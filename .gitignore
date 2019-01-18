@@ -1,0 +1,5 @@
+# Ignore all annoying .DS_Store files
+.DS_Store
+
+# Ignore node modules folder -- if any
+/node_modules
