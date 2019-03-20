@@ -1,0 +1,9 @@
+{
+  "name": "SSN",
+  "version": "1.0.0",
+  "description": "for ECE366",
+  "main": "index.js",
+  "repository": "https://github.com/dhvanilshah/Symmetric-Social-Network-ECE366.git",
+  "author": "Ariana Freitag <freitagariana@gmail.com>",
+  "license": "MIT"
+}
