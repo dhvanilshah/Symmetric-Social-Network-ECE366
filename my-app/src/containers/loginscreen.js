@@ -16,14 +16,9 @@ class Loginscreen extends Component {
       <div>
       <MuiThemeProvider>
         <div>
-           <RaisedButton label={"Register as Student"} primary={true} style={style} onClick={(event) => this.handleClick(event,'student')}/>
+           <RaisedButton label={"Register"} primary={true} style={style} onClick={(event) => this.handleClick(event,'register')}/>
        </div>
        </MuiThemeProvider>
-       <MuiThemeProvider>
-       <div>
-          <RaisedButton label={"Register as Teacher"} primary={true} style={style} onClick={(event) => this.handleClick(event,'teacher')}/>
-      </div>
-      </MuiThemeProvider>
       </div>
     )
     this.state={
@@ -32,7 +27,7 @@ class Loginscreen extends Component {
       loginscreen:[],
       loginmessage:'',
       loginButtons:loginButtons,
-      registerButtonLabel:registerButtons,,
+      registerButtonLabel:'Register',,
       isLogin:true
     }
   }
@@ -75,13 +70,13 @@ class Loginscreen extends Component {
         <div>
         <MuiThemeProvider>
           <div>
-             <RaisedButton label={"Register as Student"} primary={true} style={style} onClick={(event) => this.handleClick(event,'student')}/>
+             <RaisedButton label={"Register"} primary={true} style={style} onClick={(event) => this.handleClick(event,'register')}/>
          </div>
          </MuiThemeProvider>
         </div>
       )
       loginscreen.push(<Login parentContext={this} appContext={this.props.appContext} role={userRole}/>);
-      loginmessage = "Not Registered yet.Go to registration";
+      loginmessage = "Not Registered yet.";
       this.setState({
                      loginscreen:loginscreen,
                      loginmessage:loginmessage,
