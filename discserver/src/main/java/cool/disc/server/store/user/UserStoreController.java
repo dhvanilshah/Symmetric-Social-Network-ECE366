@@ -1,4 +1,4 @@
-package cool.disc.server.store;
+package cool.disc.server.store.user;
 
 import com.mongodb.client.*;
 import cool.disc.server.model.User;
@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 
-public class UserStoreMongo implements UserStore {
+public class UserStoreController implements UserStore {
 
     private MongoClient mongoClient = MongoClients.create();
     private MongoDatabase database = mongoClient.getDatabase("discbase");
     private MongoCollection<Document> userCollection = database.getCollection("users");
 
-    public UserStoreMongo() {}
+    public UserStoreController() {}
 
     @Override
     public User addUser(final String username,

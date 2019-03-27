@@ -2,7 +2,7 @@ package cool.disc.server.handler.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cool.disc.server.model.User;
-import cool.disc.server.store.UserStore;
+import cool.disc.server.store.user.UserStore;
 import com.spotify.apollo.RequestContext;
 import com.spotify.apollo.Response;
 import com.spotify.apollo.route.AsyncHandler;
@@ -12,7 +12,6 @@ import com.spotify.apollo.route.Middlewares;
 import com.spotify.apollo.route.Route;
 import okio.ByteString;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;

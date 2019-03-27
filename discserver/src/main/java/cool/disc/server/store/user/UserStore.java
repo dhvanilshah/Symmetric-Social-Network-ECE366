@@ -1,4 +1,4 @@
-package cool.disc.server.store;
+package cool.disc.server.store.user;
 
 import cool.disc.server.model.User;
 
