@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: eu.toolchain.ffwd:ffwd-client:0.0.3">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/eu/toolchain/ffwd/ffwd-client/0.0.3/ffwd-client-0.0.3.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/eu/toolchain/ffwd/ffwd-client/0.0.3/ffwd-client-0.0.3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/eu/toolchain/ffwd/ffwd-client/0.0.3/ffwd-client-0.0.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

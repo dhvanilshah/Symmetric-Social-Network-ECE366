@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b6cd22ea-f10d-4be4-a0f6-08e356d64d9f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/discserver/discserver.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/discserver/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sync.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sync.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/discserver/discserver.iml" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/discserver.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Post.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/User.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/discserver/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,10 +17,24 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="true">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/discserver/pom.xml">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider editor-type-id="MavenHelperPluginDependencyAnalyzer" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="190">
+              <caret line="10" selection-start-line="4" selection-start-column="9" selection-end-line="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/App.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="228">
+              <caret line="20" column="56" lean-forward="true" selection-start-line="20" selection-start-column="56" selection-end-line="20" selection-end-column="56" />
+            </state>
+          </provider>
         </entry>
       </file>
     </leaf>
@@ -27,6 +43,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -38,69 +55,107 @@
       <list>
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/discserver/pom.xml" />
+        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Friend.java" />
+        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Request.java" />
+        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/User.java" />
+        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Post.java" />
+        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Song.java" />
+        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Comment.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="20" />
-    <option name="y" value="43" />
+    <option name="y" value="42" />
     <option name="width" value="1400" />
-    <option name="height" value="837" />
+    <option name="height" value="838" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="sync" type="b2602c69:ProjectViewProjectNode" />
-              <item name="sync" type="462c0819:PsiDirectoryNode" />
+              <item name="Symmetric-Social-Network-ECE366" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Symmetric-Social-Network-ECE366" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="sync" type="b2602c69:ProjectViewProjectNode" />
-              <item name="sync" type="462c0819:PsiDirectoryNode" />
+              <item name="Symmetric-Social-Network-ECE366" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Symmetric-Social-Network-ECE366" type="462c0819:PsiDirectoryNode" />
               <item name="discserver" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="sync" type="b2602c69:ProjectViewProjectNode" />
-              <item name="sync" type="462c0819:PsiDirectoryNode" />
+              <item name="Symmetric-Social-Network-ECE366" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Symmetric-Social-Network-ECE366" type="462c0819:PsiDirectoryNode" />
               <item name="discserver" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="sync" type="b2602c69:ProjectViewProjectNode" />
-              <item name="sync" type="462c0819:PsiDirectoryNode" />
+              <item name="Symmetric-Social-Network-ECE366" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Symmetric-Social-Network-ECE366" type="462c0819:PsiDirectoryNode" />
               <item name="discserver" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="sync" type="b2602c69:ProjectViewProjectNode" />
-              <item name="sync" type="462c0819:PsiDirectoryNode" />
+              <item name="Symmetric-Social-Network-ECE366" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Symmetric-Social-Network-ECE366" type="462c0819:PsiDirectoryNode" />
               <item name="discserver" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Symmetric-Social-Network-ECE366" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Symmetric-Social-Network-ECE366" type="462c0819:PsiDirectoryNode" />
+              <item name="discserver" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Symmetric-Social-Network-ECE366" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Symmetric-Social-Network-ECE366" type="462c0819:PsiDirectoryNode" />
+              <item name="discserver" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Symmetric-Social-Network-ECE366" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Symmetric-Social-Network-ECE366" type="462c0819:PsiDirectoryNode" />
+              <item name="discserver" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="store" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553039187387" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553814639120" />
     <property name="jdk.selected.JAVA_MODULE" value="1.8" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -126,16 +181,18 @@
       <updated>1553010233692</updated>
       <workItem from="1553010236817" duration="768000" />
       <workItem from="1553038787417" duration="264000" />
+      <workItem from="1553813896362" duration="739000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1032000" />
+    <option name="totallyTimeSpent" value="1771000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="20" y="43" width="1400" height="837" extended-state="0" />
+    <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2496318" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1796875" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -143,6 +200,8 @@
       <window_info id="UI Designer" order="5" />
       <window_info id="Learn" order="6" weight="0.3298969" />
       <window_info id="Favorites" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="FindBugs-IDEA" />
+      <window_info anchor="bottom" id="CheckStyle" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -155,6 +214,8 @@
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Terminal" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+      <window_info anchor="right" id="Mongo Explorer" />
+      <window_info anchor="right" id="Key Promoter X" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -177,15 +238,72 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/foo.java">
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/foo.java" />
+    <entry file="file://$PROJECT_DIR$/discserver/pom.xml">
+      <provider editor-type-id="MavenHelperPluginDependencyAnalyzer" />
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="16" selection-start-column="16" selection-end-column="16" />
+        <state relative-caret-position="190">
+          <caret line="10" selection-start-line="4" selection-start-column="9" selection-end-line="10" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/pom.xml">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Friend.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="7" column="13" lean-forward="true" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Request.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" column="16" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/User.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Post.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="15" column="14" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Song.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Comment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/App.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="20" column="56" lean-forward="true" selection-start-line="20" selection-start-column="56" selection-end-line="20" selection-end-column="56" />
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
