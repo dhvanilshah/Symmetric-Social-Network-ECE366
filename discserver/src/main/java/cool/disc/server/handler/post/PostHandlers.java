@@ -23,10 +23,14 @@ public class PostHandlers {
 
     public Stream<Route<AsyncHandler<Response<ByteString>>>> routes() {
         return Stream.of(
-                Route.sync("GET", "/getPostFrom/<first>/<last>", this::getPostFrom)
+                Route.sync("GET", "/getPosts?<userId>", this::getPosts)
                         .withMiddleware(jsonMiddleware()),
-                Route.sync("GET", "/getPostTo/<first>/<last>", this::getPostTo)
+                Route.sync("GET", "/getFeed", this::getFeed)
                         .withMiddleware(jsonMiddleware()),
+                // writerId, receiverId are just for time being (until we can retrieve them from the token)
+                Route.sync("POST", "/addPost?<writerId>&<receiverId>&<message>", this::addPost)
+                        .withMiddleware(jsonMiddleware()),
+                // for testing
                 Route.sync("GET", "/getAllPosts", this::geAllPosts).withMiddleware(jsonMiddleware()));
     }
 
@@ -34,20 +38,28 @@ public class PostHandlers {
         return postStore.getAllPosts();
     }
 
-    List<Post> getPostFrom(final RequestContext requestContext) {
-        String firstname = requestContext.pathArgs().get("first");
-        String lastname = requestContext.pathArgs().get("last");
-        List<Post> posts = postStore.getPostFrom(firstname, lastname);
+    // perhaps, adding posts(and users as well) can return http response (200 / 503)
+    // this doesn't need to return any data types however
+    Post addPost(final RequestContext requestContext) {
+        String message = requestContext.pathArgs().get("message");
+        String writerId = requestContext.pathArgs().get("writerID");
+        String receiverId = requestContext.pathArgs().get("receiverId");
+        postStore.addPost(writerId, receiverId, message);
+        return null;
+    }
+
+    List<Post> getPosts(final RequestContext requestContext) {
+        String userId = requestContext.pathArgs().get("userId");
+        List<Post> posts = postStore.getPosts(userId);
         return posts;
     }
 
-    List<Post> getPostTo(final RequestContext requestContext) {
-        String firstname = requestContext.pathArgs().get("first");
-        String lastname = requestContext.pathArgs().get("last");
-        List<Post> posts = postStore.getPostFrom(firstname, lastname);
+    List<Post> getFeed(final RequestContext requestContext) {
+        List<Post> posts = postStore.getFeed();
         return posts;
     }
 
+    // Asynchronous Middleware Handling for payloads
     private <T> Middleware<AsyncHandler<T>, AsyncHandler<Response<ByteString>>> jsonMiddleware() {
         return JsonSerializerMiddlewares.<T>jsonSerialize(objectMapper.writer())
                 .and(Middlewares::httpPayloadSemantics)

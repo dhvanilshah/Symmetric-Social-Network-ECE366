@@ -1,120 +1,149 @@
 package cool.disc.server.store.post;
 
-import com.mongodb.client.*;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+import com.typesafe.config.Config;
 import cool.disc.server.model.Post;
+import cool.disc.server.model.User;
+import cool.disc.server.model.UserBuilder;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import cool.disc.server.model.PostBuilder;
 
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class PostStoreController implements PostStore {
+    private final Config config;
 
+    // localhost
+    private final static String HOST = "localhost";
+    private final static int PORT = 27017;
+    private static MongoClient dbclient = new MongoClient(HOST, PORT);
 
-    private MongoClient mongoClient = MongoClients.create();
-    private MongoDatabase database = mongoClient.getDatabase("discbase");
+    // atlas cloud
+    private static MongoClientURI uri = new MongoClientURI(
+            "mongodb+srv://admin:puiGLHcv0PKhyLPV@disc-db-shard-00-00-xi3cp.mongodb.net");
+    private static MongoClient dbClient = new MongoClient(uri);
+    private MongoDatabase database = dbClient.getDatabase("main-db");
     private MongoCollection<Document> postCollection = database.getCollection("post");
     private MongoCollection<Document> userCollection = database.getCollection("user");
 
-    public PostStoreController() {
+    public PostStoreController(final Config config) {
+        this.config = config;
     }
 
+    // (GET) addPost?message
+    // in the driver function, receiverId and message would be passed in.
+    // writerId is still here until we can get it from the token (passed on from frontend)
     @Override
-    public void addPost(String receiverId, String writerId, String message, Integer isPrivate) {
-        ObjectId new_post_id = new ObjectId();
-        Document new_post = new Document("_id", new_post_id)
-                .append("receiverId", receiverId)
-                .append("writerId", writerId)
-                .append("message", message)
-                .append("isPrivate", isPrivate);
-        postCollection.insertOne(new_post);
+    public void addPost(String writerId, String receiverId, String message) {
+        ObjectId newPostId = new ObjectId();
+        Document newPostDocument = new Document("_id", newPostId)
+                .append("message", message);
+        postCollection.insertOne(newPostDocument);
     }
 
+    // Utility function for getPosts() below
+    // retreives all friends of the specified user
+    public List<User> getFriends(String id) {
+        ObjectId _id = new ObjectId(id);
+        Document queryFriends = new Document("_id", _id);
+        MongoCursor<Document> friendsCursor = userCollection.find(queryFriends).iterator();
 
-//CHANGE TO getPostto
-    @Override
-    public List<Post> getPostFrom(final String first_name, final String last_name) {
-
-        Document firstNameRegQuery = new Document("$regex", "^(?)" + Pattern.quote(first_name));
-        firstNameRegQuery.append("$options", "i");
-        Document lastNameRegQuery = new Document("$regex", "^(?)" + Pattern.quote(last_name));
-        lastNameRegQuery.append("$options", "i");
-        Document findUserIdQuery = new Document("firstname", firstNameRegQuery);
-        findUserIdQuery.append("lastname", lastNameRegQuery);
-        MongoCursor<Document> userCursor = userCollection.find(findUserIdQuery).iterator();
-        Document firstMatchingUser = userCursor.next();
-        System.out.println("**getpostfrom() ** USERID QUERY RESULT: " + firstMatchingUser);
-        ObjectId userId = firstMatchingUser.getObjectId("_id");
-
-        System.out.println("Found entry! - "+userId.toHexString());
-
-        Document postQuery = new Document("writerId", userId);
-        MongoCursor<Document> iterable = postCollection.find(postQuery).iterator();
-
-        List<Post> postList = new ArrayList<Post>();
-        while(iterable.hasNext()){
-            Document postDoc = iterable.next();
-            System.out.println("****DOCUMENT RESULT: " + postDoc);
-            ObjectId id = postDoc.getObjectId( "_id" );
-            String receiverId = postDoc.getObjectId("receiverId").toString();
-            String writerId = postDoc.getObjectId("writerId").toString();
-            String message = postDoc.getString("message");
-            Integer isPrivate = postDoc.getInteger("isPrivate");
-
-            Post post = new PostBuilder()
-                    .id(id.toHexString())
-                    .receiverId(receiverId)
-                    .writerId(writerId)
-                    .message(message)
-                    .isPrivate(isPrivate)
-                    .build();
-            postList.add(post);
+        List<User> friendList = null;
+        try {
+            while (friendsCursor.hasNext()) {
+                Document friendDocument = friendsCursor.next();
+                User friend = new UserBuilder()
+                        .id(friendDocument.getObjectId("_id").toString())
+                        .name(friendDocument.getString("name"))
+                        .username(friendDocument.getString("username"))
+                        .build();
+                friendList.add(friend);
+            }
         }
-        System.out.println(postList);
-        return postList;
-    }
-
-    @Override
-    public List<Post> getPostTo(final String first_name, final String last_name) {
-        Document firstNameRegQuery = new Document("$regex", "^(?)" + Pattern.quote(first_name));
-        firstNameRegQuery.append("$options", "i");
-        Document lastNameRegQuery = new Document("$regex", "^(?)" + Pattern.quote(last_name));
-        lastNameRegQuery.append("$options", "i");
-        Document findUserIdQuery = new Document("firstname", firstNameRegQuery);
-        findUserIdQuery.append("lastname", lastNameRegQuery);
-        MongoCursor<Document> userCursor = userCollection.find(findUserIdQuery).iterator();
-        Document firstMatchingUser = userCursor.next();
-        ObjectId userId = firstMatchingUser.getObjectId("_id");
-
-        System.out.println("Found entry! - "+userId.toHexString());
-
-        Document postQuery = new Document("receiverId", userId);
-        MongoCursor<Document> iterable = (MongoCursor<Document>) postCollection.find(postQuery);
-        List<Post> postList = new ArrayList<Post>();
-        while(iterable.hasNext()) {
-            Document postDoc = iterable.next();
-            ObjectId id = postDoc.getObjectId( "_id" );
-            String receiverId = postDoc.getObjectId("receiverId").toString();
-            String writerId = postDoc.getObjectId("writerId").toString();
-            String message = postDoc.getString("message");
-            Integer isPrivate = postDoc.getInteger("isPrivate");
-
-            Post post = new PostBuilder()
-                    .id(id.toHexString())
-                    .receiverId(receiverId)
-                    .writerId(writerId)
-                    .message(message)
-                    .isPrivate(isPrivate)
-                    .build();
-            postList.add(post);
+        catch (Exception e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
-        System.out.println(postList);
-        return postList;
+        finally {
+            friendsCursor.close();
+        }
+        return friendList;
+    }
+    // (GET) getPosts/userId
+    // get posts from the user (= userId) and the user's friends
+    public List<Post> getPosts(final String userId) {
+        List<User> friendList = getFriends(userId);
+        Document queryMe = new Document("_id", userId);
+        Document myUserDocument= userCollection.find(queryMe).iterator().next();
+        User myUser = new UserBuilder()
+                .id(myUserDocument.getObjectId("_id").toString())
+                .name(myUserDocument.getString("name"))
+                .username(myUserDocument.getString("username"))
+                .build();
+        // add (User) myself to the list of friendList, from each of which posts will be pulled
+        friendList.add(myUser);
+
+        List<Post> allPosts = null;
+        // query for posts from each friend
+        for (User friend : friendList) {
+            Document queryPosts = new Document("receiverId", friend.id());
+            MongoCursor<Document> cursor = postCollection.find(queryPosts).iterator();
+            try{
+                while(cursor.hasNext()) {
+                    Document nextentry = cursor.next();
+                    Post post = new PostBuilder()
+                            .id(nextentry.getObjectId("_id").toString())
+                            .receiverId(nextentry.getObjectId("receiverId").toString())
+                            .writerId(nextentry.getObjectId("writerId").toString())
+                            .message(nextentry.getString("message"))
+                            .build();
+                    allPosts.add(post);
+                }
+            }
+            catch(Exception e){
+                System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            }
+            finally {
+                cursor.close();
+            }
+        }
+        return allPosts;
     }
 
-    @Override
+    //- (GET) getFeed (calls getPosts)
+    public List<Post> getFeed() {
+        // for now, printing all posts,
+        // but later, get the user in session from the token, and
+        // get posts from only friends of the user
+        List<Post> allPosts = null;
+        MongoCursor<Document> userCursor = userCollection.find().iterator();
+        try{
+            while (userCursor.hasNext()) {
+                ObjectId userId = userCursor.next().getObjectId("_id");
+                List<Post> friendsPosts = getPosts(userId.toString());
+                for (Post post : friendsPosts) {
+                    allPosts.add(post);
+                }
+            }
+        }
+        catch (Exception e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+        finally {
+            userCursor.close();
+        }
+        return allPosts;
+    }
+
+    // for testing purposes only -- get 'all' posts from the collection
     public List<Post> getAllPosts() {
         MongoCursor<Document> cursor = postCollection.find().iterator();
         List<Post> postEntries = new ArrayList<Post>();
@@ -123,10 +152,9 @@ public class PostStoreController implements PostStore {
                 Document nextentry = cursor.next();
                 Post post = new PostBuilder()
                         .id(nextentry.getObjectId("_id").toString())
-                        .receiverId(nextentry.getObjectId("receiverId").toString())
                         .writerId(nextentry.getObjectId("writerId").toString())
+                        .receiverId(nextentry.getObjectId("receiverId").toString())
                         .message(nextentry.getString("message"))
-                        .isPrivate(nextentry.getInteger("isPrivate"))
                         .build();
                 postEntries.add(post);
             }

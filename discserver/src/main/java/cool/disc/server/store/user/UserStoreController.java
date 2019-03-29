@@ -6,6 +6,7 @@ import cool.disc.server.model.UserBuilder;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -26,15 +27,16 @@ public class UserStoreController implements UserStore {
                         final String service,
                         final String photo){
 
-        Document newUser = new Document("name", name)
+        Document newUser = new Document("id", new ObjectId())
+                .append("name", name)
                 .append("username", username)
                 .append("password", password)
                 .append("service", service)
                 .append("photo", photo);
-
         userCollection.insertOne(newUser);
-        ObjectId id = (ObjectId)newUser.get( "_id" );
 
+        // show added user information
+        ObjectId id = (ObjectId)newUser.get( "_id" );
              return new UserBuilder()
                      .id(id.toHexString())
                      .username(username)

@@ -10,9 +10,9 @@ public interface Post {
     String id();
     String writerId();
     String receiverId();
-    @Nullable String message();
+    String message();
     @Nullable Integer privacy();
-    String songId();
+    @Nullable String songId();
     @Nullable List<String> comments();
     @Nullable Integer likes();
 }
