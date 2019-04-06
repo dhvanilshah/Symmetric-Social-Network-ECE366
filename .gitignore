@@ -30,3 +30,6 @@ hs_err_pid*
 
 # maven
 target
+
+# libraries
+/idea/libraries

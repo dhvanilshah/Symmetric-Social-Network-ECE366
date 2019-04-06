@@ -1,16 +1,16 @@
 package cool.disc.server.store.post;
 
+import cool.disc.server.model.Friend;
 import cool.disc.server.model.Post;
-import cool.disc.server.model.User;
+import org.bson.types.ObjectId;
 
 import java.util.List;
 
 public interface PostStore {
-    void addPost(String writerId, String receiverId, String message);
-    public List<User> getFriends(String id);
-    public List<Post> getPosts(final String userId);
-    public List<Post> getFeed();
+    Post addPost(ObjectId writerId, ObjectId receiverId, String message);
+    List<Friend> getFriends(String id);
+    List<Post> getPosts(ObjectId userId);
+    List<Post> getFeed(String name);
 
-    // for testing
     List<Post> getAllPosts();
 }

@@ -1,6 +1,8 @@
 package cool.disc.server.store.user;
 
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.*;
+import com.typesafe.config.Config;
 import cool.disc.server.model.User;
 import cool.disc.server.model.UserBuilder;
 import org.bson.Document;
@@ -14,11 +16,17 @@ import java.util.regex.Pattern;
 
 public class UserStoreController implements UserStore {
 
-    private MongoClient mongoClient = MongoClients.create();
-    private MongoDatabase database = mongoClient.getDatabase("discbase");
-    private MongoCollection<Document> userCollection = database.getCollection("users");
+//    private MongoClient mongoClient = MongoClients.create();
+    private static MongoClientURI uri = new MongoClientURI("mongodb+srv://admin:puiGLHcv0PKhyLPV@disc-db-shard-00-00-xi3cp.mongodb.net/?retryWrites=true&wtimeoutMS=0,admin:puiGLHcv0PKhyLPV@disc-db-shard-00-01-xi3cp.mongodb.net/?retryWrites=true&wtimeoutMS=0,admin:puiGLHcv0PKhyLPV@disc-db-shard-00-02-xi3cp.mongodb.net/?retryWrites=true&wtimeoutMS=0");
+    private com.mongodb.MongoClient dbClient = new com.mongodb.MongoClient(uri);
+    private MongoDatabase database = dbClient.getDatabase("main-db");
+    private MongoCollection<Document> userCollection = database.getCollection("user");
 
-    public UserStoreController() {}
+    private final Config config;
+
+    public UserStoreController(final Config config) {
+        this.config = config;
+    }
 
     @Override
     public User addUser(final String username,
@@ -47,6 +55,7 @@ public class UserStoreController implements UserStore {
                      .build();
     }
 
+    // get a list of Users from matching [regex] 'name'
     @Override
     public List<User> getUser(final String name){
         System.out.println("hello - query");
@@ -71,5 +80,21 @@ public class UserStoreController implements UserStore {
             usrlist.add(user);
         }
         return usrlist;
+    }
+
+    // get only '_id' from User's 'name'
+    @Override
+    public ObjectId getUserId(String name) {
+        MongoCursor<Document> foundDoc = null;
+        ObjectId userId = null;
+        try {
+            foundDoc = userCollection.find(new Document("name", name)).iterator();
+        } catch (Exception e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+        if (foundDoc.hasNext()) {
+            userId = foundDoc.next().getObjectId("_id");
+        }
+        return userId;
     }
 }
