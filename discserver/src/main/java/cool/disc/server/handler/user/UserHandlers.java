@@ -29,7 +29,8 @@ public class UserHandlers {
     public Stream<Route<AsyncHandler<Response<ByteString>>>> routes() {
         return Stream.of(
                 Route.sync("GET", "/addUser", this::addUser).withMiddleware(jsonMiddleware()),
-                Route.sync("GET", "/getUser/<name>", this::getUser).withMiddleware(jsonMiddleware())
+                Route.sync("GET", "/getUser/<name>", this::getUser).withMiddleware(jsonMiddleware()),
+                Route.sync("GET", "/login", this::login).withMiddleware(jsonMiddleware())
         );
     }
 
@@ -46,6 +47,14 @@ public class UserHandlers {
         String name = requestContext.pathArgs().get("name");
         return userStore.getUser(name);
     }
+
+    String login(final RequestContext requestContext){
+        Optional<String> username = requestContext.request().parameter("username");
+        Optional<String> password = requestContext.request().parameter("password");
+        return userStore.login(username.get(), password.get());
+    }
+
+
 
     private <T> Middleware<AsyncHandler<T>, AsyncHandler<Response<ByteString>>> jsonMiddleware() {
         return JsonSerializerMiddlewares.<T>jsonSerialize(objectMapper.writer())

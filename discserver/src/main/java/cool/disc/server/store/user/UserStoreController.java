@@ -1,5 +1,9 @@
 package cool.disc.server.store.user;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.*;
 import com.typesafe.config.Config;
@@ -13,7 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static com.mongodb.client.model.Filters.eq;
 
+//CHANGE ADDUSER TO POST AND GET JSON DATA FROM THE POST
+//WRITE LOGIN POST METHOD
 public class UserStoreController implements UserStore {
 
 //    private MongoClient mongoClient = MongoClients.create();
@@ -58,7 +65,6 @@ public class UserStoreController implements UserStore {
     // get a list of Users from matching [regex] 'name'
     @Override
     public List<User> getUser(final String name){
-        System.out.println("hello - query");
         Document regQuery = new Document();
         regQuery.append("$regex", "^(?)" + Pattern.quote(name));
         regQuery.append("$options", "i");
@@ -96,5 +102,35 @@ public class UserStoreController implements UserStore {
             userId = foundDoc.next().getObjectId("_id");
         }
         return userId;
+    }
+
+    @Override
+    public String login(String username, String password){
+        Document doc;
+        String token = null;
+
+        try {
+            doc  = userCollection.find(eq("username", username)).first();
+            String pwd = doc.getString("password");
+            if(pwd.equals(password)){
+                String uid = doc.getObjectId("_id").toHexString();
+                try {
+                Algorithm algorithm = Algorithm.HMAC256("andyjeongscrummaster");
+                token = JWT.create()
+                        .withIssuer("auth0")
+                        .withClaim("id", uid)
+                        .sign(algorithm);
+            } catch (JWTCreationException exception){
+                //Invalid Signing configuration / Couldn't convert Claims.
+            }
+            }
+        } catch (Exception e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+        if (token != null){
+            return token;
+        } else {
+            return "invalid";
+        }
     }
 }

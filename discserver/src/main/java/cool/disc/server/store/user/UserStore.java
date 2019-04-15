@@ -10,4 +10,5 @@ public interface UserStore {
     User addUser(String username, String name, String password, String service, String photo);
     List<User> getUser(String name);
     ObjectId getUserId(String name);
+    String login(String username, String password);
 }

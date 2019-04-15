@@ -1,20 +1,20 @@
 package cool.disc.server.store.post;
 
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientException;
+//import com.mongodb.MongoClientException;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.*;
-import com.sun.org.apache.xerces.internal.xs.datatypes.ObjectList;
+//import com.sun.org.apache.xerces.internal.xs.datatypes.ObjectList;
 import com.typesafe.config.Config;
 import cool.disc.server.model.*;
-import cool.disc.server.store.user.UserStore;
+//import cool.disc.server.store.user.UserStore;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import javax.swing.text.html.HTMLDocument;
+//import javax.swing.text.html.HTMLDocument;
 import java.util.*;
 
-import static com.spotify.metrics.core.MetricId.build;
+//import static com.spotify.metrics.core.MetricId.build;
 
 public class PostStoreController implements PostStore {
     private final Config config;

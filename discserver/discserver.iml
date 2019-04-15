@@ -54,6 +54,8 @@
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver:3.10.1" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:bson:3.10.1" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-core:3.10.1" level="project" />
+    <orderEntry type="library" name="Maven: com.auth0:java-jwt:3.8.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: commons-codec:commons-codec:1.11" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: io.norberg:auto-matter:0.15.2" level="project" />
     <orderEntry type="library" name="Maven: io.norberg:auto-matter-annotation:0.15.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.squareup:javapoet:1.11.1" level="project" />

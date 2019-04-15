@@ -31,6 +31,7 @@
                 </configuration>
             </plugin>
 
+
             <!-- Used to build uber jar for deployment (contains all dependencies inside JAR).
                  Without this, you would need to make sure at runtime you specify a classpath.
             -->
@@ -114,6 +115,11 @@
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver</artifactId>
             <version>3.10.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.8.0</version>
         </dependency>
         <!--<dependency>-->
         <!--<groupId>org.slf4j</groupId>-->
