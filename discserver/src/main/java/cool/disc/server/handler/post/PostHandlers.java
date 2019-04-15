@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.mongodb.MongoClientException;
 import com.spotify.apollo.RequestContext;
 import com.spotify.apollo.Response;
+import com.spotify.apollo.Status;
 import com.spotify.apollo.route.*;
 import cool.disc.server.model.Post;
 import cool.disc.server.store.post.PostStore;
@@ -15,6 +16,7 @@ import org.bson.types.ObjectId;
 
 import javax.annotation.PostConstruct;
 import javax.swing.text.Document;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +49,18 @@ public class PostHandlers {
     // adding a post from parameters received through http request
     // parameters: writerName (not id), receiverName (not id), message
     Post addPost(final RequestContext requestContext) {
+        Post post;
+        if (requestContext.request().payload().isPresent()) {
+            try {
+                post = objectMapper.readValue(requestContext.request().payload().get().toByteArray(), Post.class);
+                // do smoething with the post
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("invalid payload");
+            }
+        } else {
+            throw new RuntimeException("no payload");
+        }
         String writerName = requestContext.request().parameters().get("writerName").iterator().next();
         String receiverName = requestContext.request().parameters().get("receiverName").iterator().next();
         String message = requestContext.request().parameters().get("message").iterator().next();

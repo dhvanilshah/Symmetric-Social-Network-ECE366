@@ -28,7 +28,7 @@ public class UserHandlers {
 
     public Stream<Route<AsyncHandler<Response<ByteString>>>> routes() {
         return Stream.of(
-                Route.sync("GET", "/addUser", this::addUser).withMiddleware(jsonMiddleware()),
+                Route.sync("POST", "/addUser", this::addUser).withMiddleware(jsonMiddleware()),
                 Route.sync("GET", "/getUser/<name>", this::getUser).withMiddleware(jsonMiddleware())
         );
     }

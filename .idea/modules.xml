@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/discserver/discserver.iml" filepath="$PROJECT_DIR$/discserver/discserver.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/sync.iml" filepath="$PROJECT_DIR$/.idea/sync.iml" />
     </modules>
   </component>
 </project>
