@@ -55,6 +55,7 @@ public class UserStoreController implements UserStore {
         userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
     }
 
+    @Override
     public Response<Object> addUser(User newUser){
         // parse data from the payload
         ObjectId newId = new ObjectId();
