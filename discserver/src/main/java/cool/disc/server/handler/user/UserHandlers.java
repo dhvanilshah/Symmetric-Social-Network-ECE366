@@ -6,14 +6,13 @@ import cool.disc.server.model.User;
 import cool.disc.server.store.user.UserStore;
 import com.spotify.apollo.RequestContext;
 import com.spotify.apollo.Response;
-import com.spotify.apollo.route.AsyncHandler;
-import com.spotify.apollo.route.JsonSerializerMiddlewares;
-import com.spotify.apollo.route.Middleware;
-import com.spotify.apollo.route.Middlewares;
-import com.spotify.apollo.route.Route;
+import com.spotify.apollo.route.*;
+import cool.disc.server.model.User;
+import cool.disc.server.store.user.UserStore;
 import okio.ByteString;
 
 import java.util.HashMap;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -37,13 +36,20 @@ public class UserHandlers {
         );
     }
 
-    User addUser(final RequestContext requestContext) {
-        Optional<String> username = requestContext.request().parameter("username");
-        Optional<String> name = requestContext.request().parameter("name");
-        Optional<String> password = requestContext.request().parameter("password");
-        Optional<String> service = requestContext.request().parameter("service");
-        Optional<String> photo = requestContext.request().parameter("photo");
-        return userStore.addUser(username.get(), name.get(), password.get(), service.get(), photo.get());
+    Integer addUser(final RequestContext requestContext) {
+        User user;
+        if (requestContext.request().payload().isPresent()) {
+            try {
+                user = objectMapper.readValue(requestContext.request().payload().get().toByteArray(), User.class);
+                Response<Object> response = userStore.addUser(user);
+                return response.status().code();
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("invalid payload");
+            }
+        } else {
+            throw new RuntimeException("no payload");
+        }
     }
 
     List<User> getUser(final RequestContext requestContext){
@@ -51,7 +57,8 @@ public class UserHandlers {
         return userStore.getUser(name);
     }
 
-    Response<String> login(final RequestContext requestContext){
+
+    Response<ByteString> login(final RequestContext requestContext){
 
         Optional<String> username = requestContext.request().parameter("username");
         Optional<String> password = requestContext.request().parameter("password");
@@ -59,10 +66,10 @@ public class UserHandlers {
         String response = userStore.login(username.get(), password.get());
 
         if(response.equals("invalid")){
-            return Response.of(Status.UNAUTHORIZED, "Invalid username or password");
+            return Response.of(Status.UNAUTHORIZED, ByteString.encodeUtf8("Invalid username or password"));
         }
         else{
-            return Response.ok().withPayload(response);
+            return Response.ok().withPayload(ByteString.encodeUtf8(response));
         }
     }
 

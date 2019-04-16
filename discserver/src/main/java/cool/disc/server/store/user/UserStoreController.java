@@ -3,66 +3,97 @@ package cool.disc.server.store.user;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
-import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import com.mongodb.client.*;
 import com.spotify.apollo.Response;
-import com.spotify.apollo.Status;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+import cool.disc.server.model.Friend;
+import cool.disc.server.model.Request;
 import cool.disc.server.model.User;
 import cool.disc.server.model.UserBuilder;
 import okio.ByteString;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import static com.mongodb.client.model.Filters.eq;
 
-//CHANGE ADDUSER TO POST AND GET JSON DATA FROM THE POST
-//WRITE LOGIN POST METHOD
 public class UserStoreController implements UserStore {
-
-//    private MongoClient mongoClient = MongoClients.create();
-    private static MongoClientURI uri = new MongoClientURI("mongodb+srv://admin:puiGLHcv0PKhyLPV@disc-db-shard-00-00-xi3cp.mongodb.net/?retryWrites=true&wtimeoutMS=0,admin:puiGLHcv0PKhyLPV@disc-db-shard-00-01-xi3cp.mongodb.net/?retryWrites=true&wtimeoutMS=0,admin:puiGLHcv0PKhyLPV@disc-db-shard-00-02-xi3cp.mongodb.net/?retryWrites=true&wtimeoutMS=0");
-    private com.mongodb.MongoClient dbClient = new com.mongodb.MongoClient(uri);
-    private MongoDatabase database = dbClient.getDatabase("main-db");
-    private MongoCollection<Document> userCollection = database.getCollection("user");
-
     private final Config config;
 
-    public UserStoreController(final Config config) {
-        this.config = config;
+    // localhost
+//    private static MongoClientURI uri = new MongoClientURI("mongodb://localhost:27017/?retryWrites=true");
+
+    MongoClientURI uri;
+    private MongoClient dbClient;
+    private MongoDatabase database;
+    private MongoCollection<Document> userCollection;
+
+    public UserStoreController() {
+        this.config = ConfigFactory.load("discserver.conf");
+        // get login info from config
+        String uri1 = this.config.getString("mongo.uri");
+        String username = this.config.getString("mongo.username");
+        String password = this.config.getString("mongo.password");
+        String host = this.config.getString("mongo.host");
+        String uriString = uri1 + username + password + host;
+
+        // initialize db driver
+        uri = new MongoClientURI(uriString);
+        dbClient = new MongoClient(uri);
+        String databaseString = this.config.getString("mongo.database");
+        database = dbClient.getDatabase(databaseString);
+        userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
     }
 
-    @Override
-    public User addUser(final String username,
-                        final String name,
-                        final String password,
-                        final String service,
-                        final String photo){
+    public Response<Object> addUser(User newUser){
+        // parse data from the payload
+        ObjectId newId = new ObjectId();
+        String name = newUser.name();
+        String password = newUser.password();
+        String email = newUser.email();
+        String service = newUser.service();
+        String photo = newUser.photo();
+        Date date = newUser.dateCreated();
+        List<Friend> friends = newUser.friends();
+        List<Request> reqSent = newUser.reqSent();
+        List<Request> reqReceived = newUser.reqReceived();
+        List<String> likedPosts = newUser.likedPosts();
+        List<String> likedComments = newUser.likedComments();
 
-        Document newUser = new Document("id", new ObjectId())
+        Document addUserDoc = new Document("id", newId)
                 .append("name", name)
-                .append("username", username)
                 .append("password", password)
+                .append("email", email)
                 .append("service", service)
-                .append("photo", photo);
-        userCollection.insertOne(newUser);
+                .append("photo", photo)
+                .append("date", date)
+                .append("friends", friends)
+                .append("reqSent", reqSent)
+                .append("reqReceived", reqReceived)
+                .append("likedPosts", likedPosts)
+                .append("likedComments", likedComments);
+        return getObjectResponse(addUserDoc, userCollection);
+    }
 
-        // show added user information
-        ObjectId id = (ObjectId)newUser.get( "_id" );
-             return new UserBuilder()
-                     .id(id.toHexString())
-                     .username(username)
-                     .name(name)
-                     .password(password)
-                     .service(service)
-                     .photo(photo)
-                     .build();
+    // get response from inserting
+    public static Response<Object> getObjectResponse(Document addUserDoc, MongoCollection<Document> userCollection) {
+        try {
+            userCollection.insertOne(addUserDoc);
+            return Response.ok();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // get a list of Users from matching [regex] 'name'
@@ -76,34 +107,35 @@ public class UserStoreController implements UserStore {
         findQuery.append("name", regQuery);
         FindIterable<Document> iterable = userCollection.find(findQuery);
 
-        List<User> usrlist = new ArrayList<User>();
+        List<User> userlist = new ArrayList<User>();
         for(Document userDoc : iterable){
             ObjectId id = (ObjectId)userDoc.get( "_id" );
-            String nameusr = userDoc.getString("name");
-            String username = userDoc.getString("username");
+            String nameUser = userDoc.getString("name");
+            String usernameUser = userDoc.getString("username");
             User user = new UserBuilder()
                     .id(id.toHexString())
-                    .username(username)
-                    .name(nameusr)
+                    .name(nameUser)
+                    .username(usernameUser)
                     .build();
-            usrlist.add(user);
+            userlist.add(user);
         }
-        return usrlist;
+        return userlist;
     }
 
     // get only '_id' from User's 'name'
     @Override
     public ObjectId getUserId(String name) {
         MongoCursor<Document> foundDoc = null;
-        ObjectId userId = null;
         try {
             foundDoc = userCollection.find(new Document("name", name)).iterator();
         } catch (Exception e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
-        if (foundDoc.hasNext()) {
-            userId = foundDoc.next().getObjectId("_id");
+        ObjectId userId = null;
+        if (!foundDoc.hasNext()) {
+            return userId; // null
         }
+        userId = foundDoc.next().getObjectId("_id");
         return userId;
     }
 
@@ -119,14 +151,14 @@ public class UserStoreController implements UserStore {
             if(pwd.equals(password)){
                 String uid = doc.getObjectId("_id").toHexString();
                 try {
-                Algorithm algorithm = Algorithm.HMAC256("andyjeongscrummaster");
-                token = JWT.create()
-                        .withIssuer("auth0")
-                        .withClaim("id", uid)
-                        .sign(algorithm);
-            } catch (JWTCreationException exception){
-                //Invalid Signing configuration / Couldn't convert Claims.
-            }
+                    Algorithm algorithm = Algorithm.HMAC256("handsdown_for_dshah");
+                    token = JWT.create()
+                            .withIssuer("auth0")
+                            .withClaim("id", uid)
+                            .sign(algorithm);
+                } catch (JWTCreationException exception){
+                    //Invalid Signing configuration / Couldn't convert Claims.
+                }
             }
         } catch (Exception e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );

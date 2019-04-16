@@ -1,12 +1,11 @@
-//import org.mockito.Mock;
-//
-//import static org.mockito.Mockito.*;
-//
-///* Unit test for User Handler */
-//public class UserTest {
-//
-//    @Mock
-//
-//
-//}
-//
+
+package cool.disc.server;
+
+/* Unit test for User Handler */
+public class UserTest {
+
+    
+
+}
+
+
