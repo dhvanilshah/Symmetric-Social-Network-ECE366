@@ -16,9 +16,11 @@ import cool.disc.server.model.Friend;
 import cool.disc.server.model.Request;
 import cool.disc.server.model.User;
 import cool.disc.server.model.UserBuilder;
+import cool.disc.server.utils.AuthUtils;
 import okio.ByteString;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.omg.PortableInterceptor.ServerRequestInfo;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +31,7 @@ import static com.mongodb.client.model.Filters.eq;
 
 public class UserStoreController implements UserStore {
     private final Config config;
+    private final AuthUtils authUtils;
 
     // localhost
 //    private static MongoClientURI uri = new MongoClientURI("mongodb://localhost:27017/?retryWrites=true");
@@ -39,6 +42,7 @@ public class UserStoreController implements UserStore {
     private MongoCollection<Document> userCollection;
 
     public UserStoreController() {
+        this.authUtils =  new AuthUtils();
         this.config = ConfigFactory.load("discserver.conf");
         // get login info from config
         String uri1 = this.config.getString("mongo.uri");
@@ -56,45 +60,30 @@ public class UserStoreController implements UserStore {
     }
 
     @Override
-    public Response<Object> addUser(User newUser){
+    public Integer addUser(User newUser){
         // parse data from the payload
-        ObjectId newId = new ObjectId();
         String name = newUser.name();
         String password = newUser.password();
         String email = newUser.email();
         String service = newUser.service();
         String photo = newUser.photo();
-        Date date = newUser.dateCreated();
-        List<Friend> friends = newUser.friends();
-        List<Request> reqSent = newUser.reqSent();
-        List<Request> reqReceived = newUser.reqReceived();
-        List<String> likedPosts = newUser.likedPosts();
-        List<String> likedComments = newUser.likedComments();
+        Date date = new Date();
 
-        Document addUserDoc = new Document("id", newId)
+        Document addUserDoc = new Document()
                 .append("name", name)
                 .append("password", password)
                 .append("email", email)
                 .append("service", service)
                 .append("photo", photo)
-                .append("date", date)
-                .append("friends", friends)
-                .append("reqSent", reqSent)
-                .append("reqReceived", reqReceived)
-                .append("likedPosts", likedPosts)
-                .append("likedComments", likedComments);
-        return getObjectResponse(addUserDoc, userCollection);
-    }
+                .append("date", date);
 
-    // get response from inserting
-    public static Response<Object> getObjectResponse(Document addUserDoc, MongoCollection<Document> userCollection) {
         try {
             userCollection.insertOne(addUserDoc);
-            return Response.ok();
+            return 1;
         } catch (Exception e) {
             e.printStackTrace();
+            return 0;
         }
-        return null;
     }
 
     // get a list of Users from matching [regex] 'name'
@@ -153,15 +142,16 @@ public class UserStoreController implements UserStore {
             String pwd = doc.getString("password");
             if(pwd.equals(password)){
                 String uid = doc.getObjectId("_id").toHexString();
-                try {
-                    Algorithm algorithm = Algorithm.HMAC256(secret);
-                    token = JWT.create()
-                            .withIssuer("auth0")
-                            .withClaim("id", uid)
-                            .sign(algorithm);
-                } catch (JWTCreationException exception){
-                    //Invalid Signing configuration / Couldn't convert Claims.
-                }
+//                try {
+//                    Algorithm algorithm = Algorithm.HMAC256(secret);
+//                    token = JWT.create()
+//                            .withIssuer("auth0")
+//                            .withClaim("id", uid)
+//                            .sign(algorithm);
+//                } catch (JWTCreationException exception){
+//                    //Invalid Signing configuration / Couldn't convert Claims.
+//                }
+               token = authUtils.createToken(uid);
             }
         } catch (Exception e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -174,4 +164,18 @@ public class UserStoreController implements UserStore {
 //            return Response.of(Status.UNAUTHORIZED, "Password or Username incorrect");
         }
     }
+
+    @Override
+    public String addFriend(String friend_id, String user_id){
+        Document doc;
+        String token = null;
+        try {
+            doc  = userCollection.find(eq("_id", friend_id)).first();
+        } catch (Exception e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+
+        return user_id;
+    }
+
 }
