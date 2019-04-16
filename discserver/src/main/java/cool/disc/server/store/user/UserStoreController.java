@@ -142,6 +142,8 @@ public class UserStoreController implements UserStore {
 //    take in username and password and return JWT if password is correct
     @Override
     public String login(String username, String password){
+        String secret = this.config.getString("secrets.jwt-key");
+
         Document doc;
         String token = null;
 
@@ -151,7 +153,7 @@ public class UserStoreController implements UserStore {
             if(pwd.equals(password)){
                 String uid = doc.getObjectId("_id").toHexString();
                 try {
-                    Algorithm algorithm = Algorithm.HMAC256("handsdown_for_dshah");
+                    Algorithm algorithm = Algorithm.HMAC256(secret);
                     token = JWT.create()
                             .withIssuer("auth0")
                             .withClaim("id", uid)
