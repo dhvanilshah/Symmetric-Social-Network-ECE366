@@ -1,11 +1,11 @@
 server {
-  listen 80 default_server;
+  listen 8000 default_server;
   listen [::]:80 default_server;
-  root /usr/local/var/www/disc.cool/;
+  root /var/www/disc.cool/;
   index index.html;
   server_name disc.cool www.disc.cool;
   location ~ ^/api/(.*)$  {
 	# insert Apollo IP address and server port number below
-    	proxy_pass http://192.168.1.90:9999/$1;
+    	proxy_pass http://199.98.27.115:8080/$1;
   }
 }
