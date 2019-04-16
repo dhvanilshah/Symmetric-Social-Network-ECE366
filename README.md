@@ -11,7 +11,7 @@ Below is our actual code in the file */etc/nginx/sites-enabled/disc.cool*:
 ```
 server {
   listen 8000 default_server;
-  listen [::]:80 default_server;
+  listen [::]:8000 default_server;
   root /var/www/disc.cool/;
   index index.html;
   server_name disc.cool www.disc.cool;
