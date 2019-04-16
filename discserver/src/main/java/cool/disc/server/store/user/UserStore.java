@@ -1,6 +1,8 @@
 package cool.disc.server.store.user;
 
+import com.spotify.apollo.Response;
 import cool.disc.server.model.User;
+import okio.ByteString;
 import org.bson.types.ObjectId;
 
 import java.util.List;

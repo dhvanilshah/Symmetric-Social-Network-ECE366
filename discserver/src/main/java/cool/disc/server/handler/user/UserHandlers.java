@@ -1,6 +1,7 @@
 package cool.disc.server.handler.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spotify.apollo.Status;
 import cool.disc.server.model.User;
 import cool.disc.server.store.user.UserStore;
 import com.spotify.apollo.RequestContext;
@@ -12,7 +13,9 @@ import com.spotify.apollo.route.Middlewares;
 import com.spotify.apollo.route.Route;
 import okio.ByteString;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -48,19 +51,33 @@ public class UserHandlers {
         return userStore.getUser(name);
     }
 
-    String login(final RequestContext requestContext){
+    Response<String> login(final RequestContext requestContext){
+
         Optional<String> username = requestContext.request().parameter("username");
         Optional<String> password = requestContext.request().parameter("password");
-        return userStore.login(username.get(), password.get());
+
+        String response = userStore.login(username.get(), password.get());
+
+        if(response.equals("invalid")){
+            return Response.of(Status.UNAUTHORIZED, "Invalid username or password");
+        }
+        else{
+            return Response.ok().withPayload(response);
+        }
     }
 
 
 
     private <T> Middleware<AsyncHandler<T>, AsyncHandler<Response<ByteString>>> jsonMiddleware() {
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Access-Control-Allow-Origin", "*");
+        headers.put("Access-Control-Allow-Methods", "GET, POST");
+
         return JsonSerializerMiddlewares.<T>jsonSerialize(objectMapper.writer())
                 .and(Middlewares::httpPayloadSemantics)
                 .and(responseAsyncHandler -> requestContext ->
                         responseAsyncHandler.invoke(requestContext)
-                                .thenApply(response -> response.withHeader("Access-Control-Allow-Origin", "*")));
+                                .thenApply(response -> response.withHeaders(headers)));
     }
 }

@@ -1,5 +1,7 @@
 package cool.disc.server;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spotify.apollo.Environment;
 import com.spotify.apollo.httpservice.HttpService;
@@ -23,7 +25,7 @@ public final class App {
     }
 
     static void init(Environment environment) {
-        ObjectMapper objectMapper = new ObjectMapper().registerModule(new AutoMatterModule());
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new AutoMatterModule()).setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);;
         UserStore userStore = new UserStoreController(environment.config());
         UserHandlers userHandlers = new UserHandlers(objectMapper, userStore);
         userHandlers.routes();
@@ -33,7 +35,7 @@ public final class App {
         postHandlers.routes();
 
         environment.routingEngine()
-                .registerAutoRoute(Route.sync("GET", "/hello/world", rc -> "hello world"))
+                .registerAutoRoute(Route.sync("GET", "/", rc -> "hello world"))
                 .registerRoutes(userHandlers.routes())
                 .registerRoutes(postHandlers.routes());
     }

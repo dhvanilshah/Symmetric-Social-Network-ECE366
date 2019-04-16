@@ -6,9 +6,12 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.*;
+import com.spotify.apollo.Response;
+import com.spotify.apollo.Status;
 import com.typesafe.config.Config;
 import cool.disc.server.model.User;
 import cool.disc.server.model.UserBuilder;
+import okio.ByteString;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -104,6 +107,7 @@ public class UserStoreController implements UserStore {
         return userId;
     }
 
+//    take in username and password and return JWT if password is correct
     @Override
     public String login(String username, String password){
         Document doc;
@@ -129,8 +133,10 @@ public class UserStoreController implements UserStore {
         }
         if (token != null){
             return token;
+//            return Response.ok().withPayload(token);
         } else {
             return "invalid";
+//            return Response.of(Status.UNAUTHORIZED, "Password or Username incorrect");
         }
     }
 }
