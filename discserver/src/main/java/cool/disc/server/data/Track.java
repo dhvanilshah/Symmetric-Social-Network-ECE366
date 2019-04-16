@@ -1,19 +1,19 @@
 package cool.disc.server.data;
 
 public class Track {
-  private final String name;
-  private final Album album;
+    private final String name;
+    private final Artist artist;
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public Album getAlbum() {
-    return album;
-  }
+    public Artist getArtist() {
+        return artist;
+    }
 
-  public Track(String name, Album album) {
-    this.name = name;
-    this.album = album;
-  }
+    public Track(String name, Artist artist) {
+        this.name = name;
+        this.artist = artist;
+    }
 }
