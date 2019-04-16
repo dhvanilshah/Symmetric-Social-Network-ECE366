@@ -1,9 +1,8 @@
-import static org.mockito.Mockito.*;
+package cool.disc.server;
 
 /* Unit test for User Handler */
 public class UserTest {
 
-    @Mock
     
 
 }

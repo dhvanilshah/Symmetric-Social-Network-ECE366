@@ -1,17 +1,14 @@
 package cool.disc.server.handler.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cool.disc.server.model.User;
-import cool.disc.server.store.user.UserStore;
 import com.spotify.apollo.RequestContext;
 import com.spotify.apollo.Response;
-import com.spotify.apollo.route.AsyncHandler;
-import com.spotify.apollo.route.JsonSerializerMiddlewares;
-import com.spotify.apollo.route.Middleware;
-import com.spotify.apollo.route.Middlewares;
-import com.spotify.apollo.route.Route;
+import com.spotify.apollo.route.*;
+import cool.disc.server.model.User;
+import cool.disc.server.store.user.UserStore;
 import okio.ByteString;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -34,13 +31,20 @@ public class UserHandlers {
         );
     }
 
-    User addUser(final RequestContext requestContext) {
-        Optional<String> username = requestContext.request().parameter("username");
-        Optional<String> name = requestContext.request().parameter("name");
-        Optional<String> password = requestContext.request().parameter("password");
-        Optional<String> service = requestContext.request().parameter("service");
-        Optional<String> photo = requestContext.request().parameter("photo");
-        return userStore.addUser(username.get(), name.get(), password.get(), service.get(), photo.get());
+    Integer addUser(final RequestContext requestContext) {
+        User user;
+        if (requestContext.request().payload().isPresent()) {
+            try {
+                user = objectMapper.readValue(requestContext.request().payload().get().toByteArray(), User.class);
+                Response<Object> response = userStore.addUser(user);
+                return response.status().code();
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("invalid payload");
+            }
+        } else {
+            throw new RuntimeException("no payload");
+        }
     }
 
     List<User> getUser(final RequestContext requestContext){
