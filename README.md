@@ -15,8 +15,6 @@
 We are currently using the front end locally. To run the front end first, instal; `yarn`.
 Once yarn is installed, cd into the front end repository. Run `yarn start` in the terminal window.
 This will open the front end at port 3000 in your browser.
-||||||| merged common ancestors
-=======
 
 #### Build with Maven
 ```bash
