@@ -1,5 +1,7 @@
 package cool.disc.server;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.spotify.apollo.Environment;
@@ -33,9 +35,10 @@ public final class App {
         HttpService.boot(App::init, "disc", args);
     }
 
-    public static void init(Environment environment) {
-        ObjectMapper objectMapper = new ObjectMapper().registerModule(new AutoMatterModule());
 
+
+    public static void init(Environment environment) {
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new AutoMatterModule()).setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         AlbumResource albumResource = new AlbumResource(objectMapper);
         ArtistResource artistResource = new ArtistResource(objectMapper);
 
@@ -52,6 +55,7 @@ public final class App {
         }
         // "/ping" for the purpose of checking if routing works only
         environment.routingEngine()
+                .registerAutoRoute(Route.sync("GET", "/", rc -> "hello world"))
                 .registerRoutes(userHandlers.routes())
                 .registerRoutes(postHandlers.routes())
                 .registerRoutes(albumResource.routes())
@@ -61,7 +65,7 @@ public final class App {
                         "Useful endpoint for doing health checks."));
     }
 
-    // for testing health checks
+//     for testing health checks
     public static Response<ByteString> ping(RequestContext requestContext) {
         return Response.ok().withPayload(ByteString.encodeUtf8("pong!"));
     }

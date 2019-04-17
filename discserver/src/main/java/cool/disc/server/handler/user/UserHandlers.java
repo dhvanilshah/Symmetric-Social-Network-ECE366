@@ -1,15 +1,22 @@
 package cool.disc.server.handler.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spotify.apollo.Request;
+import com.spotify.apollo.Status;
+import cool.disc.server.model.User;
+import cool.disc.server.store.user.UserStore;
 import com.spotify.apollo.RequestContext;
 import com.spotify.apollo.Response;
 import com.spotify.apollo.route.*;
 import cool.disc.server.model.User;
 import cool.disc.server.store.user.UserStore;
+import cool.disc.server.utils.AuthUtils;
 import okio.ByteString;
 
+import java.util.HashMap;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -17,33 +24,43 @@ public class UserHandlers {
 
     private final ObjectMapper objectMapper;
     private final UserStore userStore;
+    private final AuthUtils authUtils;
 
     public UserHandlers(final ObjectMapper objectMapper, final UserStore userStore){
         this.objectMapper = objectMapper;
         this.userStore = userStore;
+        this.authUtils = new AuthUtils();
     }
 
     public Stream<Route<AsyncHandler<Response<ByteString>>>> routes() {
         return Stream.of(
                 Route.sync("GET", "/addUser", this::addUser).withMiddleware(jsonMiddleware()),
                 Route.sync("GET", "/getUser/<name>", this::getUser).withMiddleware(jsonMiddleware()),
-                Route.sync("GET", "/login", this::login).withMiddleware(jsonMiddleware())
+                Route.sync("GET", "/login", this::login).withMiddleware(jsonMiddleware()),
+                Route.sync("GET", "/addFriend/<id>", this::addFriend).withMiddleware(jsonMiddleware())
         );
     }
 
-    Integer addUser(final RequestContext requestContext) {
+    Response addUser(final RequestContext requestContext) {
         User user;
+        Integer response;
         if (requestContext.request().payload().isPresent()) {
             try {
                 user = objectMapper.readValue(requestContext.request().payload().get().toByteArray(), User.class);
-                Response<Object> response = userStore.addUser(user);
-                return response.status().code();
+                response = userStore.addUser(user);
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new RuntimeException("invalid payload");
             }
         } else {
             throw new RuntimeException("no payload");
+        }
+
+        if(response == 1){
+           return Response.ok();
+        }
+        else {
+            return Response.of(Status.UNAUTHORIZED, ByteString.encodeUtf8("Could not create account"));
         }
     }
 
@@ -52,19 +69,50 @@ public class UserHandlers {
         return userStore.getUser(name);
     }
 
-    String login(final RequestContext requestContext){
+
+    Response<String> login(final RequestContext requestContext){
+
         Optional<String> username = requestContext.request().parameter("username");
         Optional<String> password = requestContext.request().parameter("password");
-        return userStore.login(username.get(), password.get());
+
+        String response = userStore.login(username.get(), password.get());
+
+        if(response.equals("invalid")){
+            return Response.of(Status.UNAUTHORIZED, "Invalid username or password");
+        }
+        else{
+            return Response.ok().withPayload(response);
+        }
+    }
+
+    Response<String> addFriend(final RequestContext requestContext){
+        String friend_id = requestContext.pathArgs().get("id");
+        Optional<String> token = requestContext.request().header("session-token");
+        if (friend_id.isEmpty() || !token.isPresent()) {
+            return Response.of(Status.BAD_REQUEST, "Invalid request");
+        }
+        String user_id = authUtils.verifyToken(token.get());
+
+        if(user_id == null){
+            return Response.of(Status.UNAUTHORIZED, "Could not verify user.");
+        }
+        String response = userStore.addFriend(friend_id, user_id);
+
+        return Response.ok().withPayload(response);
     }
 
 
 
     private <T> Middleware<AsyncHandler<T>, AsyncHandler<Response<ByteString>>> jsonMiddleware() {
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Access-Control-Allow-Origin", "*");
+        headers.put("Access-Control-Allow-Methods", "GET, POST");
+
         return JsonSerializerMiddlewares.<T>jsonSerialize(objectMapper.writer())
                 .and(Middlewares::httpPayloadSemantics)
                 .and(responseAsyncHandler -> requestContext ->
                         responseAsyncHandler.invoke(requestContext)
-                                .thenApply(response -> response.withHeader("Access-Control-Allow-Origin", "*")));
+                                .thenApply(response -> response.withHeaders(headers)));
     }
 }
