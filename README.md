@@ -16,6 +16,9 @@ We are currently using the front end locally. To run the front end first, instal
 Once yarn is installed, cd into the front end repository. Run `yarn start` in the terminal window.
 This will open the front end at port 3000 in your browser.
 
+#### Explanation of front end
+The front end consists of components that can be reused on different pages. Right now we have a home page, sign in page, and sign up page.  
+
 #### Build with Maven
 ```bash
 mvn clean compile   // compiles the project
