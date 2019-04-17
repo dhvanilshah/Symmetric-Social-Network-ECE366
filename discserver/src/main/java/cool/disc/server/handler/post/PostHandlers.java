@@ -1,7 +1,6 @@
 package cool.disc.server.handler.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.mongodb.MongoClientException;
 import com.spotify.apollo.RequestContext;
 import com.spotify.apollo.Response;
@@ -10,14 +9,11 @@ import cool.disc.server.model.Post;
 import cool.disc.server.store.post.PostStore;
 import cool.disc.server.store.user.UserStore;
 import okio.ByteString;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
-import javax.annotation.PostConstruct;
-import javax.swing.text.Document;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 public class PostHandlers {
@@ -32,11 +28,12 @@ public class PostHandlers {
         this.userStore = userStore;
     }
 
-        public Stream<Route<AsyncHandler<Response<ByteString>>>> routes() {
+    public Stream<Route<AsyncHandler<Response<ByteString>>>> routes() {
         return Stream.of(
                 Route.sync("GET", "/getFeed", this::getFeed).withMiddleware(jsonMiddleware()),
-                Route.sync("GET", "/addPost", this::addPost).withMiddleware(jsonMiddleware()),
-                Route.sync("GET", "/getAllPosts", this::geAllPosts).withMiddleware(jsonMiddleware()));
+                Route.sync("POST", "/addPost", this::addPost).withMiddleware(jsonMiddleware()),
+                Route.sync("GET", "/getAllPosts", this::geAllPosts).withMiddleware(jsonMiddleware())
+        );
     }
 
     // retrieves all posts in the database
@@ -46,29 +43,20 @@ public class PostHandlers {
 
     // adding a post from parameters received through http request
     // parameters: writerName (not id), receiverName (not id), message
-    Post addPost(final RequestContext requestContext) {
-        String writerName = requestContext.request().parameters().get("writerName").iterator().next();
-        String receiverName = requestContext.request().parameters().get("receiverName").iterator().next();
-        String message = requestContext.request().parameters().get("message").iterator().next();
-//        System.out.println("writer: " + writerName + " receiver: " + receiverName + " message: " + message);
-//        System.out.println("*************************************************************");
-        ObjectId writerId = null;
-        ObjectId receiverId = null;
-        try {
-            writerId = userStore.getUserId(writerName);
-            receiverId = userStore.getUserId(receiverName);
-        } catch (Exception e) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    Integer addPost(final RequestContext requestContext) {
+        Post post;
+        if (requestContext.request().payload().isPresent()) {
+            try {
+                post = objectMapper.readValue(requestContext.request().payload().get().toByteArray(), Post.class);
+                Response<Object> response = postStore.addPost(post);
+                return response.status().code();
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("invalid payload");
+            }
+        } else {
+            throw new RuntimeException("no payload");
         }
-        System.out.println("writerId: " + writerId.toHexString() + " receiverId: " + receiverId.toHexString());
-        Post addedPost = null;
-        if (writerId != null || receiverId != null ){
-                addedPost = postStore.addPost(writerId, receiverId, message);
-                if (addedPost != null) {
-                    System.out.println("MESSAGE: " + addedPost.message());
-                }
-        }
-        return addedPost;
     }
 
     // retrieves all posts written by the specified user and the user's friends.
@@ -103,6 +91,6 @@ public class PostHandlers {
                                                 .invoke(requestContext)
                                                 .thenApply(
                                                         response -> response.withHeader("Access-Control-Allow-Origin", "*")));
-        }
+    }
 
-        }
+}

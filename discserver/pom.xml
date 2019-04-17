@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <build>
         <plugins>
-            <!-- Used to tell maven how to create a manifest file in your JAR file -->
+            <!--  for manifest file in your JAR file -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -31,6 +31,7 @@
                 </configuration>
             </plugin>
 
+
             <!-- Used to build uber jar for deployment (contains all dependencies inside JAR).
                  Without this, you would need to make sure at runtime you specify a classpath.
             -->
@@ -45,35 +46,6 @@
             </plugin>
         </plugins>
     </build>
-    <!--<build>-->
-        <!--<plugins>-->
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-compiler-plugin</artifactId>-->
-                <!--<configuration>-->
-                    <!--<source>8</source>-->
-                    <!--<target>8</target>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
-            <!--<plugin>-->
-                <!--<groupId>org.codehaus.mojo</groupId>-->
-                <!--<artifactId>exec-maven-plugin</artifactId>-->
-                <!--<version>1.2.1</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<goals>-->
-                            <!--<goal>java</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-                <!--<configuration>-->
-                    <!--<mainClass>cool.disc.server.App</mainClass>-->
-                    <!--<arguments>-->
-                    <!--</arguments>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
-        <!--</plugins>-->
-    <!--</build>-->
 
     <packaging>jar</packaging>
 
@@ -94,6 +66,7 @@
         </dependencies>
     </dependencyManagement>
 
+    <!-- project dependencies -->
     <dependencies>
         <dependency>
             <groupId>com.spotify</groupId>
@@ -115,12 +88,11 @@
             <artifactId>mongodb-driver</artifactId>
             <version>3.10.1</version>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.slf4j</groupId>-->
-        <!--<artifactId>slf4j-simple</artifactId>-->
-        <!--<version>1.7.25</version>-->
-        <!--</dependency>-->
-
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.8.0</version>
+        </dependency>
         <dependency>
             <groupId>io.norberg</groupId>
             <artifactId>auto-matter</artifactId>
@@ -132,8 +104,13 @@
             <artifactId>auto-matter-jackson</artifactId>
             <version>0.15.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.mashape.unirest</groupId>
+            <artifactId>unirest-java</artifactId>
+            <version>1.4.9</version>
+        </dependency>
 
-        <!-- test only -->
+        <!-- for tests -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
