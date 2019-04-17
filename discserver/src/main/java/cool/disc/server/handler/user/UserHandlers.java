@@ -1,15 +1,12 @@
 package cool.disc.server.handler.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spotify.apollo.Request;
 import com.spotify.apollo.Status;
 import cool.disc.server.model.User;
 import cool.disc.server.store.user.UserStore;
 import com.spotify.apollo.RequestContext;
 import com.spotify.apollo.Response;
 import com.spotify.apollo.route.*;
-import cool.disc.server.model.User;
-import cool.disc.server.store.user.UserStore;
 import cool.disc.server.utils.AuthUtils;
 import okio.ByteString;
 
@@ -26,10 +23,10 @@ public class UserHandlers {
     private final UserStore userStore;
     private final AuthUtils authUtils;
 
-    public UserHandlers(final ObjectMapper objectMapper, final UserStore userStore){
+    public UserHandlers(final ObjectMapper objectMapper, final UserStore userStore, AuthUtils authUtils){
         this.objectMapper = objectMapper;
         this.userStore = userStore;
-        this.authUtils = new AuthUtils();
+        this.authUtils = authUtils;     /* Added this because Ethan suggested we do it this way */
     }
 
     public Stream<Route<AsyncHandler<Response<ByteString>>>> routes() {

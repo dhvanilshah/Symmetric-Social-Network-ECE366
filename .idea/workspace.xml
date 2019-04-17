@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b6cd22ea-f10d-4be4-a0f6-08e356d64d9f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/post/PostHandlers.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/post/PostHandlers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/PostTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/PostTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/UserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/UserTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/discserver/target/" />
@@ -27,10 +27,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java">
+        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/utils/AuthUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="785">
-              <caret line="93" selection-start-line="93" selection-end-line="93" />
+            <state relative-caret-position="210">
+              <caret line="21" column="44" lean-forward="true" selection-start-line="21" selection-start-column="44" selection-end-line="21" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -39,10 +39,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/utils/AuthUtils.java">
+        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/App.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="35" selection-start-line="35" selection-end-line="35" />
+            <state relative-caret-position="172">
+              <caret line="47" column="89" lean-forward="true" selection-start-line="47" selection-start-column="89" selection-end-line="47" selection-end-column="89" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="147">
+              <caret line="28" column="98" selection-start-line="28" selection-start-column="98" selection-end-line="28" selection-end-column="98" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -53,7 +65,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStoreController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="40">
+            <state relative-caret-position="-24">
               <caret line="134" column="24" lean-forward="true" selection-start-line="134" selection-start-column="24" selection-end-line="134" selection-end-column="24" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -63,24 +75,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/UserTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-229">
-              <caret line="71" column="83" lean-forward="true" selection-start-line="67" selection-start-column="10" selection-end-line="71" selection-end-column="83" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/PostTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="132" column="33" selection-start-line="132" selection-start-column="33" selection-end-line="132" selection-end-column="33" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2081#2087#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="102">
+              <caret line="121" column="36" lean-forward="true" selection-start-line="121" selection-start-column="36" selection-end-line="121" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -88,7 +87,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/post/PostHandlers.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
+            <state relative-caret-position="212">
               <caret line="50" column="67" selection-start-line="50" selection-start-column="44" selection-end-line="50" selection-end-column="67" />
             </state>
           </provider>
@@ -101,6 +100,19 @@
               <caret line="197" column="57" lean-forward="true" selection-start-line="197" selection-start-column="57" selection-end-line="197" selection-end-column="57" />
               <folding>
                 <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/PostTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="205">
+              <caret line="74" column="43" lean-forward="true" selection-start-line="74" selection-start-column="43" selection-end-line="74" selection-end-column="43" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2081#2087#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -147,15 +159,15 @@
         <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/auth/AuthHandlers.java" />
         <option value="$PROJECT_DIR$/discserver/pom.xml" />
         <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/post/PostStoreController.java" />
-        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/App.java" />
         <option value="$PROJECT_DIR$/discserver/src/main/resources/discserver.conf" />
         <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStore.java" />
         <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/utils/AuthUtils.java" />
         <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStoreController.java" />
-        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java" />
-        <option value="$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/UserTest.java" />
         <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/post/PostHandlers.java" />
         <option value="$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/PostTest.java" />
+        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/App.java" />
+        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java" />
+        <option value="$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/UserTest.java" />
       </list>
     </option>
   </component>
@@ -365,7 +377,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555536338058" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555545133518" />
     <property name="jdk.selected.JAVA_MODULE" value="1.8" />
     <property name="last_opened_file_path" value="D:/IdeaProjects/ece366-spring2019/mongodb" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -393,8 +405,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.PostTest.addPost">
-    <configuration name="PostTest.addPost" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.UserTest">
+    <configuration name="PostTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="discserver" />
       <extension name="coverage">
         <pattern>
@@ -404,13 +416,12 @@
       </extension>
       <option name="PACKAGE_NAME" value="cool.disc.server" />
       <option name="MAIN_CLASS_NAME" value="cool.disc.server.PostTest" />
-      <option name="METHOD_NAME" value="addPost" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PostTest.getAllPost" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="UserTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="discserver" />
       <extension name="coverage">
         <pattern>
@@ -419,25 +430,8 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="cool.disc.server" />
-      <option name="MAIN_CLASS_NAME" value="cool.disc.server.PostTest" />
-      <option name="METHOD_NAME" value="getAllPost" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="PostTest.getFeed" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="discserver" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="cool.disc.server.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="cool.disc.server" />
-      <option name="MAIN_CLASS_NAME" value="cool.disc.server.PostTest" />
-      <option name="METHOD_NAME" value="getFeed" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="MAIN_CLASS_NAME" value="cool.disc.server.UserTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -474,19 +468,35 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="UserTest.login" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="discserver" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cool.disc.server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="cool.disc.server" />
+      <option name="MAIN_CLASS_NAME" value="cool.disc.server.UserTest" />
+      <option name="METHOD_NAME" value="login" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
-      <item itemvalue="JUnit.UserTest.getUser" />
       <item itemvalue="JUnit.UserTest.addFriend" />
-      <item itemvalue="JUnit.PostTest.getAllPost" />
-      <item itemvalue="JUnit.PostTest.getFeed" />
-      <item itemvalue="JUnit.PostTest.addPost" />
+      <item itemvalue="JUnit.UserTest.login" />
+      <item itemvalue="JUnit.UserTest.getUser" />
+      <item itemvalue="JUnit.UserTest" />
+      <item itemvalue="JUnit.PostTest" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.PostTest.addPost" />
-        <item itemvalue="JUnit.PostTest.getFeed" />
-        <item itemvalue="JUnit.PostTest.getAllPost" />
+        <item itemvalue="JUnit.UserTest" />
         <item itemvalue="JUnit.UserTest.addFriend" />
+        <item itemvalue="JUnit.PostTest" />
+        <item itemvalue="JUnit.UserTest.login" />
         <item itemvalue="JUnit.UserTest.getUser" />
       </list>
     </recent_temporary>
@@ -519,35 +529,35 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="PostTest_getAllPost - 2019.04.17 at 16h 29m 58s.xml">
-      <configuration name="PostTest.getAllPost" configurationId="JUnit" />
+    <history-entry file="UserTest_login - 2019.04.17 at 17h 39m 39s.xml">
+      <configuration name="UserTest.login" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PostTest_getAllPost - 2019.04.17 at 16h 30m 12s.xml">
-      <configuration name="PostTest.getAllPost" configurationId="JUnit" />
+    <history-entry file="UserTest_addFriend - 2019.04.17 at 17h 45m 31s.xml">
+      <configuration name="UserTest.addFriend" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PostTest_getFeed - 2019.04.17 at 16h 46m 10s.xml">
-      <configuration name="PostTest.getFeed" configurationId="JUnit" />
+    <history-entry file="UserTest - 2019.04.17 at 17h 46m 05s.xml">
+      <configuration name="UserTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PostTest_getFeed - 2019.04.17 at 16h 47m 23s.xml">
-      <configuration name="PostTest.getFeed" configurationId="JUnit" />
+    <history-entry file="UserTest - 2019.04.17 at 17h 47m 10s.xml">
+      <configuration name="UserTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PostTest_getFeed - 2019.04.17 at 16h 53m 03s.xml">
-      <configuration name="PostTest.getFeed" configurationId="JUnit" />
+    <history-entry file="PostTest - 2019.04.17 at 17h 51m 25s.xml">
+      <configuration name="PostTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PostTest_getFeed - 2019.04.17 at 17h 12m 05s.xml">
-      <configuration name="PostTest.getFeed" configurationId="JUnit" />
+    <history-entry file="PostTest - 2019.04.17 at 19h 21m 30s.xml">
+      <configuration name="PostTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PostTest_addPost - 2019.04.17 at 17h 12m 41s.xml">
-      <configuration name="PostTest.addPost" configurationId="JUnit" />
+    <history-entry file="UserTest_addFriend - 2019.04.17 at 19h 34m 27s.xml">
+      <configuration name="UserTest.addFriend" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PostTest_addPost - 2019.04.17 at 17h 14m 14s.xml">
-      <configuration name="PostTest.addPost" configurationId="JUnit" />
+    <history-entry file="UserTest_addFriend - 2019.04.17 at 19h 34m 37s.xml">
+      <configuration name="UserTest.addFriend" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PostTest_addPost - 2019.04.17 at 17h 14m 35s.xml">
-      <configuration name="PostTest.addPost" configurationId="JUnit" />
+    <history-entry file="UserTest_addFriend - 2019.04.17 at 19h 40m 02s.xml">
+      <configuration name="UserTest.addFriend" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PostTest_getFeed - 2019.04.17 at 17h 15m 05s.xml">
-      <configuration name="PostTest.getFeed" configurationId="JUnit" />
+    <history-entry file="UserTest_addFriend - 2019.04.17 at 19h 47m 56s.xml">
+      <configuration name="UserTest.addFriend" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
@@ -567,15 +577,15 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.30247933" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.45950413" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3322314" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.45950413" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.03821656" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" weight="0.07388535" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.43801653" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" weight="0.3289256" />
       <window_info anchor="bottom" id="FindBugs-IDEA" order="12" />
       <window_info anchor="bottom" id="CheckStyle" order="13" />
@@ -661,13 +671,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java</url>
-          <line>97</line>
+          <line>94</line>
           <properties />
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java</url>
-          <line>93</line>
+          <line>90</line>
           <properties />
           <option name="timeStamp" value="33" />
         </line-breakpoint>
@@ -682,6 +692,12 @@
           <line>27</line>
           <properties />
           <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java</url>
+          <line>92</line>
+          <properties />
+          <option name="timeStamp" value="51" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -921,16 +937,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/App.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="67" column="71" selection-start-line="67" selection-start-column="41" selection-end-line="67" selection-end-column="71" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStore.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
@@ -989,41 +995,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/utils/AuthUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="35" selection-start-line="35" selection-end-line="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/internal/runners/model/ReflectiveCallable.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="16" selection-start-line="16" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="785">
-          <caret line="93" selection-start-line="93" selection-end-line="93" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStoreController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="134" column="24" lean-forward="true" selection-start-line="134" selection-start-column="24" selection-end-line="134" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3543#3549#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1047,28 +1022,69 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/PostTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="74" column="43" lean-forward="true" selection-start-line="74" selection-start-column="43" selection-end-line="74" selection-end-column="43" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2081#2087#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStoreController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-24">
+          <caret line="134" column="24" lean-forward="true" selection-start-line="134" selection-start-column="24" selection-end-line="134" selection-end-column="24" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3543#3549#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/post/PostHandlers.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
+        <state relative-caret-position="212">
           <caret line="50" column="67" selection-start-line="50" selection-start-column="44" selection-end-line="50" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/App.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="47" column="89" lean-forward="true" selection-start-line="47" selection-start-column="89" selection-end-line="47" selection-end-column="89" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="28" column="98" selection-start-line="28" selection-start-column="98" selection-end-line="28" selection-end-column="98" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/utils/AuthUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="21" column="44" lean-forward="true" selection-start-line="21" selection-start-column="44" selection-end-line="21" selection-end-column="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/UserTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-229">
-          <caret line="71" column="83" lean-forward="true" selection-start-line="67" selection-start-column="10" selection-end-line="71" selection-end-column="83" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/PostTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="132" column="33" selection-start-line="132" selection-start-column="33" selection-end-line="132" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2081#2087#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="102">
+          <caret line="121" column="36" lean-forward="true" selection-start-line="121" selection-start-column="36" selection-end-line="121" selection-end-column="36" />
         </state>
       </provider>
     </entry>

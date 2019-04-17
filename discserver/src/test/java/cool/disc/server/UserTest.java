@@ -11,7 +11,6 @@ import cool.disc.server.handler.user.UserHandlers;
 import cool.disc.server.model.User;
 import cool.disc.server.model.UserBuilder;
 import cool.disc.server.store.user.UserStore;
-import org.bson.types.ObjectId;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -56,7 +55,7 @@ public class UserTest
                 .photo("test_photo")
                 .build();
 
-        testClass = new UserHandlers(objectMapper, userStore);
+        testClass = new UserHandlers(objectMapper, userStore, auth);
     }
 
 
@@ -65,13 +64,13 @@ public class UserTest
     public void addUser() throws IOException
     {
         /* Mocking the analysis of the request payload */
-//        byte[] byteArray = new byte[0];
-//        when(requestContext.request()).thenReturn(request);
-//        when(request.payload()).thenReturn(Optional.of(requestPayloadByteString));
-//        when(requestPayloadByteString.toByteArray()).thenReturn(byteArray);
-//        when(objectMapper.readValue(byteArray, User.class)).thenReturn(testUser);
+        byte[] byteArray = new byte[0];
+        when(requestContext.request()).thenReturn(request);
+        when(request.payload()).thenReturn(Optional.of(requestPayloadByteString));
+        when(requestPayloadByteString.toByteArray()).thenReturn(byteArray);
+        when(objectMapper.readValue(byteArray, User.class)).thenReturn(testUser);
 
-        when(requestContext.pathArgs()).thenReturn(Collections.singletonMap("name", testUser.name()));
+        //when(requestContext.pathArgs()).thenReturn(Collections.singletonMap("name", testUser.name()));
 
         /* Mocking interaction with the DB */
         when(userStore.addUser(testUser)).thenReturn(1);
@@ -118,8 +117,6 @@ public class UserTest
         /* Mock the request context and request */
         when(requestContext.pathArgs()).thenReturn(Collections.singletonMap("id", friend.id()));
         when(requestContext.request()).thenReturn(request);
-
-        /* This token is bad, so we should get unauthorized access */
         when(request.header("session-token")).thenReturn(Optional.of("token"));
 
         /* Mock the authorization */
@@ -132,7 +129,7 @@ public class UserTest
         Response handlerReturn = testClass.addFriend(requestContext);
 
         /* Make sure we got the right response back */
-        Assert.assertEquals(handlerReturn.status(), Status.UNAUTHORIZED);
+        Assert.assertEquals(handlerReturn.status(), Status.OK);
 
     }
 
@@ -140,7 +137,6 @@ public class UserTest
     public void login()
     {
         /* Mock request */
-        when(requestContext.pathArgs()).thenReturn(Collections.singletonMap("name", testUser.name()));
         when(requestContext.request()).thenReturn(request);
         when(request.parameter("username")).thenReturn(Optional.of(testUser.username()));
         when(request.parameter("password")).thenReturn(Optional.of(testUser.password()));

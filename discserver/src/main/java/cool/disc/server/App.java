@@ -19,6 +19,7 @@ import cool.disc.server.store.post.PostStore;
 import cool.disc.server.store.post.PostStoreController;
 import cool.disc.server.store.user.UserStore;
 import cool.disc.server.store.user.UserStoreController;
+import cool.disc.server.utils.AuthUtils;
 import io.norberg.automatter.jackson.AutoMatterModule;
 import okio.ByteString;
 
@@ -40,8 +41,11 @@ public final class App {
         AlbumResource albumResource = new AlbumResource(objectMapper);
         ArtistResource artistResource = new ArtistResource(objectMapper);
 
+        /* Added this because Ethan said it shouldnt be constructed within the userHandlers */
+        AuthUtils authUtils = new AuthUtils();
+
         UserStore userStore = new UserStoreController();
-        UserHandlers userHandlers = new UserHandlers(objectMapper, userStore);
+        UserHandlers userHandlers = new UserHandlers(objectMapper, userStore, authUtils);
 
         PostStore postStore = new PostStoreController();
         PostHandlers postHandlers = new PostHandlers(objectMapper, postStore, userStore);
