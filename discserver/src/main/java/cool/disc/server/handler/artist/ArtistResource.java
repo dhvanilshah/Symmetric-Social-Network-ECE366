@@ -8,8 +8,6 @@ import com.spotify.apollo.*;
 import com.spotify.apollo.route.AsyncHandler;
 import com.spotify.apollo.route.JsonSerializerMiddlewares;
 import com.spotify.apollo.route.Route;
-import cool.disc.server.data.Album;
-import cool.disc.server.data.Artist;
 import cool.disc.server.data.Track;
 import okio.ByteString;
 
@@ -92,7 +90,7 @@ public class ArtistResource {
                 String artistName = trackNode.get("artists").get(0).get("name").asText();
                 String trackName = trackNode.get("name").asText();
 
-                tracks.add(new Track(trackName, new Album(albumName, new Artist(artistName))));
+//                tracks.add(new Track(trackName, new Album(albumName, new Artist(artistName))));
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to parse JSON", e);
