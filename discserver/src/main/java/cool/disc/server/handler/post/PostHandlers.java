@@ -37,13 +37,13 @@ public class PostHandlers {
     }
 
     // retrieves all posts in the database
-    List<Post> geAllPosts(final RequestContext requestContext) {
+    public List<Post> geAllPosts(final RequestContext requestContext) {
         return postStore.getAllPosts();
     }
 
     // adding a post from parameters received through http request
     // parameters: writerName (not id), receiverName (not id), message
-    Integer addPost(final RequestContext requestContext) {
+    public Integer addPost(final RequestContext requestContext) {
         Post post;
         if (requestContext.request().payload().isPresent()) {
             try {
@@ -61,7 +61,7 @@ public class PostHandlers {
 
     // retrieves all posts written by the specified user and the user's friends.
     // needs to pass in the name of the user as parameter through http request
-    List<Post> getFeed(final RequestContext requestContext) {
+    public List<Post> getFeed(final RequestContext requestContext) {
         String name = requestContext.request().parameters().get("name").iterator().next();
         List<Post> postList = new ArrayList<>();
         try {

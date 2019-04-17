@@ -11,6 +11,7 @@ import cool.disc.server.handler.user.UserHandlers;
 import cool.disc.server.model.User;
 import cool.disc.server.model.UserBuilder;
 import cool.disc.server.store.user.UserStore;
+import org.bson.types.ObjectId;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,12 +20,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.OngoingStubbing;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.mockito.Mockito.*;
 
@@ -103,40 +102,39 @@ public class UserTest
     }
 
 /* Needs work */
-//    @Test
-//    public void addFriend() throws IOException
-//    {
-//        /* Create a friend user */
-//        User friend = new UserBuilder()
-//                .id("friend_id")
-//                .username("friend_username")
-//                .name("friend_name")
-//                .password("friend_password")
-//                .service("friend_service")
-//                .photo("friend_photo")
-//                .build();
-//
-//        /* Mock the request context and request */
-//        when(requestContext.pathArgs()).thenReturn(Collections.singletonMap("name", testUser.name()));
-//        when(requestContext.request()).thenReturn(request);
-//        when(request.header("session-token")).thenReturn(Optional.of("token"));
-//
-//        /* Mock the authorization */
-//        when(auth.verifyToken("token")).thenReturn(testUser.id());
-//
-//        /* Mocking interaction with DB */
-//        when(userStore.addFriend(friend.id(), testUser.id())).thenReturn(testUser.id());
-//
-//        /* Getting the response from the handler method -- Needs work */
-//        Response handlerReturn = testClass.addFriend(requestContext);
-//
-//        /* Make sure we got the right response back */
-//        Assert.assertEquals(handlerReturn.status(), Status.OK);
-//
-//        /* Make sure we got the right response message back */
-//        Assert.assertEquals(handlerReturn.payload(), testUser.id());
-//
-//    }
+    @Test
+    public void addFriend() throws IOException
+    {
+        /* Create a friend user */
+        User friend = new UserBuilder()
+                .id("friend_id")
+                .username("friend_username")
+                .name("friend_name")
+                .password("friend_password")
+                .service("friend_service")
+                .photo("friend_photo")
+                .build();
+
+        /* Mock the request context and request */
+        when(requestContext.pathArgs()).thenReturn(Collections.singletonMap("id", friend.id()));
+        when(requestContext.request()).thenReturn(request);
+
+        /* This token is bad, so we should get unauthorized access */
+        when(request.header("session-token")).thenReturn(Optional.of("token"));
+
+        /* Mock the authorization */
+        when(auth.verifyToken("token")).thenReturn(testUser.id());
+
+        /* Mocking interaction with DB */
+        when(userStore.addFriend(friend.id(), testUser.id())).thenReturn(testUser.id());
+
+        /* Getting the response from the handler method */
+        Response handlerReturn = testClass.addFriend(requestContext);
+
+        /* Make sure we got the right response back */
+        Assert.assertEquals(handlerReturn.status(), Status.UNAUTHORIZED);
+
+    }
 
     @Test
     public void login()
