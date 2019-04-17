@@ -40,6 +40,7 @@ public class UserStoreController implements UserStore {
     private MongoClient dbClient;
     private MongoDatabase database;
     private MongoCollection<Document> userCollection;
+    private MongoCollection<Document> testCollection;
 
     public UserStoreController() {
         this.authUtils =  new AuthUtils();
@@ -54,27 +55,36 @@ public class UserStoreController implements UserStore {
         // initialize db driver
         uri = new MongoClientURI(uriString);
         dbClient = new MongoClient(uri);
+
+        MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
         String databaseString = this.config.getString("mongo.database");
-        database = dbClient.getDatabase(databaseString);
-        userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
+//        database = dbClient.getDatabase(databaseString);
+//        userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
+//        testCollection = database.getCollection("test");
+
+        database = mongoClient.getDatabase("discbase");
+        userCollection = database.getCollection("users");
+        testCollection = database.getCollection("tests");
     }
 
     @Override
     public Integer addUser(User newUser){
         // parse data from the payload
         String name = newUser.name();
+        String username = newUser.username();
         String password = newUser.password();
         String email = newUser.email();
         String service = newUser.service();
-        String photo = newUser.photo();
+//        String photo = newUser.photo();
         Date date = new Date();
 
         Document addUserDoc = new Document()
                 .append("name", name)
+                .append("username", username)
                 .append("password", password)
                 .append("email", email)
                 .append("service", service)
-                .append("photo", photo)
+//                .append("photo", photo)
                 .append("date", date);
 
         try {
@@ -132,8 +142,6 @@ public class UserStoreController implements UserStore {
 //    take in username and password and return JWT if password is correct
     @Override
     public String login(String username, String password){
-        String secret = this.config.getString("secrets.jwt-key");
-
         Document doc;
         String token = null;
 
