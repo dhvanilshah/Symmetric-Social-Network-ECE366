@@ -64,13 +64,13 @@ public class UserHandlers {
         }
     }
 
-    List<User> getUser(final RequestContext requestContext){
+    public List<User> getUser(final RequestContext requestContext){
         String name = requestContext.pathArgs().get("name");
         return userStore.getUser(name);
     }
 
 
-    Response<String> login(final RequestContext requestContext){
+    public Response<String> login(final RequestContext requestContext){
 
         Optional<String> username = requestContext.request().parameter("username");
         Optional<String> password = requestContext.request().parameter("password");
@@ -85,7 +85,7 @@ public class UserHandlers {
         }
     }
 
-    Response<String> addFriend(final RequestContext requestContext){
+    public Response<String> addFriend(final RequestContext requestContext){
         String friend_id = requestContext.pathArgs().get("id");
         Optional<String> token = requestContext.request().header("session-token");
         if (friend_id.isEmpty() || !token.isPresent()) {
