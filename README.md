@@ -11,20 +11,25 @@
 - ReactJS, Redux, Axios
 - Nginx, Apollo-Spotify, MongoDB
 
-#### Running the front end
-We are currently using the front end locally. To run the front end first, instal; `yarn`.
-Once yarn is installed, cd into the front end repository. Run `yarn start` in the terminal window.
-This will open the front end at port 3000 in your browser.
-
-#### Explanation of front end
-The front end consists of components that can be reused on different pages. Right now we have a home page, sign in page, and sign up page.  
-
 #### Build with Maven
 ```bash
 mvn clean compile   // compiles the project
 mvn package         // compile, run tests, and produce deployable artifact (fat .jar)
 java -jar ${path for fat Jar file} cool.disc.server.App -Dhttp.server.port=${port} // specify path and port address
 // by default, the bankend server will run on localhost with above command
+```
+********
+##### Explanation of FrontEnd
+The front end consists of components that can be reused on different pages. Right now we have a home page, sign in page, and sign up page.  
+
+We are currently using the front end locally. To run the front end first, install package `yarn`.
+Once yarn is installed, cd into the front end repository. Run `yarn start` in the terminal window.
+By default, the app will run on localhost:3000.
+
+```
+brew [apt-get] install yarn 
+cd ${directory}
+yarn start
 ```
 ********
 ##### Explanation of Web Server (Nginx)
@@ -51,26 +56,23 @@ server {
 The `location` directive tells Nginx to reverse proxy whenever a URI contains */api/* and pass whatever argument follows the */api/* segment to the Apollo server listening on port 8080.
 
 ********
-##### Explanation of Backend Server
+##### Explanation of BackEnd Server
 In general, the flow of the process is as such:
 App -> Handler routes -> Controller implementation. Upon start, HttpService.boot(), followed by init(), is called, where path routes from the Handlers are registered: ```registerRoutes( Handler.routes() )```. Then each path route is asynchronously linked to the specified uri and its method type (i.e. GET, POST).
 
 To check what parameters are needed for a user, post, etc., check under ```/model``` directory
 
-User currently has the following path routes (subject to change):
+User currently has the following endpoints (subject to change):
   1) /addUser : adds a user with the provided input payload.
 
   2) /getUser/${name} : returns a user with the specified ${name}
 
-Post currently has the following path routes (subject to change):
-  1) /getFeed?name=${name}
-  when name equals the {first+last name concatenated} of an existing user, it returns all posts written by the identified user and his/her friends. This uses methods ``` getPosts``` on each friend of the user (```getFriends ```) and the user as well, and returns a list of Posts.
+Post currently has the following endpoints (subject to change):
+  1) /getFeed?name=${name} : when name equals the {first+last name concatenated} of an existing user, it returns all posts written by the identified user and his/her friends. This uses methods ``` getPosts``` on each friend of the user (```getFriends ```) and the user as well, and returns a list of Posts.
 
-  2) /addPost
-  given writer, targeted user and message, it adds a post entry to the collection in the database. The input payload will be passed in as a JSON object (``` payload()```).
+  2) /addPost : given writer, targeted user and message, it adds a post entry to the collection in the database. The input payload will be passed in as a JSON object (``` payload()```).
 
-  3) /getAllPosts
-  retrieves all posts in the post collection.
+  3) /getAllPosts : retrieves all posts in the post collection.
 
 ********
 ##### In Progress
