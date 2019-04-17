@@ -41,7 +41,7 @@ public class UserHandlers {
         );
     }
 
-    Response addUser(final RequestContext requestContext) {
+    public Response addUser(final RequestContext requestContext) {
         User user;
         Integer response;
         if (requestContext.request().payload().isPresent()) {
