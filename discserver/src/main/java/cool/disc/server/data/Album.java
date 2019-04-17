@@ -25,7 +25,7 @@ public class Album {
         }
         if (!urls.isEmpty()) {
             for (String url : urls) {
-                System.out.println(url);
+//                System.out.println(url);
                 return urls;
             }
         }

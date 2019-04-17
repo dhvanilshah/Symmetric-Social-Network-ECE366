@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MongoConfiguration">
+    <option name="serverConfigurations">
+      <list>
+        <ServerConfiguration>
+          <option name="authenticationMechanism" value="SCRAM-SHA-1" />
+          <option name="label" value="cloud" />
+          <option name="password" value="puiGLHcv0PKhyLPV" />
+          <option name="serverUrls">
+            <list>
+              <option value="disc-db-shard-00-00-xi3cp.mongodb.net:27017" />
+            </list>
+          </option>
+          <option name="sshTunnelingConfiguration">
+            <SshTunnelingConfiguration />
+          </option>
+          <option name="sslConnection" value="true" />
+          <option name="userDatabase" value="main-db" />
+          <option name="username" value="admin" />
+        </ServerConfiguration>
+        <ServerConfiguration>
+          <option name="label" value="localhost" />
+          <option name="serverUrls">
+            <list>
+              <option value="localhost:27017" />
+            </list>
+          </option>
+          <option name="sshTunnelingConfiguration">
+            <SshTunnelingConfiguration />
+          </option>
+        </ServerConfiguration>
+      </list>
+    </option>
+  </component>
+</project>

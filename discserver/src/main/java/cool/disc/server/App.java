@@ -27,15 +27,13 @@ import java.util.List;
 public final class App {
     /**
      * @param args  program arguments passed in from the command line
-     * @throws LoadingException if anything goes wrong during the service boot sequence
+     * @throws LoadingException if HttpService fails to boot
      */
     public static List<String> urls = null;
 
     public static void main(String[] args) throws LoadingException {
         HttpService.boot(App::init, "disc", args);
     }
-
-
 
     public static void init(Environment environment) {
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new AutoMatterModule()).setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
@@ -55,11 +53,11 @@ public final class App {
         }
         // "/ping" for the purpose of checking if routing works only
         environment.routingEngine()
-                .registerAutoRoute(Route.sync("GET", "/", rc -> "hello world"))
+                .registerAutoRoute(Route.sync("GET", "/", rc -> "Welcome to Backend!"))
                 .registerRoutes(userHandlers.routes())
                 .registerRoutes(postHandlers.routes())
-                .registerRoutes(albumResource.routes())
-                .registerRoutes(artistResource.routes())
+//                .registerRoutes(albumResource.routes())
+//                .registerRoutes(artistResource.routes())
                 .registerRoute(Route.sync("GET", "/ping", App::ping).withDocString(
                         "Responds with a 'pong!' if the service is up.",
                         "Useful endpoint for doing health checks."));

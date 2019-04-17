@@ -74,7 +74,7 @@ public class Authenticate {
         for (int i = 0 ; i < items.length(); i++) {
             String url = items.getJSONObject(i).getJSONObject("album").getJSONObject("external_urls").getString("spotify");
             urls.add(url);
-//            System.out.println("url: " + url);
+            System.out.println("Album URL for '"+query+ "': " + url);
         }
     }
 
