@@ -23,7 +23,7 @@ public class UserHandlers {
     private final UserStore userStore;
     private final AuthUtils authUtils;
 
-    public UserHandlers(final ObjectMapper objectMapper, final UserStore userStore, AuthUtils authUtils){
+    public UserHandlers(final ObjectMapper objectMapper, final UserStore userStore, final AuthUtils authUtils){
         this.objectMapper = objectMapper;
         this.userStore = userStore;
         this.authUtils = authUtils;     /* Added this because Ethan suggested we do it this way */

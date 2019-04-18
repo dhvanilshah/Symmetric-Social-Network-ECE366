@@ -41,7 +41,7 @@ public final class App {
         AlbumResource albumResource = new AlbumResource(objectMapper);
         ArtistResource artistResource = new ArtistResource(objectMapper);
 
-        /* Added this because Ethan said it shouldnt be constructed within the userHandlers */
+        /* Added this because Ethan said it should not be constructed within the userHandlers */
         AuthUtils authUtils = new AuthUtils();
 
         UserStore userStore = new UserStoreController();
