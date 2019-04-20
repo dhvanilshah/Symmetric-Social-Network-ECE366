@@ -3,8 +3,12 @@ package cool.disc.server.store.user;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.UpdateResult;
 import com.spotify.apollo.Response;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -150,15 +154,6 @@ public class UserStoreController implements UserStore {
             String pwd = doc.getString("password");
             if(pwd.equals(password)){
                 String uid = doc.getObjectId("_id").toHexString();
-//                try {
-//                    Algorithm algorithm = Algorithm.HMAC256(secret);
-//                    token = JWT.create()
-//                            .withIssuer("auth0")
-//                            .withClaim("id", uid)
-//                            .sign(algorithm);
-//                } catch (JWTCreationException exception){
-//                    //Invalid Signing configuration / Couldn't convert Claims.
-//                }
                token = authUtils.createToken(uid);
             }
         } catch (Exception e) {
@@ -175,15 +170,71 @@ public class UserStoreController implements UserStore {
 
     @Override
     public String addFriend(String friend_id, String user_id){
-        Document doc;
-        String token = null;
+        Document requestPending;
+        Document requestSent;
+
+        requestPending = new Document("userId", new ObjectId(user_id)).append("date", new Date());
+        requestSent = new Document("userId",  new ObjectId(friend_id)).append("date", new Date());
+
         try {
-            doc  = userCollection.find(eq("_id", friend_id)).first();
+            userCollection.updateOne(eq("_id",  new ObjectId(user_id)), Updates.push("reqSent", requestSent));
+            userCollection.updateOne(eq("_id",  new ObjectId(friend_id)), Updates.push("reqReceived", requestPending));
         } catch (Exception e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
 
-        return user_id;
+        return "okay";
     }
+
+    @Override
+    public String handleRequest(String friend_id, String user_id, String action){
+        Document friend;
+        Document user;
+        List<Document> requests;
+//        Step 1: get user, friend
+//        Step 2: delete request sent, delete request received
+//        Step 3: add user to friend's list and add friend to user's list
+
+        try {
+            user = userCollection.find(eq("_id", new ObjectId(user_id))).first();
+            friend = userCollection.find(eq("_id", new ObjectId(friend_id))).first();
+
+            ArrayList<Document> reqRec =  (ArrayList<Document>) user.get("reqReceived");
+            ArrayList<Document> reqSent =  (ArrayList<Document>) friend.get("reqSent");
+
+            for(int i = 0; i < reqRec.size(); i++){
+                Document doc = reqRec.get(i);
+                if(doc.get("userId").equals(new ObjectId(friend_id))){
+                    reqRec.remove(doc);
+                }
+            }
+
+            for(int i = 0; i < reqSent.size(); i++){
+                Document doc = reqSent.get(i);
+                if(doc.get("userId").equals(new ObjectId(user_id))){
+                    reqSent.remove(doc);
+                }
+            }
+
+            BasicDBObject userReqRec = new BasicDBObject("$set", new BasicDBObject("reqReceived", reqRec));
+            userCollection.updateOne(eq("_id",  new ObjectId(user_id)), userReqRec);
+
+            BasicDBObject friendReqSent = new BasicDBObject("$set", new BasicDBObject("reqSent", reqSent));
+            userCollection.updateOne(eq("_id",  new ObjectId(friend_id)), friendReqSent);
+
+            if(action.equals("add")){
+                user = new Document("userId", new ObjectId(user_id)).append("score", 0);
+                friend = new Document("userId", new ObjectId(friend_id)).append("score", 0);
+                userCollection.updateOne(eq("_id",  new ObjectId(user_id)), Updates.push("friends", friend));
+                userCollection.updateOne(eq("_id",  new ObjectId(friend_id)), Updates.push("friends", user));
+            }
+
+        } catch (Exception e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+
+        return "okay";
+    }
+
 
 }

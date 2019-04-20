@@ -19,6 +19,7 @@ import cool.disc.server.store.post.PostStore;
 import cool.disc.server.store.post.PostStoreController;
 import cool.disc.server.store.user.UserStore;
 import cool.disc.server.store.user.UserStoreController;
+import cool.disc.server.utils.AuthUtils;
 import io.norberg.automatter.jackson.AutoMatterModule;
 import okio.ByteString;
 
@@ -39,11 +40,13 @@ public final class App {
 
     public static void init(Environment environment) {
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new AutoMatterModule()).setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        AuthUtils authUtils = new AuthUtils();
+
         AlbumResource albumResource = new AlbumResource(objectMapper);
         ArtistResource artistResource = new ArtistResource(objectMapper);
 
         UserStore userStore = new UserStoreController();
-        UserHandlers userHandlers = new UserHandlers(objectMapper, userStore);
+        UserHandlers userHandlers = new UserHandlers(objectMapper, userStore, authUtils);
 
         PostStore postStore = new PostStoreController();
         PostHandlers postHandlers = new PostHandlers(objectMapper, postStore, userStore);
