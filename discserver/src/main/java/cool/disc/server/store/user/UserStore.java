@@ -15,4 +15,5 @@ public interface UserStore {
     ObjectId getUserId(String name);
     String login(String username, String password);
     String addFriend(String friend_id, String user_id);
+    String handleRequest(String friend_id, String user_id, String action);
 }
