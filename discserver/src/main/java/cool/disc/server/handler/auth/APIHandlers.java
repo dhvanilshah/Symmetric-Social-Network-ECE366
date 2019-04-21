@@ -28,10 +28,13 @@ public class APIHandlers {
 
     public Stream<Route<AsyncHandler<Response<ByteString>>>> routes() {
         return java.util.stream.Stream.of(
+            // type: track, artist, album, etc.
+            // title: querying string
                 Route.sync("GET", "/song/<type>/<title>", this::getSongUrl).withMiddleware(jsonMiddleware())
         );
     }
 
+    // getSongUrl: retrieves the first song(from album) url in the list
     public String getSongUrl(final RequestContext requestContext) {
         String type = requestContext.pathArgs().get("type");
         String title = requestContext.pathArgs().get("title");
@@ -53,8 +56,6 @@ public class APIHandlers {
         }
         return null;
     }
-
-
 
     //     Asynchronous Middleware Handling for payloads
     private <T> Middleware<AsyncHandler<T>, AsyncHandler<Response<ByteString>>> jsonMiddleware() {
