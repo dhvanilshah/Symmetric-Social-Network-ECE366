@@ -60,7 +60,6 @@ public class UserStoreController implements UserStore {
             } catch (Exception error) {
                 uri = new MongoClientURI(uriString+host3);
                 dbClient = new com.mongodb.MongoClient(uri);
-
             }
         }
 
@@ -69,7 +68,7 @@ public class UserStoreController implements UserStore {
 //        userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
 //        testCollection = database.getCollection("test");
 
-        database = mongoClient.getDatabase("discbase");
+        database = dbClient.getDatabase("discbase");
         userCollection = database.getCollection("users");
         testCollection = database.getCollection("tests");
     }
