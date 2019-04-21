@@ -62,12 +62,6 @@ public class UserStoreController implements UserStore {
                 dbClient = new com.mongodb.MongoClient(uri);
             }
         }
-
-        String databaseString = this.config.getString("mongo.database");
-//        database = dbClient.getDatabase(databaseString);
-//        userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
-//        testCollection = database.getCollection("test");
-
         database = dbClient.getDatabase("discbase");
         userCollection = database.getCollection("users");
         testCollection = database.getCollection("tests");
@@ -238,5 +232,3 @@ public class UserStoreController implements UserStore {
         return "okay";
     }
 }
-
-

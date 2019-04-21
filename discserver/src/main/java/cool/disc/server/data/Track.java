@@ -46,7 +46,6 @@ public class Track {
     }
 
     public List<Song> searchSongs() {
-//        public List<Map<String, String>> getOpenLinks() {
 //        List<String> urls = new ArrayList<>();
         List<Song> songs = new ArrayList<>();
         Song searchedSong;
@@ -74,7 +73,6 @@ public class Track {
                         .score(0)
                         .build();
                 songs.add(searchedSong);
-
 //                System.out.println("Album URL for '"+this.trackTitle+ "': " + url);
             }
         } catch (NullPointerException e) {

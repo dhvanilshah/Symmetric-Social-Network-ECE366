@@ -31,6 +31,7 @@ public class Authenticate {
     List urls = new ArrayList<String>();
     String access_token = "";
 
+    // constructor: loads token upon initialization
     public Authenticate(ObjectMapper objectMapper) throws IOException, UnirestException {
         this.objectMapper = objectMapper;
         this.objectWriter = objectMapper.writer();
@@ -50,23 +51,21 @@ public class Authenticate {
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .header("Authorization", "Basic " + encodedString)
                 .body("grant_type=client_credentials".getBytes()).asJson();
-//        System.out.println("Body: " + tokenRequest.getBody().getObject().toString());
-//        System.out.println("STATUS: " + tokenRequest.getStatus());
         JSONObject body = tokenRequest.getBody().getObject();
         access_token = body.getString("access_token");
-//        System.out.println("Access Token: " + access_token);
         LOG.info("Success on access token: {}", access_token);
 
     }
 
+    // queries for a search
     public JSONObject search(String query, String type) throws UnirestException, IOException{
         // access Spotify Web API using the token
-//        String query = "bts";
+        // type: album, track, artist, etc.
+        // query: search string
         String q = null;
         for(int i = 0; i < query.length(); i++) {
             q = URLEncoder.encode(query, "UTF-8").replace("+", "%20");
         }
-//        String type = "track";
         HttpResponse<JsonNode> accessRequest
                 // sample urls:
                 //       "https://api.spotify.com/v1/tracks/2TpxZ7JUBn3uw46aR7qd6V"
@@ -77,20 +76,9 @@ public class Authenticate {
                 .header("Authorization", "Bearer " + access_token)
                 .asJson();
         JSONObject result=  accessRequest.getBody().getObject();
-//        System.out.println("result:"+result);
-//        JSONArray items = result.getJSONObject("tracks").getJSONArray("items");
-//        for (int i = 0 ; i < items.length(); i++) {
-//            String url = items.getJSONObject(i).getJSONObject("album").getJSONObject("external_urls").getString("spotify");
-//            urls.add(url);
-////            System.out.println("Album URL for '"+query+ "': " + url);
-//        }
         return result;
     }
-//
-//    public Track getTrack() {
-//
-//    }
-
+    
     public List<String> getTrackUrl() {
         return urls;
     }
@@ -105,10 +93,6 @@ public class Authenticate {
         return sb.toString();
     }
 }
-
-
-
-
 
 
 // oauth ref: https://collab.ucsd.edu/api/api-documentation/information-for-api-consumers/code-examples/java-example
