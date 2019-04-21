@@ -70,13 +70,7 @@ public class UserStoreController implements UserStore {
 
             }
         }
-
-        String databaseString = this.config.getString("mongo.database");
-//        database = dbClient.getDatabase(databaseString);
-//        userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
-//        testCollection = database.getCollection("test");
-
-        database = mongoClient.getDatabase("discbase");
+        database = dbClient.getDatabase("discbase");
         userCollection = database.getCollection("users");
         testCollection = database.getCollection("tests");
     }
