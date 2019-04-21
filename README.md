@@ -78,7 +78,9 @@ Track currently has the following endpoints (subject to change):
   1) /song/track/${title} : upon calling this endpoint with the title as the argument, it searches for a song on Spotify Web API and returns the first (most relevant) openspotify url. Then it stores in our "searched song" collection database
   
  Friend currently has the following endpoints (subject to change):
-  1) /addFriend/<id>/....
+  1) /addFriend/${id} : takes in a userId from the front end and sends that friend a request
+    
+  2) /handleRequest/${id}/${action} : takes in a userId from a friend request and and action (either "decline" or "accept") and handles the request
 	
 	
 	
