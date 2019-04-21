@@ -74,6 +74,14 @@ Post currently has the following endpoints (subject to change):
 
   3) /getAllPosts : retrieves all posts in the post collection.
 
+Track currently has the following endpoints (subject to change):
+  1) /song/track/${title} : upon calling this endpoint with the title as the argument, it searches for a song on Spotify Web API and returns the first (most relevant) openspotify url. Then it stores in our "searched song" collection database
+  
+ Friend currently has the following endpoints (subject to change):
+  1) /addFriend/<id>/....
+	
+	
+	
 ********
 ##### In Progress
 - Front-end register users
