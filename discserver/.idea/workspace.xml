@@ -811,7 +811,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/cool/disc/server/handler/user/UserHandlers.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="384">
           <caret line="126" column="47" selection-start-line="126" selection-start-column="47" selection-end-line="126" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
