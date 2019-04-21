@@ -3,20 +3,19 @@ package cool.disc.server;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import com.spotify.apollo.Environment;
 import com.spotify.apollo.RequestContext;
 import com.spotify.apollo.Response;
 import com.spotify.apollo.httpservice.HttpService;
 import com.spotify.apollo.httpservice.LoadingException;
 import com.spotify.apollo.route.Route;
-import cool.disc.server.data.Album;
-import cool.disc.server.handler.album.AlbumResource;
-import cool.disc.server.handler.artist.ArtistResource;
+import cool.disc.server.handler.auth.APIHandlers;
 import cool.disc.server.handler.post.PostHandlers;
 import cool.disc.server.handler.user.UserHandlers;
 import cool.disc.server.store.post.PostStore;
 import cool.disc.server.store.post.PostStoreController;
+import cool.disc.server.store.song.SongStore;
+import cool.disc.server.store.song.SongStoreController;
 import cool.disc.server.store.user.UserStore;
 import cool.disc.server.store.user.UserStoreController;
 import cool.disc.server.utils.AuthUtils;
@@ -40,27 +39,25 @@ public final class App {
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new AutoMatterModule()).setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         AuthUtils authUtils = new AuthUtils();
 
-        AlbumResource albumResource = new AlbumResource(objectMapper);
-        ArtistResource artistResource = new ArtistResource(objectMapper);
+//        AlbumResource albumResource = new AlbumResource(objectMapper);
+//        ArtistResource artistResource = new ArtistResource(objectMapper);
+
 
         UserStore userStore = new UserStoreController();
         UserHandlers userHandlers = new UserHandlers(objectMapper, userStore, authUtils);
 
         PostStore postStore = new PostStoreController();
         PostHandlers postHandlers = new PostHandlers(objectMapper, postStore, userStore);
-        Album album = new Album(objectMapper);
-        try {
-            List<String> trackUrls = album.getUrls();
-        } catch (UnirestException e) {
-            e.printStackTrace();
-        }
+
+        SongStore songStore = new SongStoreController();
+        APIHandlers apiHandlers = new APIHandlers(objectMapper, songStore);
+
         // "/ping" for the purpose of checking if routing works only
         environment.routingEngine()
                 .registerAutoRoute(Route.sync("GET", "/", rc -> "Welcome to Backend!"))
                 .registerRoutes(userHandlers.routes())
                 .registerRoutes(postHandlers.routes())
-//                .registerRoutes(albumResource.routes())
-//                .registerRoutes(artistResource.routes())
+                .registerRoutes(apiHandlers.routes())
                 .registerRoute(Route.sync("GET", "/ping", App::ping).withDocString(
                         "Responds with a 'pong!' if the service is up.",
                         "Useful endpoint for doing health checks."));

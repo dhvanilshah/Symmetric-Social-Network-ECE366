@@ -2,12 +2,9 @@ package cool.disc.server.handler.user;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spotify.apollo.Request;
-import com.spotify.apollo.Status;
-import cool.disc.server.model.User;
-import cool.disc.server.store.user.UserStore;
 import com.spotify.apollo.RequestContext;
 import com.spotify.apollo.Response;
+import com.spotify.apollo.Status;
 import com.spotify.apollo.route.*;
 import cool.disc.server.model.User;
 import cool.disc.server.store.user.UserStore;
@@ -15,8 +12,8 @@ import cool.disc.server.utils.AuthUtils;
 import okio.ByteString;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -64,7 +61,7 @@ public class UserHandlers {
         }
 
         if(response == 1){
-           return Response.ok();
+            return Response.ok();
         }
         else {
             return Response.of(Status.UNAUTHORIZED, ByteString.encodeUtf8("Could not create account"));

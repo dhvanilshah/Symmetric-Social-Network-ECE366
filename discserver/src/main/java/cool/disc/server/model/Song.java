@@ -1,15 +1,19 @@
 package cool.disc.server.model;
 
 import io.norberg.automatter.AutoMatter;
+import org.bson.types.ObjectId;
 
 import javax.annotation.Nullable;
 
 @AutoMatter
 public interface Song {
-    String id();
-    String artist();
-    @Nullable String album();
-    @Nullable Integer score();
+    ObjectId id();
+    String songId();
     String title();
-    @Nullable String url();
+    String songUrl();
+    String artist();
+    String artistId();
+    String albumName();
+    String albumImageUrl();
+    @Nullable Integer score();
 }

@@ -1,11 +1,11 @@
 package cool.disc.server.store.post;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
+import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.spotify.apollo.Response;
+import com.spotify.apollo.Status;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import cool.disc.server.model.Friend;
@@ -38,11 +38,24 @@ public class PostStoreController implements PostStore {
         String username = this.config.getString("mongo.username");
         String password = this.config.getString("mongo.password");
         String host = this.config.getString("mongo.host");
-        String uriString = uri1 + username + password + host;
+        String host2 = this.config.getString("mongo.host2");
+        String host3 = this.config.getString("mongo.host3");
+        String uriString = uri1 + username + password;
 
         // initialize db driver
-        uri = new MongoClientURI(uriString);
-        dbClient = new MongoClient(uri);
+        uri = new MongoClientURI(uriString+host);
+        try {
+            dbClient = new com.mongodb.MongoClient(uri);
+        } catch (MongoClientException e) {
+            try {
+                uri = new MongoClientURI(uriString+host2);
+                dbClient = new com.mongodb.MongoClient(uri);
+            } catch (Exception error) {
+                uri = new MongoClientURI(uriString+host3);
+                dbClient = new com.mongodb.MongoClient(uri);
+
+            }
+        }
         String databaseString = this.config.getString("mongo.database");
         database = dbClient.getDatabase(databaseString);
     }
@@ -80,10 +93,11 @@ public class PostStoreController implements PostStore {
         try {
             userCollection.insertOne(addPostDoc);
             return Response.ok();
-        } catch (Exception e) {
+        } catch (MongoWriteException e) {
+      // todo: user already exists
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            return Response.forStatus(Status.CONFLICT);
         }
-        return null;
     }
 
     // Utility function for getPosts() below
@@ -96,7 +110,7 @@ public class PostStoreController implements PostStore {
         try{
             Document queryFriends = new Document("name", name);
             Document inputUser = userCollection.find(queryFriends).iterator().next();
-            friendList = (List<Friend>) inputUser.get("friends")    ;
+            friendList = (List<Friend>) inputUser.get("friends");
             return friendList;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());

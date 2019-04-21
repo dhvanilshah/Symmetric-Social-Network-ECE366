@@ -53,7 +53,9 @@
 //                .photo("test_photo")
 //                .build();
 //
-//        testClass = new UserHandlers(objectMapper, userStore);
+
+//        testClass = new UserHandlers(objectMapper, userStore, authUtils);
+
 //    }
 //
 //

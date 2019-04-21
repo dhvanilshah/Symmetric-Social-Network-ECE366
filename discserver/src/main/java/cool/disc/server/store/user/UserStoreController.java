@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientException;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
@@ -14,17 +15,14 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Updates;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import cool.disc.server.model.Friend;
-import cool.disc.server.model.Request;
 import cool.disc.server.model.User;
 import cool.disc.server.model.UserBuilder;
 import cool.disc.server.utils.AuthUtils;
-import okio.ByteString;
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.omg.PortableInterceptor.ServerRequestInfo;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,13 +52,25 @@ public class UserStoreController implements UserStore {
         String username = this.config.getString("mongo.username");
         String password = this.config.getString("mongo.password");
         String host = this.config.getString("mongo.host");
-        String uriString = uri1 + username + password + host;
+        String host2 = this.config.getString("mongo.host2");
+        String host3 = this.config.getString("mongo.host3");
+        String uriString = uri1 + username + password;
 
         // initialize db driver
-        uri = new MongoClientURI(uriString);
-        dbClient = new MongoClient(uri);
+        uri = new MongoClientURI(uriString+host);
+        try {
+            dbClient = new com.mongodb.MongoClient(uri);
+        } catch (MongoClientException e) {
+            try {
+                uri = new MongoClientURI(uriString+host2);
+                dbClient = new com.mongodb.MongoClient(uri);
+            } catch (Exception error) {
+                uri = new MongoClientURI(uriString+host3);
+                dbClient = new com.mongodb.MongoClient(uri);
 
-        MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+            }
+        }
+
         String databaseString = this.config.getString("mongo.database");
 //        database = dbClient.getDatabase(databaseString);
 //        userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
@@ -143,7 +153,7 @@ public class UserStoreController implements UserStore {
         return userId;
     }
 
-//    take in username and password and return JWT if password is correct
+    //    take in username and password and return JWT if password is correct
     @Override
     public String login(String username, String password){
         Document doc;
@@ -235,6 +245,6 @@ public class UserStoreController implements UserStore {
 
         return "okay";
     }
-
-
 }
+
+

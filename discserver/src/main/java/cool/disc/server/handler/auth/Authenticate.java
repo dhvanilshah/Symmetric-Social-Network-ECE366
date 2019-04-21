@@ -8,8 +8,9 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,12 +22,14 @@ import java.util.Base64;
 import java.util.List;
 
 public class Authenticate {
+    private static final Logger LOG = LoggerFactory.getLogger(Authenticate.class);
 
     private final ObjectMapper objectMapper;
     private final ObjectWriter objectWriter;
     private final Config config;
 
     List urls = new ArrayList<String>();
+    String access_token = "";
 
     public Authenticate(ObjectMapper objectMapper) throws IOException, UnirestException {
         this.objectMapper = objectMapper;
@@ -50,17 +53,21 @@ public class Authenticate {
 //        System.out.println("Body: " + tokenRequest.getBody().getObject().toString());
 //        System.out.println("STATUS: " + tokenRequest.getStatus());
         JSONObject body = tokenRequest.getBody().getObject();
-        String access_token = body.getString("access_token");
+        access_token = body.getString("access_token");
 //        System.out.println("Access Token: " + access_token);
+        LOG.info("Success on access token: {}", access_token);
 
+    }
+
+    public JSONObject search(String query, String type) throws UnirestException, IOException{
         // access Spotify Web API using the token
-        String query = "bts";
+//        String query = "bts";
         String q = null;
         for(int i = 0; i < query.length(); i++) {
             q = URLEncoder.encode(query, "UTF-8").replace("+", "%20");
         }
-        String type = "track";
-        HttpResponse<JsonNode> accessRequest // Unirest.get("https://accounts.spotify.com/api/token")
+//        String type = "track";
+        HttpResponse<JsonNode> accessRequest
                 // sample urls:
                 //       "https://api.spotify.com/v1/tracks/2TpxZ7JUBn3uw46aR7qd6V"
                 //       "https://api.spotify.com/v1/search?q=tania%20bowra&type=artist"
@@ -70,18 +77,23 @@ public class Authenticate {
                 .header("Authorization", "Bearer " + access_token)
                 .asJson();
         JSONObject result=  accessRequest.getBody().getObject();
-        JSONArray items = result.getJSONObject("tracks").getJSONArray("items");
-        for (int i = 0 ; i < items.length(); i++) {
-            String url = items.getJSONObject(i).getJSONObject("album").getJSONObject("external_urls").getString("spotify");
-            urls.add(url);
-            System.out.println("Album URL for '"+query+ "': " + url);
-        }
+//        System.out.println("result:"+result);
+//        JSONArray items = result.getJSONObject("tracks").getJSONArray("items");
+//        for (int i = 0 ; i < items.length(); i++) {
+//            String url = items.getJSONObject(i).getJSONObject("album").getJSONObject("external_urls").getString("spotify");
+//            urls.add(url);
+////            System.out.println("Album URL for '"+query+ "': " + url);
+//        }
+        return result;
     }
+//
+//    public Track getTrack() {
+//
+//    }
 
     public List<String> getTrackUrl() {
         return urls;
     }
-
 
     private static String readStreamToString(InputStream inputStream) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader((inputStream)));
