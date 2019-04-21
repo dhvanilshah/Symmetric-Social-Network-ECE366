@@ -11,7 +11,6 @@ import cool.disc.server.store.user.UserStore;
 import cool.disc.server.utils.AuthUtils;
 import okio.ByteString;
 
-import java.util.HashMap;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
