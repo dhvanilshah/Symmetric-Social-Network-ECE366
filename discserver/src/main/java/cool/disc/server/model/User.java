@@ -8,9 +8,9 @@ import java.util.List;
 
 @AutoMatter
 public interface User {
-    String id();
-    String name();
-    String username();
+    @Nullable String id();
+    @Nullable String name();
+    @Nullable String username();
     @Nullable String password();
     @Nullable String email();
     @Nullable String service();

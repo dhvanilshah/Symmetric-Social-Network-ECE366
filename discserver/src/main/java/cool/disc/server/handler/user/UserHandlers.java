@@ -10,6 +10,7 @@ import cool.disc.server.model.User;
 import cool.disc.server.store.user.UserStore;
 import cool.disc.server.utils.AuthUtils;
 import okio.ByteString;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;

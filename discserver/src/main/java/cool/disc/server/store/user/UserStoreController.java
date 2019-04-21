@@ -1,9 +1,16 @@
 package cool.disc.server.store.user;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientException;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.UpdateResult;
+import com.spotify.apollo.Response;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -35,6 +42,7 @@ public class UserStoreController implements UserStore {
     private MongoClient dbClient;
     private MongoDatabase database;
     private MongoCollection<Document> userCollection;
+    private MongoCollection<Document> testCollection;
 
     public UserStoreController() {
         this.authUtils =  new AuthUtils();
@@ -62,9 +70,15 @@ public class UserStoreController implements UserStore {
 
             }
         }
+
         String databaseString = this.config.getString("mongo.database");
-        database = dbClient.getDatabase(databaseString);
-        userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
+//        database = dbClient.getDatabase(databaseString);
+//        userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
+//        testCollection = database.getCollection("test");
+
+        database = mongoClient.getDatabase("discbase");
+        userCollection = database.getCollection("users");
+        testCollection = database.getCollection("tests");
     }
 
     @Override
@@ -150,7 +164,7 @@ public class UserStoreController implements UserStore {
             String pwd = doc.getString("password");
             if(pwd.equals(password)){
                 String uid = doc.getObjectId("_id").toHexString();
-                token = authUtils.createToken(uid);
+               token = authUtils.createToken(uid);
             }
         } catch (Exception e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -231,6 +245,6 @@ public class UserStoreController implements UserStore {
 
         return "okay";
     }
-
-
 }
+
+

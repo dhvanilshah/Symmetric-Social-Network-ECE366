@@ -42,6 +42,7 @@ public final class App {
 //        AlbumResource albumResource = new AlbumResource(objectMapper);
 //        ArtistResource artistResource = new ArtistResource(objectMapper);
 
+
         UserStore userStore = new UserStoreController();
         UserHandlers userHandlers = new UserHandlers(objectMapper, userStore, authUtils);
 
