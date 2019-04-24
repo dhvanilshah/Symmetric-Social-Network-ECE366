@@ -117,6 +117,12 @@ public class PostStoreController implements PostStore {
         }
         return friendList;
     }
+
+    public void deletePost(ObjectId postId) {
+        postCollection = database.getCollection(this.config.getString("mongo.collection_post"));
+
+    }
+
     // getPosts(userId) --> retrieves all posts written by the specified userId
     public List<Post> getPosts(ObjectId userId) {
         postCollection = database.getCollection(this.config.getString("mongo.collection_post"));

@@ -54,7 +54,7 @@ public class APIHandlers {
     }
 
     // getSongUrl: retrieves the first song(from album) url in the list
-    public String getSongUrl(final RequestContext requestContext) {
+    public List<String> getSongUrl(final RequestContext requestContext) {
         List<String> result = null;
 //        String type = requestContext.pathArgs().get("type");
         String type = "track";
@@ -69,16 +69,19 @@ public class APIHandlers {
                 LOG.info("response for addSong: {}", response.status().code());
                 if(response.status().code() == 200) {                 // success
                     String url = songs.iterator().next().songUrl();
-                    LOG.info("url : {} \n", url);
-                    return url;
+                    result.add(url);
+                    LOG.info("urls: {}", result);
+                    return result;
                 } else if (response.status().code() == 302) {        // found
-                    return "Track already in DB. Updated score.";
+                    result.add("Track already in DB. Updated score.");
+                    return result;
                 }
             }
         } catch (IOException | UnirestException e) {
             e.printStackTrace();
         }
-        return "Track Not Found.";
+        result.add("Track Not Found.");
+        return result;
     }
 
     //     Asynchronous Middleware Handling for payloads
