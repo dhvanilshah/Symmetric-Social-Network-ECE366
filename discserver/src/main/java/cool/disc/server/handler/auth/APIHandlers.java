@@ -8,7 +8,9 @@ import com.spotify.apollo.route.*;
 import cool.disc.server.data.Track;
 import cool.disc.server.model.Song;
 import cool.disc.server.store.song.SongStore;
+import javafx.util.Pair;
 import okio.ByteString;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,14 +31,31 @@ public class APIHandlers {
 
     public Stream<Route<AsyncHandler<Response<ByteString>>>> routes() {
         return java.util.stream.Stream.of(
-            // type: track, artist, album, etc.
+            // type: tracks, artists
             // title: querying string
-                Route.sync("GET", "/song/<title>", this::getSongUrl).withMiddleware(jsonMiddleware())
+                Route.sync("GET", "/song/<title>", this::getSongUrl).withMiddleware(jsonMiddleware()),
+                Route.sync("GET", "/song/recommend/<genre>", this::getRecommendations).withMiddleware(jsonMiddleware())
         );
+    }
+
+    public JSONObject getRecommendations(final RequestContext requestContext) {
+        JSONObject result = null;
+        String genre = requestContext.pathArgs().get("genre");
+        try {
+            Track track = new Track(objectMapper, "", genre);
+            Pair<String, String> response = track.searchRecommendations(genre);
+            String[] resp = response.toString().split("=");
+            result= new JSONObject().put(resp[0],resp[1]);
+            return result;
+        } catch (IOException | UnirestException e) {
+            LOG.error(e.getMessage());
+            return null;
+        }
     }
 
     // getSongUrl: retrieves the first song(from album) url in the list
     public String getSongUrl(final RequestContext requestContext) {
+        List<String> result = null;
 //        String type = requestContext.pathArgs().get("type");
         String type = "track";
         String title = requestContext.pathArgs().get("title");
@@ -52,14 +71,14 @@ public class APIHandlers {
                     String url = songs.iterator().next().songUrl();
                     LOG.info("url : {} \n", url);
                     return url;
-                } else {
-                    return "updated score";
+                } else if (response.status().code() == 302) {        // found
+                    return "Track already in DB. Updated score.";
                 }
             }
         } catch (IOException | UnirestException e) {
             e.printStackTrace();
         }
-        return null;
+        return "Track Not Found.";
     }
 
     //     Asynchronous Middleware Handling for payloads

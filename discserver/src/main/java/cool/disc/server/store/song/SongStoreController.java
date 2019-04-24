@@ -1,6 +1,7 @@
 package cool.disc.server.store.song;
 
 import com.mongodb.*;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.spotify.apollo.Response;
@@ -12,8 +13,6 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static com.mongodb.client.model.Filters.exists;
 
 public class SongStoreController implements SongStore {
     private static final Logger LOG = LoggerFactory.getLogger(SongStoreController.class);
@@ -72,23 +71,24 @@ public class SongStoreController implements SongStore {
 
     private Response<Object> getObjectResponse(Document addSongDoc, MongoCollection<Document> songCollection) {
         try {
-            Document doc = (Document) songCollection.find(exists("songUrl")).first();
-            if (doc == null) {
+            BasicDBObject songCheck = new BasicDBObject().append("title", addSongDoc.get("title"));
+            FindIterable<Document> cursor = songCollection.find(songCheck);
+            if (!cursor.iterator().hasNext()) {
                 songCollection.insertOne(addSongDoc);
-                Response.ok();
-            } else {
-                // todo: update the song's score (+1)
+                return Response.ok();
+            } else if(cursor.iterator().hasNext()) {
+                // update the song's score (+1)
                 Document searchedSong = new Document().append("songUrl",addSongDoc.get("songUrl"));
                 Bson queriedSong = songCollection.find(searchedSong).iterator().next();
                 Integer newScore = ((Document) queriedSong).getInteger("score") + 1;
                 Bson scoreUpdateDoc = new Document().append("score",newScore);
                 Bson updateOperationDocument = new Document("$set", scoreUpdateDoc);
                 songCollection.updateOne(queriedSong, updateOperationDocument);
-                return Response.forStatus(Status.ACCEPTED);
+                return Response.forStatus(Status.FOUND);
             }
         } catch (MongoWriteException e) {
             LOG.info("error: {}",e.getMessage());
         }
-        return Response.forStatus(Status.CONFLICT);
+        return null;
     }
 }

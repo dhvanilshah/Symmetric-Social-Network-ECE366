@@ -78,9 +78,26 @@ public class Authenticate {
         JSONObject result=  accessRequest.getBody().getObject();
         return result;
     }
-    
-    public List<String> getTrackUrl() {
-        return urls;
+
+//    For Initial Testing
+//    public List<String> getTrackUrl() {
+//        return urls;
+//    }
+
+    // queries for a search
+    public JSONObject searchRecommendations(String genre) throws UnirestException, IOException{
+        HttpResponse<JsonNode> accessRequest
+                = Unirest.get("https://api.spotify.com/v1/recommendations?" +
+                                "seed_artists=4NHQUGzhtTLFvgF5SZesLK&" +
+                                "seed_tracks=0c6xIDDpzE81m2q797ordA&" +
+                                "seed_genres"+genre +
+                                "&min_energy=0.4&min_popularity=50&market=US")
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .header("Authorization", "Bearer " + access_token)
+                .asJson();
+        JSONObject response = accessRequest.getBody().getObject();
+        return response;
     }
 
     private static String readStreamToString(InputStream inputStream) throws IOException {
