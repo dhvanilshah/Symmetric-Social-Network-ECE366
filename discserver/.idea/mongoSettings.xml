@@ -9,7 +9,7 @@
           <option name="password" value="puiGLHcv0PKhyLPV" />
           <option name="serverUrls">
             <list>
-              <option value="disc-db-shard-00-00-xi3cp.mongodb.net:27017" />
+              <option value="disc-db-shard-00-01-xi3cp.mongodb.net:27017" />
             </list>
           </option>
           <option name="sshTunnelingConfiguration">

@@ -8,8 +8,9 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,13 +22,16 @@ import java.util.Base64;
 import java.util.List;
 
 public class Authenticate {
+    private static final Logger LOG = LoggerFactory.getLogger(Authenticate.class);
 
     private final ObjectMapper objectMapper;
     private final ObjectWriter objectWriter;
     private final Config config;
 
     List urls = new ArrayList<String>();
+    String access_token = "";
 
+    // constructor: loads token upon initialization
     public Authenticate(ObjectMapper objectMapper) throws IOException, UnirestException {
         this.objectMapper = objectMapper;
         this.objectWriter = objectMapper.writer();
@@ -47,20 +51,22 @@ public class Authenticate {
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .header("Authorization", "Basic " + encodedString)
                 .body("grant_type=client_credentials".getBytes()).asJson();
-//        System.out.println("Body: " + tokenRequest.getBody().getObject().toString());
-//        System.out.println("STATUS: " + tokenRequest.getStatus());
         JSONObject body = tokenRequest.getBody().getObject();
-        String access_token = body.getString("access_token");
-//        System.out.println("Access Token: " + access_token);
+        access_token = body.getString("access_token");
+        LOG.info("Success on access token: {}", access_token);
 
+    }
+
+    // queries for a search
+    public JSONObject search(String query, String type) throws UnirestException, IOException{
         // access Spotify Web API using the token
-        String query = "bts";
+        // type: track
+        // query: search string
         String q = null;
         for(int i = 0; i < query.length(); i++) {
             q = URLEncoder.encode(query, "UTF-8").replace("+", "%20");
         }
-        String type = "track";
-        HttpResponse<JsonNode> accessRequest // Unirest.get("https://accounts.spotify.com/api/token")
+        HttpResponse<JsonNode> accessRequest
                 // sample urls:
                 //       "https://api.spotify.com/v1/tracks/2TpxZ7JUBn3uw46aR7qd6V"
                 //       "https://api.spotify.com/v1/search?q=tania%20bowra&type=artist"
@@ -70,18 +76,29 @@ public class Authenticate {
                 .header("Authorization", "Bearer " + access_token)
                 .asJson();
         JSONObject result=  accessRequest.getBody().getObject();
-        JSONArray items = result.getJSONObject("tracks").getJSONArray("items");
-        for (int i = 0 ; i < items.length(); i++) {
-            String url = items.getJSONObject(i).getJSONObject("album").getJSONObject("external_urls").getString("spotify");
-            urls.add(url);
-            System.out.println("Album URL for '"+query+ "': " + url);
-        }
+        return result;
     }
 
-    public List<String> getTrackUrl() {
-        return urls;
-    }
+//    For Initial Testing
+//    public List<String> getTrackUrl() {
+//        return urls;
+//    }
 
+    // queries for a search
+    public JSONObject searchRecommendations(String genre) throws UnirestException, IOException{
+        HttpResponse<JsonNode> accessRequest
+                = Unirest.get("https://api.spotify.com/v1/recommendations?" +
+                                "seed_artists=4NHQUGzhtTLFvgF5SZesLK&" +
+                                "seed_tracks=0c6xIDDpzE81m2q797ordA&" +
+                                "seed_genres"+genre +
+                                "&min_energy=0.4&min_popularity=50&market=US")
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .header("Authorization", "Bearer " + access_token)
+                .asJson();
+        JSONObject response = accessRequest.getBody().getObject();
+        return response;
+    }
 
     private static String readStreamToString(InputStream inputStream) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader((inputStream)));
@@ -93,10 +110,6 @@ public class Authenticate {
         return sb.toString();
     }
 }
-
-
-
-
 
 
 // oauth ref: https://collab.ucsd.edu/api/api-documentation/information-for-api-consumers/code-examples/java-example

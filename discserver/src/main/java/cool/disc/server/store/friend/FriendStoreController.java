@@ -1,14 +1,12 @@
 package cool.disc.server.store.friend;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
+import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import cool.disc.server.model.Friend;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 
 import java.util.List;
 
@@ -30,30 +28,30 @@ public class FriendStoreController implements FriendStore {
         String username = this.config.getString("mongo.username");
         String password = this.config.getString("mongo.password");
         String host = this.config.getString("mongo.host");
-        String uriString = uri1 + username + password + host;
+        String host2 = this.config.getString("mongo.host2");
+        String host3 = this.config.getString("mongo.host3");
+        String uriString = uri1 + username + password;
 
         // initialize db driver
-        uri = new MongoClientURI(uriString);
-        dbClient = new MongoClient(uri);
+        uri = new MongoClientURI(uriString+host);
+        try {
+            dbClient = new com.mongodb.MongoClient(uri);
+        } catch (MongoClientException e) {
+            try {
+                uri = new MongoClientURI(uriString+host2);
+                dbClient = new com.mongodb.MongoClient(uri);
+            } catch (Exception error) {
+                uri = new MongoClientURI(uriString+host3);
+                dbClient = new com.mongodb.MongoClient(uri);
+
+            }
+        }
         String databaseString = this.config.getString("mongo.database");
         database = dbClient.getDatabase(databaseString);
+        userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
+
     }
 
-    @Override
-    public ObjectId getUserId() {
-
-        return null;
-    }
-
-    @Override
-    public ObjectId getId() {
-        return null;
-    }
-
-    @Override
-    public Integer getScore() {
-        return null;
-    }
 
     @Override
     public List<Friend> getFriendList() {
@@ -69,5 +67,4 @@ public class FriendStoreController implements FriendStore {
     public Friend removeFriend() {
         return null;
     }
-
 }

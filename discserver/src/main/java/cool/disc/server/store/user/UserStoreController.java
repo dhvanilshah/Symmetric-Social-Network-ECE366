@@ -1,26 +1,21 @@
 package cool.disc.server.store.user;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientException;
 import com.mongodb.MongoClientURI;
-import com.spotify.apollo.Response;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Updates;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import cool.disc.server.model.Friend;
-import cool.disc.server.model.Request;
 import cool.disc.server.model.User;
 import cool.disc.server.model.UserBuilder;
 import cool.disc.server.utils.AuthUtils;
-import okio.ByteString;
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.omg.PortableInterceptor.ServerRequestInfo;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,6 +35,7 @@ public class UserStoreController implements UserStore {
     private MongoClient dbClient;
     private MongoDatabase database;
     private MongoCollection<Document> userCollection;
+    private MongoCollection<Document> testCollection;
 
     public UserStoreController() {
         this.authUtils =  new AuthUtils();
@@ -49,32 +45,46 @@ public class UserStoreController implements UserStore {
         String username = this.config.getString("mongo.username");
         String password = this.config.getString("mongo.password");
         String host = this.config.getString("mongo.host");
-        String uriString = uri1 + username + password + host;
+        String host2 = this.config.getString("mongo.host2");
+        String host3 = this.config.getString("mongo.host3");
+        String uriString = uri1 + username + password;
 
         // initialize db driver
-        uri = new MongoClientURI(uriString);
-        dbClient = new MongoClient(uri);
-        String databaseString = this.config.getString("mongo.database");
-        database = dbClient.getDatabase(databaseString);
-        userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
+        uri = new MongoClientURI(uriString+host);
+        try {
+            dbClient = new com.mongodb.MongoClient(uri);
+        } catch (MongoClientException e) {
+            try {
+                uri = new MongoClientURI(uriString+host2);
+                dbClient = new com.mongodb.MongoClient(uri);
+            } catch (Exception error) {
+                uri = new MongoClientURI(uriString+host3);
+                dbClient = new com.mongodb.MongoClient(uri);
+            }
+        }
+        database = dbClient.getDatabase("discbase");
+        userCollection = database.getCollection("users");
+        testCollection = database.getCollection("tests");
     }
 
     @Override
     public Integer addUser(User newUser){
         // parse data from the payload
         String name = newUser.name();
+        String username = newUser.username();
         String password = newUser.password();
         String email = newUser.email();
         String service = newUser.service();
-        String photo = newUser.photo();
+//        String photo = newUser.photo();
         Date date = new Date();
 
         Document addUserDoc = new Document()
                 .append("name", name)
+                .append("username", username)
                 .append("password", password)
                 .append("email", email)
                 .append("service", service)
-                .append("photo", photo)
+//                .append("photo", photo)
                 .append("date", date);
 
         try {
@@ -129,11 +139,9 @@ public class UserStoreController implements UserStore {
         return userId;
     }
 
-//    take in username and password and return JWT if password is correct
+    //    take in username and password and return JWT if password is correct
     @Override
     public String login(String username, String password){
-        String secret = this.config.getString("secrets.jwt-key");
-
         Document doc;
         String token = null;
 
@@ -142,15 +150,6 @@ public class UserStoreController implements UserStore {
             String pwd = doc.getString("password");
             if(pwd.equals(password)){
                 String uid = doc.getObjectId("_id").toHexString();
-//                try {
-//                    Algorithm algorithm = Algorithm.HMAC256(secret);
-//                    token = JWT.create()
-//                            .withIssuer("auth0")
-//                            .withClaim("id", uid)
-//                            .sign(algorithm);
-//                } catch (JWTCreationException exception){
-//                    //Invalid Signing configuration / Couldn't convert Claims.
-//                }
                token = authUtils.createToken(uid);
             }
         } catch (Exception e) {
@@ -167,15 +166,69 @@ public class UserStoreController implements UserStore {
 
     @Override
     public String addFriend(String friend_id, String user_id){
-        Document doc;
-        String token = null;
+        Document requestPending;
+        Document requestSent;
+
+        requestPending = new Document("userId", new ObjectId(user_id)).append("date", new Date());
+        requestSent = new Document("userId",  new ObjectId(friend_id)).append("date", new Date());
+
         try {
-            doc  = userCollection.find(eq("_id", friend_id)).first();
+            userCollection.updateOne(eq("_id",  new ObjectId(user_id)), Updates.push("reqSent", requestSent));
+            userCollection.updateOne(eq("_id",  new ObjectId(friend_id)), Updates.push("reqReceived", requestPending));
         } catch (Exception e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
 
-        return user_id;
+        return "okay";
     }
 
+    @Override
+    public String handleRequest(String friend_id, String user_id, String action){
+        Document friend;
+        Document user;
+        List<Document> requests;
+//        Step 1: get user, friend
+//        Step 2: delete request sent, delete request received
+//        Step 3: add user to friend's list and add friend to user's list
+
+        try {
+            user = userCollection.find(eq("_id", new ObjectId(user_id))).first();
+            friend = userCollection.find(eq("_id", new ObjectId(friend_id))).first();
+
+            ArrayList<Document> reqRec =  (ArrayList<Document>) user.get("reqReceived");
+            ArrayList<Document> reqSent =  (ArrayList<Document>) friend.get("reqSent");
+
+            for(int i = 0; i < reqRec.size(); i++){
+                Document doc = reqRec.get(i);
+                if(doc.get("userId").equals(new ObjectId(friend_id))){
+                    reqRec.remove(doc);
+                }
+            }
+
+            for(int i = 0; i < reqSent.size(); i++){
+                Document doc = reqSent.get(i);
+                if(doc.get("userId").equals(new ObjectId(user_id))){
+                    reqSent.remove(doc);
+                }
+            }
+
+            BasicDBObject userReqRec = new BasicDBObject("$set", new BasicDBObject("reqReceived", reqRec));
+            userCollection.updateOne(eq("_id",  new ObjectId(user_id)), userReqRec);
+
+            BasicDBObject friendReqSent = new BasicDBObject("$set", new BasicDBObject("reqSent", reqSent));
+            userCollection.updateOne(eq("_id",  new ObjectId(friend_id)), friendReqSent);
+
+            if(action.equals("add")){
+                user = new Document("userId", new ObjectId(user_id)).append("score", 0);
+                friend = new Document("userId", new ObjectId(friend_id)).append("score", 0);
+                userCollection.updateOne(eq("_id",  new ObjectId(user_id)), Updates.push("friends", friend));
+                userCollection.updateOne(eq("_id",  new ObjectId(friend_id)), Updates.push("friends", user));
+            }
+
+        } catch (Exception e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+
+        return "okay";
+    }
 }
