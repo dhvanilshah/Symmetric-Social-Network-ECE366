@@ -60,7 +60,7 @@ public class Authenticate {
     // queries for a search
     public JSONObject search(String query, String type) throws UnirestException, IOException{
         // access Spotify Web API using the token
-        // type: album, track, artist, etc.
+        // type: track
         // query: search string
         String q = null;
         for(int i = 0; i < query.length(); i++) {

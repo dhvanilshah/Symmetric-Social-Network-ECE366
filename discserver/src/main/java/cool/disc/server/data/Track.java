@@ -2,28 +2,27 @@ package cool.disc.server.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.spotify.apollo.RequestContext;
 import cool.disc.server.handler.auth.Authenticate;
 import cool.disc.server.model.Song;
 import cool.disc.server.model.SongBuilder;
-import cool.disc.server.store.song.SongStore;
 import org.bson.types.ObjectId;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Track {
+    private static final Logger LOG = LoggerFactory.getLogger(Track.class);
 
     private final ObjectMapper objectMapper;
     JSONObject result;
     Authenticate auth;
     String trackTitle;
     String trackType;
-    RequestContext requestContext;
-    SongStore songStore;
 
     public Track(ObjectMapper objectMapper, String trackTitle, String trackType) throws IOException, UnirestException {
         this.objectMapper = objectMapper;
@@ -58,6 +57,8 @@ public class Track {
                 String songId = items.getJSONObject(i).getJSONObject("album").getString("id");
                 String album = items.getJSONObject(i).getJSONObject("album").getString("name");
                 String url = items.getJSONObject(i).getJSONObject("album").getJSONObject("external_urls").getString("spotify");
+                LOG.info("artist, artistId, songId, album, url = {},{},{},{},{}",
+                        artist, artistId, songId, album, url);
 //                urls.add(url);
                 // index 0: width and height 640px, 1: 300px, 2: 64px
                 String albumImageUrl = items.getJSONObject(i).getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url");

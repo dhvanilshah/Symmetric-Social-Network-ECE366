@@ -20,6 +20,7 @@ public class APIHandlers {
     private static final Logger LOG = LoggerFactory.getLogger(APIHandlers.class);
     private final ObjectMapper objectMapper;
     private SongStore songStore;
+    List<Song> songs = null;
 
     public APIHandlers(final ObjectMapper objectMapper, SongStore songStore) {
         this.objectMapper = objectMapper;
@@ -30,25 +31,29 @@ public class APIHandlers {
         return java.util.stream.Stream.of(
             // type: track, artist, album, etc.
             // title: querying string
-                Route.sync("GET", "/song/<type>/<title>", this::getSongUrl).withMiddleware(jsonMiddleware())
+                Route.sync("GET", "/song/<title>", this::getSongUrl).withMiddleware(jsonMiddleware())
         );
     }
 
     // getSongUrl: retrieves the first song(from album) url in the list
     public String getSongUrl(final RequestContext requestContext) {
-        String type = requestContext.pathArgs().get("type");
+//        String type = requestContext.pathArgs().get("type");
+        String type = "track";
         String title = requestContext.pathArgs().get("title");
-        LOG.info("type: " + type + "title: " + title);
+        LOG.info("type: " + type + "/ title: " + title);
         try {
             Track track = new Track(objectMapper, title, type);
-            List<Song> songs = track.searchSongs();
+            songs = track.searchSongs();
             for(Song song : songs) {
+                // add to database searched songs
                 Response<Object> response = songStore.addSong(song);
                 LOG.info("response for addSong: {}", response.status().code());
                 if(response.status().code() == 200) {                 // success
                     String url = songs.iterator().next().songUrl();
-                    LOG.info("url : {}", url);
+                    LOG.info("url : {} \n", url);
                     return url;
+                } else {
+                    return "updated score";
                 }
             }
         } catch (IOException | UnirestException e) {

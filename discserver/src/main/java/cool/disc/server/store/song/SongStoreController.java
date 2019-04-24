@@ -1,9 +1,6 @@
 package cool.disc.server.store.song;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientException;
-import com.mongodb.MongoClientURI;
-import com.mongodb.MongoWriteException;
+import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.spotify.apollo.Response;
@@ -15,6 +12,8 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.mongodb.client.model.Filters.exists;
 
 public class SongStoreController implements SongStore {
     private static final Logger LOG = LoggerFactory.getLogger(SongStoreController.class);
@@ -70,28 +69,26 @@ public class SongStoreController implements SongStore {
         LOG.info("response: {}", response);
         return response;
     }
+
     private Response<Object> getObjectResponse(Document addSongDoc, MongoCollection<Document> songCollection) {
         try {
-            songCollection.insertOne(addSongDoc);
-            return Response.ok();
+            Document doc = (Document) songCollection.find(exists("songUrl")).first();
+            if (doc == null) {
+                songCollection.insertOne(addSongDoc);
+                Response.ok();
+            } else {
+                // todo: update the song's score (+1)
+                Document searchedSong = new Document().append("songUrl",addSongDoc.get("songUrl"));
+                Bson queriedSong = songCollection.find(searchedSong).iterator().next();
+                Integer newScore = ((Document) queriedSong).getInteger("score") + 1;
+                Bson scoreUpdateDoc = new Document().append("score",newScore);
+                Bson updateOperationDocument = new Document("$set", scoreUpdateDoc);
+                songCollection.updateOne(queriedSong, updateOperationDocument);
+                return Response.forStatus(Status.ACCEPTED);
+            }
         } catch (MongoWriteException e) {
-            // todo: update the song's score (+1)
-            Bson queriedSong = songCollection.find(addSongDoc).iterator().next();
-            Integer newScore = ((Document) queriedSong).getInteger("score") + 1;
-            Bson scoreUpdateDoc = new Document().append("score",newScore);
-            Bson updateOperationDocument = new Document("$set", scoreUpdateDoc);
-            songCollection.updateOne(queriedSong, updateOperationDocument);
             LOG.info("error: {}",e.getMessage());
-            return Response.forStatus(Status.CONFLICT);
         }
+        return Response.forStatus(Status.CONFLICT);
     }
-
-    public Song getSong(String title) {
-        Song result = null;
-        Document queryFriends = new Document("title", title);
-
-
-        return result;
-    }
-
 }

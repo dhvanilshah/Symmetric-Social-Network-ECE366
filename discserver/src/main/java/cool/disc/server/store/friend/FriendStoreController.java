@@ -48,6 +48,8 @@ public class FriendStoreController implements FriendStore {
         }
         String databaseString = this.config.getString("mongo.database");
         database = dbClient.getDatabase(databaseString);
+        userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
+
     }
 
 
