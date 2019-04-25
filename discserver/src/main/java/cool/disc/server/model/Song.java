@@ -3,8 +3,6 @@ package cool.disc.server.model;
 import io.norberg.automatter.AutoMatter;
 import org.bson.types.ObjectId;
 
-import javax.annotation.Nullable;
-
 @AutoMatter
 public interface Song {
     ObjectId id();
@@ -15,5 +13,5 @@ public interface Song {
     String artistId();
     String albumName();
     String albumImageUrl();
-    @Nullable Integer score();
+    Integer score();
 }

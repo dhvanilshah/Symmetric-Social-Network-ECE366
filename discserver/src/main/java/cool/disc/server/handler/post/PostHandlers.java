@@ -32,12 +32,13 @@ public class PostHandlers {
         return Stream.of(
                 Route.sync("GET", "/getFeed", this::getFeed).withMiddleware(jsonMiddleware()),
                 Route.sync("POST", "/addPost", this::addPost).withMiddleware(jsonMiddleware()),
-                Route.sync("GET", "/getAllPosts", this::geAllPosts).withMiddleware(jsonMiddleware())
+                Route.sync("GET", "/getAllPosts", this::getAllPosts).withMiddleware(jsonMiddleware())
         );
     }
 
     // retrieves all posts in the database
-    public List<Post> geAllPosts(final RequestContext requestContext) {
+
+    List<Post> getAllPosts(final RequestContext requestContext) {
         return postStore.getAllPosts();
     }
 
