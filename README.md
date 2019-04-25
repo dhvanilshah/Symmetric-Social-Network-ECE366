@@ -75,7 +75,11 @@ Post currently has the following endpoints (subject to change):
   3) /getAllPosts : retrieves all posts in the post collection.
 
 Track currently has the following endpoints (subject to change):
-  1) /song/track/${title} : upon calling this endpoint with the title as the argument, it searches for a song on Spotify Web API and returns the first (most relevant) openspotify url. Then it stores in our "searched song" collection database
+  1) /song/${title} : upon calling this endpoint with the title as the argument, it searches for a song on Spotify Web API and returns the first (most relevant) openspotify url. Then it stores in our "searched song" collection database
+  
+  2) /song/add : takes in a JSON formatted data (payload) and returns a HTTP response according to the status of the insertion to collection
+  
+  3) /song/recommend/${title} : by the user's query (title), it searches for a recommended song, using the seeded artist, album, track. 
   
  Friend currently has the following endpoints (subject to change):
   1) /addFriend/${id} : takes in a userId from the front end and sends that friend a request
