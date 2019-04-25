@@ -78,7 +78,7 @@ public class SongStoreController implements SongStore {
                 return Response.ok();
             } else if(cursor.iterator().hasNext()) {
                 // update the song's score (+1)
-                Document searchedSong = new Document().append("songUrl",addSongDoc.get("songUrl"));
+                Document searchedSong = new Document().append("title",addSongDoc.get("title"));
                 Bson queriedSong = songCollection.find(searchedSong).iterator().next();
                 Integer newScore = ((Document) queriedSong).getInteger("score") + 1;
                 Bson scoreUpdateDoc = new Document().append("score",newScore);

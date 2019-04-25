@@ -8,6 +8,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,19 +80,19 @@ public class Authenticate {
         return result;
     }
 
-//    For Initial Testing
-//    public List<String> getTrackUrl() {
-//        return urls;
-//    }
-
     // queries for a search
-    public JSONObject searchRecommendations(String genre) throws UnirestException, IOException{
+    public JSONObject searchRecommendations(String query,  String genre) throws UnirestException, IOException{
+        JSONObject searchResult = search(query, "track");
+        JSONArray items = searchResult.getJSONObject("tracks").getJSONArray("items");
+        String artistId = items.getJSONObject(0).getJSONObject("album").getJSONArray("artists").getJSONObject(0 ).getString("id");
+        String songId = items.getJSONObject(0).getString("id");
+        LOG.info("artistId: {}, songId: {}", artistId, songId);
         HttpResponse<JsonNode> accessRequest
                 = Unirest.get("https://api.spotify.com/v1/recommendations?" +
-                                "seed_artists=4NHQUGzhtTLFvgF5SZesLK&" +
-                                "seed_tracks=0c6xIDDpzE81m2q797ordA&" +
-                                "seed_genres"+genre +
-                                "&min_energy=0.4&min_popularity=50&market=US")
+                                "seed_artists="+ artistId + "&" +
+                                "seed_tracks=" + songId + "&" +
+                                "seed_genres"+ genre + "&" +
+                                "min_energy=0.4&min_popularity=50&market=US")
                 .header("Accept", "application/json")
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .header("Authorization", "Bearer " + access_token)
