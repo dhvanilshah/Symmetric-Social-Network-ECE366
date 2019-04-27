@@ -50,18 +50,20 @@ public class UserStoreController implements UserStore {
         String uriString = uri1 + username + password;
 
         // initialize db driver
-        uri = new MongoClientURI(uriString+host);
-        try {
-            dbClient = new com.mongodb.MongoClient(uri);
-        } catch (MongoClientException e) {
-            try {
-                uri = new MongoClientURI(uriString+host2);
-                dbClient = new com.mongodb.MongoClient(uri);
-            } catch (Exception error) {
-                uri = new MongoClientURI(uriString+host3);
-                dbClient = new com.mongodb.MongoClient(uri);
-            }
-        }
+//        uri = new MongoClientURI(uriString+host);
+//        try {
+//            dbClient = new com.mongodb.MongoClient(uri);
+//        } catch (MongoClientException e) {
+//            try {
+//                uri = new MongoClientURI(uriString+host2);
+//                dbClient = new com.mongodb.MongoClient(uri);
+//            } catch (Exception error) {
+//                uri = new MongoClientURI(uriString+host3);
+//                dbClient = new com.mongodb.MongoClient(uri);
+//            }
+//        }
+
+        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
         database = dbClient.getDatabase("discbase");
         userCollection = database.getCollection("users");
         testCollection = database.getCollection("tests");

@@ -34,12 +34,14 @@ public class UserHandlers {
 
     public Stream<Route<AsyncHandler<Response<ByteString>>>> routes() {
         return Stream.of(
-                Route.sync("OPTIONS", "/addUser", rc -> "hello").withMiddleware(jsonMiddleware()),
+                Route.sync("OPTIONS", "/getUser/<any>", rc -> "ok").withMiddleware(jsonMiddleware()),
                 Route.sync("POST", "/addUser", this::addUser).withMiddleware(jsonMiddleware()),
                 Route.sync("GET", "/getUser/<name>", this::getUser).withMiddleware(jsonMiddleware()),
                 Route.sync("GET", "/login", this::login).withMiddleware(jsonMiddleware()),
                 Route.sync("GET", "/addFriend/<id>", this::addFriend).withMiddleware(jsonMiddleware()),
-                Route.sync("GET", "/handleRequest/<id>/<action>", this::acceptRequest).withMiddleware(jsonMiddleware())
+                Route.sync("OPTIONS", "/addFriend/<id>", rc -> "ok").withMiddleware(jsonMiddleware()),
+                Route.sync("GET", "/handleRequest/<id>/<action>", this::acceptRequest).withMiddleware(jsonMiddleware()),
+                Route.sync("OPTIONS", "/handleRequest/<id>/<action>", rc -> "ok").withMiddleware(jsonMiddleware())
         );
     }
 
@@ -69,9 +71,11 @@ public class UserHandlers {
         }
     }
 
-    public List<User> getUser(final RequestContext requestContext){
+    public Response<List<User>> getUser(final RequestContext requestContext){
+       Optional<String> token = requestContext.request().header("session-token");
         String name = requestContext.pathArgs().get("name");
-        return userStore.getUser(name);
+        List<User> data = userStore.getUser(name);
+        return Response.ok().withPayload(data);
     }
 
 
@@ -129,6 +133,8 @@ public class UserHandlers {
         Map<String, String> headers = new HashMap<>();
         headers.put("Access-Control-Allow-Origin", "*");
         headers.put("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        headers.put("Access-Control-Allow-Headers", "origin, content-type, accept, x-requested-with, session-token");
+        headers.put("Access-Control-Max-Age", "3600");
 
         return JsonSerializerMiddlewares.<T>jsonSerialize(objectMapper.writer())
                 .and(Middlewares::httpPayloadSemantics)

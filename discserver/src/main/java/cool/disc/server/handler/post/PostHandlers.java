@@ -38,7 +38,7 @@ public class PostHandlers {
 
     // retrieves all posts in the database
 
-    List<Post> getAllPosts(final RequestContext requestContext) {
+   public List<Post> getAllPosts(final RequestContext requestContext) {
         return postStore.getAllPosts();
     }
 

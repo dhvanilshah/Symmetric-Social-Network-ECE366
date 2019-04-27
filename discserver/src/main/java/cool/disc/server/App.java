@@ -37,7 +37,7 @@ public final class App {
 
     public static void init(Environment environment) {
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new AutoMatterModule()).setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-        AuthUtils authUtils = new AuthUtils();
+//        AuthUtils authUtils = new AuthUtils();
 
 //        AlbumResource albumResource = new AlbumResource(objectMapper);
 //        ArtistResource artistResource = new ArtistResource(objectMapper);
@@ -58,6 +58,7 @@ public final class App {
         // "/ping" for the purpose of checking if routing works only
         environment.routingEngine()
                 .registerAutoRoute(Route.sync("GET", "/", rc -> "Welcome to Backend!"))
+                .registerAutoRoute(Route.sync("OPTIONS", "*", rc -> "OK"))
                 .registerRoutes(userHandlers.routes())
                 .registerRoutes(postHandlers.routes())
                 .registerRoutes(apiHandlers.routes())
