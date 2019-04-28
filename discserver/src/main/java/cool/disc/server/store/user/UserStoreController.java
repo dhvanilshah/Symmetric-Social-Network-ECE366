@@ -1,5 +1,6 @@
 package cool.disc.server.store.user;
 
+import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientException;
@@ -16,6 +17,7 @@ import cool.disc.server.model.UserBuilder;
 import cool.disc.server.utils.AuthUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -184,6 +186,7 @@ public class UserStoreController implements UserStore {
         return "okay";
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public String handleRequest(String friend_id, String user_id, String action){
         Document friend;
@@ -232,5 +235,41 @@ public class UserStoreController implements UserStore {
         }
 
         return "okay";
+    }
+
+
+    @SuppressWarnings("Duplicates")
+    @Override
+    public List<User> getRequests(String user_id){
+        Document user;
+        List<User> userList = new ArrayList<User>();
+        ArrayList<Document> reqRec;
+        try {
+            user = userCollection.find(eq("_id", new ObjectId(user_id))).first();
+            reqRec =  (ArrayList<Document>) user.get("reqReceived");
+            for(int i = 0; i < reqRec.size(); i++) {
+                Document doc = reqRec.get(i);
+                Document requestSender;
+                try {
+                    requestSender = userCollection.find(eq("_id", doc.get("userId"))).first();
+                    ObjectId id = (ObjectId) requestSender.get("_id");
+                    String nameUser = requestSender.getString("name");
+                    String usernameUser = requestSender.getString("username");
+                    User reqSender = new UserBuilder()
+                            .id(id.toHexString())
+                            .name(nameUser)
+                            .username(usernameUser)
+                            .build();
+                    userList.add(reqSender);
+                } catch (Exception e) {
+                    System.err.println(e.getClass().getName() + ": " + e.getMessage());
+                }
+            }
+        }
+        catch (Exception e){
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+
+        return userList;
     }
 }

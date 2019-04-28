@@ -34,14 +34,17 @@ public class UserHandlers {
 
     public Stream<Route<AsyncHandler<Response<ByteString>>>> routes() {
         return Stream.of(
-                Route.sync("OPTIONS", "/getUser/<any>", rc -> "ok").withMiddleware(jsonMiddleware()),
                 Route.sync("POST", "/addUser", this::addUser).withMiddleware(jsonMiddleware()),
                 Route.sync("GET", "/getUser/<name>", this::getUser).withMiddleware(jsonMiddleware()),
+                Route.sync("OPTIONS", "/getUser/<any>", rc -> "ok").withMiddleware(jsonMiddleware()),
                 Route.sync("GET", "/login", this::login).withMiddleware(jsonMiddleware()),
+                Route.sync("OPTIONS", "/login", rc -> "ok").withMiddleware(jsonMiddleware()),
                 Route.sync("GET", "/addFriend/<id>", this::addFriend).withMiddleware(jsonMiddleware()),
                 Route.sync("OPTIONS", "/addFriend/<id>", rc -> "ok").withMiddleware(jsonMiddleware()),
                 Route.sync("GET", "/handleRequest/<id>/<action>", this::acceptRequest).withMiddleware(jsonMiddleware()),
-                Route.sync("OPTIONS", "/handleRequest/<id>/<action>", rc -> "ok").withMiddleware(jsonMiddleware())
+                Route.sync("OPTIONS", "/handleRequest/<id>/<action>", rc -> "ok").withMiddleware(jsonMiddleware()),
+                Route.sync("GET", "/getRequests", this::getRequests).withMiddleware(jsonMiddleware()),
+                Route.sync("OPTIONS", "/getRequests", rc -> "ok").withMiddleware(jsonMiddleware())
         );
     }
 
@@ -94,6 +97,7 @@ public class UserHandlers {
         }
     }
 
+    @SuppressWarnings("Duplicates")
     public Response<String> addFriend(final RequestContext requestContext){
         String friend_id = requestContext.pathArgs().get("id");
         Optional<String> token = requestContext.request().header("session-token");
@@ -110,6 +114,7 @@ public class UserHandlers {
         return Response.ok().withPayload(response);
     }
 
+    @SuppressWarnings("Duplicates")
     Response<String> acceptRequest(final RequestContext requestContext){
         String friend_id = requestContext.pathArgs().get("id");
         String action = requestContext.pathArgs().get("action");
@@ -125,6 +130,23 @@ public class UserHandlers {
         String response = userStore.handleRequest(friend_id, user_id, action);
 
         return Response.ok().withPayload(response);
+    }
+
+    @SuppressWarnings("Duplicates")
+    public Response<List<User>> getRequests(final RequestContext requestContext){
+        Optional<String> token = requestContext.request().header("session-token");
+        if (!token.isPresent()) {
+            return Response.forStatus(Status.BAD_REQUEST);
+        }
+        String user_id = authUtils.verifyToken(token.get());
+
+        if(user_id == null){
+            return Response.forStatus(Status.UNAUTHORIZED);
+        }
+
+        List<User>  requestSenders = userStore.getRequests(user_id);
+
+        return Response.ok().withPayload(requestSenders);
     }
 
 

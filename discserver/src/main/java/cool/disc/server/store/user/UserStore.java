@@ -1,7 +1,9 @@
 package cool.disc.server.store.user;
 
+import com.mongodb.util.JSON;
 import cool.disc.server.model.User;
 import org.bson.types.ObjectId;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -14,4 +16,5 @@ public interface UserStore {
     String login(String username, String password);
     String addFriend(String friend_id, String user_id);
     String handleRequest(String friend_id, String user_id, String action);
+    List<User> getRequests(String user_id);
 }
