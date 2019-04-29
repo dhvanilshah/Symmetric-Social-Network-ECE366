@@ -13,7 +13,9 @@ import org.bson.types.ObjectId;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public class PostHandlers {
@@ -31,8 +33,11 @@ public class PostHandlers {
     public Stream<Route<AsyncHandler<Response<ByteString>>>> routes() {
         return Stream.of(
                 Route.sync("GET", "/getFeed", this::getFeed).withMiddleware(jsonMiddleware()),
+                Route.sync("OPTIONS", "/getFeed", rc -> "ok").withMiddleware(jsonMiddleware()),
                 Route.sync("POST", "/addPost", this::addPost).withMiddleware(jsonMiddleware()),
-                Route.sync("GET", "/getAllPosts", this::getAllPosts).withMiddleware(jsonMiddleware())
+                Route.sync("OPTIONS", "/addPost", rc -> "ok").withMiddleware(jsonMiddleware()),
+                Route.sync("GET", "/getAllPosts", this::getAllPosts).withMiddleware(jsonMiddleware()),
+                Route.sync("OPTIONS", "/getAllPosts", rc -> "ok").withMiddleware(jsonMiddleware())
         );
     }
 
@@ -82,16 +87,19 @@ public class PostHandlers {
     }
 
     // Asynchronous Middleware Handling for payloads
+    @SuppressWarnings("Duplicates")
     private <T> Middleware<AsyncHandler<T>, AsyncHandler<Response<ByteString>>> jsonMiddleware() {
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Access-Control-Allow-Origin", "*");
+        headers.put("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        headers.put("Access-Control-Allow-Headers", "origin, content-type, accept, x-requested-with, session-token");
+        headers.put("Access-Control-Max-Age", "3600");
+
         return JsonSerializerMiddlewares.<T>jsonSerialize(objectMapper.writer())
                 .and(Middlewares::httpPayloadSemantics)
-                .and(
-                        responseAsyncHandler ->
-                                requestContext ->
-                                        responseAsyncHandler
-                                                .invoke(requestContext)
-                                                .thenApply(
-                                                        response -> response.withHeader("Access-Control-Allow-Origin", "*")));
+                .and(responseAsyncHandler -> requestContext ->
+                        responseAsyncHandler.invoke(requestContext)
+                                .thenApply(response -> response.withHeaders(headers)));
     }
-
 }
