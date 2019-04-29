@@ -1,5 +1,6 @@
 package cool.disc.server.handler.post;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClientException;
 import com.spotify.apollo.RequestContext;
@@ -51,9 +52,11 @@ public class PostHandlers {
     // parameters: writerName (not id), receiverName (not id), message
     public Integer addPost(final RequestContext requestContext) {
         Post post;
+        JsonNode postVal;
         if (requestContext.request().payload().isPresent()) {
             try {
-                post = objectMapper.readValue(requestContext.request().payload().get().toByteArray(), Post.class);
+                postVal = objectMapper.readTree(requestContext.request().payload().get().utf8());
+                post = objectMapper.readValue(postVal.toString(), Post.class);
                 Response<Object> response = postStore.addPost(post);
                 return response.status().code();
             } catch (IOException e) {
