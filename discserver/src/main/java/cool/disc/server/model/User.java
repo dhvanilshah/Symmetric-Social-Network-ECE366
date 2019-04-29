@@ -13,7 +13,7 @@ public interface User {
     @Nullable String username();
     @Nullable String password();
     @Nullable String email();
-    @Nullable String service();
+    @Nullable String birthday();
     @Nullable String photo();
     @Nullable Date dateCreated();
     @Nullable List<Friend> friends();

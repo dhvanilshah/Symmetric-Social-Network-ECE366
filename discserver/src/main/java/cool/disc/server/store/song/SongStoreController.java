@@ -56,16 +56,14 @@ public class SongStoreController implements SongStore {
 
     public Response<Object> addSong(Song newSong){
         Document addSongDoc = new Document()
-                .append("songId", newSong.songId())
                 .append("title", newSong.title())
                 .append("songUrl", newSong.songUrl())
                 .append("artist", newSong.artist())
-                .append("artistId", newSong.artistId())
-                .append("albumName", newSong.albumName())
+//                .append("albumName", newSong.albumName())
                 .append("albumImageUrl", newSong.albumImageUrl())
                 .append("score", newSong.score());
         Response<Object> response = getObjectResponse(addSongDoc, songCollection);
-        LOG.info("response: {}", response);
+//        LOG.info("response: {}", response);
         return response;
     }
 

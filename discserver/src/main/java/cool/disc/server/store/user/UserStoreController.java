@@ -78,7 +78,7 @@ public class UserStoreController implements UserStore {
         String username = newUser.username();
         String password = newUser.password();
         String email = newUser.email();
-        String service = newUser.service();
+        String birthday = newUser.birthday();
 //        String photo = newUser.photo();
         Date date = new Date();
 
@@ -87,7 +87,7 @@ public class UserStoreController implements UserStore {
                 .append("username", username)
                 .append("password", password)
                 .append("email", email)
-                .append("service", service)
+                .append("service", birthday)
 //                .append("photo", photo)
                 .append("date", date);
 
@@ -223,7 +223,7 @@ public class UserStoreController implements UserStore {
             BasicDBObject friendReqSent = new BasicDBObject("$set", new BasicDBObject("reqSent", reqSent));
             userCollection.updateOne(eq("_id",  new ObjectId(friend_id)), friendReqSent);
 
-            if(action.equals("add")){
+            if(action.equals("accept")){
                 user = new Document("userId", new ObjectId(user_id)).append("score", 0);
                 friend = new Document("userId", new ObjectId(friend_id)).append("score", 0);
                 userCollection.updateOne(eq("_id",  new ObjectId(user_id)), Updates.push("friends", friend));
@@ -247,6 +247,41 @@ public class UserStoreController implements UserStore {
         try {
             user = userCollection.find(eq("_id", new ObjectId(user_id))).first();
             reqRec =  (ArrayList<Document>) user.get("reqReceived");
+            for(int i = 0; i < reqRec.size(); i++) {
+                Document doc = reqRec.get(i);
+                Document requestSender;
+                try {
+                    requestSender = userCollection.find(eq("_id", doc.get("userId"))).first();
+                    ObjectId id = (ObjectId) requestSender.get("_id");
+                    String nameUser = requestSender.getString("name");
+                    String usernameUser = requestSender.getString("username");
+                    User reqSender = new UserBuilder()
+                            .id(id.toHexString())
+                            .name(nameUser)
+                            .username(usernameUser)
+                            .build();
+                    userList.add(reqSender);
+                } catch (Exception e) {
+                    System.err.println(e.getClass().getName() + ": " + e.getMessage());
+                }
+            }
+        }
+        catch (Exception e){
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+
+        return userList;
+    }
+
+    @SuppressWarnings("Duplicates")
+    @Override
+    public List<User> getFriends(String user_id){
+        Document user;
+        List<User> userList = new ArrayList<User>();
+        ArrayList<Document> reqRec;
+        try {
+            user = userCollection.find(eq("_id", new ObjectId(user_id))).first();
+            reqRec =  (ArrayList<Document>) user.get("friends");
             for(int i = 0; i < reqRec.size(); i++) {
                 Document doc = reqRec.get(i);
                 Document requestSender;

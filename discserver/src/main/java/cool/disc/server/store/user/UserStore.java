@@ -17,4 +17,5 @@ public interface UserStore {
     String addFriend(String friend_id, String user_id);
     String handleRequest(String friend_id, String user_id, String action);
     List<User> getRequests(String user_id);
+    List<User> getFriends(String user_id);
 }

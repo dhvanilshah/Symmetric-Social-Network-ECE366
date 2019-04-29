@@ -3,9 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="b6cd22ea-f10d-4be4-a0f6-08e356d64d9f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/discserver/discserver.iml" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/discserver.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/discserver/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/auth/APIHandlers.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/auth/APIHandlers.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Song.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Song.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/song/SongStoreController.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/song/SongStoreController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStore.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStore.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStoreController.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStoreController.java" afterDir="false" />
     </list>
@@ -33,76 +35,96 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/App.java">
+        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="164">
-              <caret line="60" column="60" selection-start-line="60" selection-start-column="60" selection-end-line="60" selection-end-column="60" />
+            <state relative-caret-position="208">
+              <caret line="153" column="4" selection-start-line="153" selection-start-column="4" selection-end-line="153" selection-end-column="35" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#4304#4335#0" expanded="true" />
+                <element signature="e#6387#6418#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/auth/Authenticate.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Post.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Song.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="17" column="14" selection-start-line="17" selection-start-column="14" selection-end-line="17" selection-end-column="14" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/post/PostHandlers.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="40" column="9" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/data/Track.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="402">
+              <caret line="73" column="22" selection-start-line="73" selection-start-column="22" selection-end-line="73" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/song/SongStore.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="6" column="26" selection-start-line="6" selection-start-column="26" selection-end-line="6" selection-end-column="26" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java">
+        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/auth/APIHandlers.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-652">
-              <caret line="40" column="58" selection-start-line="40" selection-start-column="58" selection-end-line="40" selection-end-column="58" />
+            <state relative-caret-position="219">
+              <caret line="125" column="35" selection-start-line="125" selection-start-column="35" selection-end-line="125" selection-end-column="35" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#4010#4041#0" expanded="true" />
-                <element signature="e#4678#4709#1" expanded="true" />
-                <element signature="e#5420#5451#0" expanded="true" />
+                <element signature="e#5389#5420#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/com/spotify/apollo-api/1.2.4/apollo-api-1.2.4.jar!/com/spotify/apollo/route/Middleware.class">
+        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/song/SongStoreController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="21" selection-start-line="21" selection-end-line="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStore.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/com/spotify/apollo-api-impl/1.2.4/apollo-api-impl-1.2.4.jar!/com/spotify/apollo/dispatch/EndpointInvocationHandler.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="48" selection-start-line="48" selection-end-line="48" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/UserTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="401">
-              <caret line="258" column="28" selection-start-line="258" selection-start-column="28" selection-end-line="258" selection-end-column="28" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Request.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+            <state relative-caret-position="346">
+              <caret line="65" column="10" selection-start-line="65" selection-start-column="10" selection-end-line="65" selection-end-column="45" />
             </state>
           </provider>
         </entry>
@@ -110,32 +132,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStoreController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3282">
-              <caret line="268" selection-start-line="268" selection-end-line="268" />
+            <state relative-caret-position="399">
+              <caret line="307" selection-start-line="307" selection-end-line="307" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#6811#6842#0" expanded="true" />
-                <element signature="e#9047#9078#0" expanded="true" />
-                <element signature="e#9206#9212#0" expanded="true" />
+                <element signature="e#10513#10544#0" expanded="true" />
+                <element signature="e#10681#10687#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/discserver/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="347">
-              <caret line="126" column="25" selection-start-line="126" selection-start-column="25" selection-end-line="126" selection-end-column="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/discserver/src/main/resources/discserver.conf">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="22" selection-start-line="9" selection-end-line="22" />
             </state>
           </provider>
         </entry>
@@ -162,6 +165,7 @@
       <find>jackson</find>
       <find>getUs</find>
       <find>getA</find>
+      <find>add</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -172,7 +176,6 @@
       <list>
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Request.java" />
-        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Song.java" />
         <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Comment.java" />
         <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/post/POST.java" />
         <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Post.java" />
@@ -182,16 +185,19 @@
         <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/post/PostStoreController.java" />
         <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/utils/AuthUtils.java" />
         <option value="$PROJECT_DIR$/discserver/src/main/resources/discserver.conf" />
-        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/User.java" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/post/PostHandlers.java" />
         <option value="$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/PostTest.java" />
         <option value="$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/UserTest.java" />
         <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/App.java" />
         <option value="$PROJECT_DIR$/discserver/pom.xml" />
+        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/User.java" />
         <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStore.java" />
-        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStoreController.java" />
         <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java" />
+        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStoreController.java" />
+        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Song.java" />
+        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/song/SongStoreController.java" />
+        <option value="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/auth/APIHandlers.java" />
       </list>
     </option>
   </component>
@@ -214,8 +220,9 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="y" value="23" />
     <option name="width" value="1440" />
-    <option name="height" value="900" />
+    <option name="height" value="877" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -283,6 +290,28 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="server" type="462c0819:PsiDirectoryNode" />
               <item name="handler" type="462c0819:PsiDirectoryNode" />
+              <item name="auth" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="disc.server" type="b2602c69:ProjectViewProjectNode" />
+              <item name="disc.server" type="462c0819:PsiDirectoryNode" />
+              <item name="discserver" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="handler" type="462c0819:PsiDirectoryNode" />
+              <item name="post" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="disc.server" type="b2602c69:ProjectViewProjectNode" />
+              <item name="disc.server" type="462c0819:PsiDirectoryNode" />
+              <item name="discserver" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="handler" type="462c0819:PsiDirectoryNode" />
               <item name="user" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -293,7 +322,7 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="server" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
+              <item name="store" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="disc.server" type="b2602c69:ProjectViewProjectNode" />
@@ -304,6 +333,18 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="server" type="462c0819:PsiDirectoryNode" />
               <item name="store" type="462c0819:PsiDirectoryNode" />
+              <item name="song" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="disc.server" type="b2602c69:ProjectViewProjectNode" />
+              <item name="disc.server" type="462c0819:PsiDirectoryNode" />
+              <item name="discserver" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="store" type="462c0819:PsiDirectoryNode" />
+              <item name="user" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="disc.server" type="b2602c69:ProjectViewProjectNode" />
@@ -324,7 +365,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556409973535" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556410086500" />
     <property name="jdk.selected.JAVA_MODULE" value="1.8" />
     <property name="last_opened_file_path" value="D:/IdeaProjects/ece366-spring2019/mongodb" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -449,6 +490,8 @@
       <workItem from="1555514062532" duration="6820000" />
       <workItem from="1555526403400" duration="10049000" />
       <workItem from="1555610146391" duration="7435000" />
+      <workItem from="1556464810832" duration="352000" />
+      <workItem from="1556499111238" duration="3180000" />
     </task>
     <servers />
   </component>
@@ -485,13 +528,13 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="124528000" />
+    <option name="totallyTimeSpent" value="128060000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1416309" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14520743" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -501,8 +544,8 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.30120483" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.32771084" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.30963856" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -513,7 +556,7 @@
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="bottom" id="FindBugs-IDEA" order="12" />
       <window_info anchor="bottom" id="CheckStyle" order="13" />
-      <window_info anchor="bottom" id="Messages" order="14" weight="0.22409639" />
+      <window_info anchor="bottom" id="Messages" order="14" weight="0.22292994" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -583,7 +626,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java</url>
-          <line>59</line>
+          <line>61</line>
           <properties />
           <option name="timeStamp" value="47" />
         </line-breakpoint>
@@ -595,7 +638,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java</url>
-          <line>52</line>
+          <line>54</line>
           <properties class="cool.disc.server.handler.user.UserHandlers">
             <option name="EMULATED" value="true" />
           </properties>
@@ -619,7 +662,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java</url>
-          <line>76</line>
+          <line>78</line>
           <properties class="cool.disc.server.handler.user.UserHandlers" method="getUser">
             <option name="EMULATED" value="true" />
           </properties>
@@ -627,7 +670,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java</url>
-          <line>135</line>
+          <line>137</line>
           <properties class="cool.disc.server.handler.user.UserHandlers" method="getRequests">
             <option name="EMULATED" value="true" />
           </properties>
@@ -640,6 +683,14 @@
             <option name="EMULATED" value="true" />
           </properties>
           <option name="timeStamp" value="62" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStoreController.java</url>
+          <line>277</line>
+          <properties class="cool.disc.server.store.user.UserStoreController" method="getFriends">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="63" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -666,7 +717,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStoreHC.java" />
     <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/auth/AuthHandlers.java" />
     <entry file="jar://$MAVEN_REPOSITORY$/com/spotify/apollo-api-impl/1.2.4/apollo-api-impl-1.2.4.jar!/com/spotify/apollo/route/RouteEndpoint.class">
       <provider selected="true" editor-type-id="text-editor">
@@ -751,26 +801,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Song.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Post.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/runners/model/FrameworkMethod.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
@@ -835,13 +865,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="116">
           <caret line="31" column="16" selection-start-line="31" selection-start-column="16" selection-end-line="31" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/User.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="20" column="39" selection-start-line="20" selection-start-column="28" selection-end-line="20" selection-end-column="39" />
         </state>
       </provider>
     </entry>
@@ -923,13 +946,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/song/SongStore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/request/RequestStoreController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-27">
@@ -940,38 +956,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/post/PostHandlers.java">
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/App.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="40" column="9" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/song/SongStoreController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-17">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/auth/APIHandlers.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="409">
-          <caret line="50" column="34" selection-start-line="50" selection-start-column="34" selection-end-line="50" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/data/Track.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="888">
-          <caret line="73" column="22" selection-start-line="73" selection-start-column="22" selection-end-line="73" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/UserTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401">
-          <caret line="258" column="28" selection-start-line="258" selection-start-column="28" selection-end-line="258" selection-end-column="28" />
+        <state relative-caret-position="570">
+          <caret line="60" column="60" selection-start-line="60" selection-start-column="60" selection-end-line="60" selection-end-column="60" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -982,13 +973,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/App.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/spotify/apollo-api-impl/1.2.4/apollo-api-impl-1.2.4.jar!/com/spotify/apollo/dispatch/EndpointInvocationHandler.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="164">
-          <caret line="60" column="60" selection-start-line="60" selection-start-column="60" selection-end-line="60" selection-end-column="60" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="525">
+          <caret line="48" selection-start-line="48" selection-end-line="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/test/java/cool/disc/server/UserTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3870">
+          <caret line="258" column="28" selection-start-line="258" selection-start-column="28" selection-end-line="258" selection-end-column="28" />
         </state>
       </provider>
     </entry>
@@ -1001,7 +996,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/discserver/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
+        <state relative-caret-position="1890">
           <caret line="126" column="25" selection-start-line="126" selection-start-column="25" selection-end-line="126" selection-end-column="25" />
         </state>
       </provider>
@@ -1013,45 +1008,108 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/spotify/apollo-api-impl/1.2.4/apollo-api-impl-1.2.4.jar!/com/spotify/apollo/dispatch/EndpointInvocationHandler.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="48" selection-start-line="48" selection-end-line="48" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStore.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
+        <state relative-caret-position="285">
+          <caret line="19" column="25" selection-start-line="19" selection-start-column="25" selection-end-line="19" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/User.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Post.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/post/PostHandlers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="40" column="9" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/data/Track.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="73" column="22" selection-start-line="73" selection-start-column="22" selection-end-line="73" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Song.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="14" selection-start-line="17" selection-start-column="14" selection-end-line="17" selection-end-column="14" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/song/SongStoreController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="346">
+          <caret line="65" column="10" selection-start-line="65" selection-start-column="10" selection-end-line="65" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/song/SongStore.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="6" column="26" selection-start-line="6" selection-start-column="26" selection-end-line="6" selection-end-column="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/user/UserStoreController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3282">
-          <caret line="268" selection-start-line="268" selection-end-line="268" />
+        <state relative-caret-position="399">
+          <caret line="307" selection-start-line="307" selection-end-line="307" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#6811#6842#0" expanded="true" />
-            <element signature="e#9047#9078#0" expanded="true" />
-            <element signature="e#9206#9212#0" expanded="true" />
+            <element signature="e#10513#10544#0" expanded="true" />
+            <element signature="e#10681#10687#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/auth/Authenticate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/user/UserHandlers.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-652">
-          <caret line="40" column="58" selection-start-line="40" selection-start-column="58" selection-end-line="40" selection-end-column="58" />
+        <state relative-caret-position="208">
+          <caret line="153" column="4" selection-start-line="153" selection-start-column="4" selection-end-line="153" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4010#4041#0" expanded="true" />
-            <element signature="e#4678#4709#1" expanded="true" />
-            <element signature="e#5420#5451#0" expanded="true" />
+            <element signature="e#4304#4335#0" expanded="true" />
+            <element signature="e#6387#6418#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/auth/APIHandlers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="125" column="35" selection-start-line="125" selection-start-column="35" selection-end-line="125" selection-end-column="35" />
+          <folding>
+            <element signature="e#5389#5420#0" expanded="true" />
           </folding>
         </state>
       </provider>

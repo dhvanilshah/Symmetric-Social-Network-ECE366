@@ -44,7 +44,9 @@ public class UserHandlers {
                 Route.sync("GET", "/handleRequest/<id>/<action>", this::acceptRequest).withMiddleware(jsonMiddleware()),
                 Route.sync("OPTIONS", "/handleRequest/<id>/<action>", rc -> "ok").withMiddleware(jsonMiddleware()),
                 Route.sync("GET", "/getRequests", this::getRequests).withMiddleware(jsonMiddleware()),
-                Route.sync("OPTIONS", "/getRequests", rc -> "ok").withMiddleware(jsonMiddleware())
+                Route.sync("OPTIONS", "/getRequests", rc -> "ok").withMiddleware(jsonMiddleware()),
+                Route.sync("GET", "/getFriends", this::getFriends).withMiddleware(jsonMiddleware()),
+                Route.sync("OPTIONS", "/getFriends", rc -> "ok").withMiddleware(jsonMiddleware())
         );
     }
 
@@ -145,6 +147,23 @@ public class UserHandlers {
         }
 
         List<User>  requestSenders = userStore.getRequests(user_id);
+
+        return Response.ok().withPayload(requestSenders);
+    }
+
+    @SuppressWarnings("Duplicates")
+    public Response<List<User>> getFriends(final RequestContext requestContext){
+        Optional<String> token = requestContext.request().header("session-token");
+        if (!token.isPresent()) {
+            return Response.forStatus(Status.BAD_REQUEST);
+        }
+        String user_id = authUtils.verifyToken(token.get());
+
+        if(user_id == null){
+            return Response.forStatus(Status.UNAUTHORIZED);
+        }
+
+        List<User>  requestSenders = userStore.getFriends(user_id);
 
         return Response.ok().withPayload(requestSenders);
     }
