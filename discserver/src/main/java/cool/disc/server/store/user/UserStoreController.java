@@ -101,6 +101,7 @@ public class UserStoreController implements UserStore {
     }
 
     // get a list of Users from matching [regex] 'name'
+    @SuppressWarnings("Duplicates")
     @Override
     public List<User> getUser(final String name){
         Document regQuery = new Document();

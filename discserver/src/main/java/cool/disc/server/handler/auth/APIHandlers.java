@@ -1,5 +1,6 @@
 package cool.disc.server.handler.auth;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.spotify.apollo.RequestContext;
@@ -8,6 +9,7 @@ import com.spotify.apollo.Status;
 import com.spotify.apollo.route.*;
 import cool.disc.server.data.Track;
 import cool.disc.server.model.Song;
+import cool.disc.server.model.User;
 import cool.disc.server.store.song.SongStore;
 import okio.ByteString;
 import org.json.JSONObject;
@@ -41,7 +43,7 @@ public class APIHandlers {
                 Route.sync("OPTIONS", "/song/<title>", rc -> "ok").withMiddleware(jsonMiddleware()),
                 Route.sync("GET", "/song/recommend/<title>", this::getRecommendations).withMiddleware(jsonMiddleware()),  // input: pathArg
                 Route.sync("OPTIONS", "/song/recommend/<title>", rc -> "ok").withMiddleware(jsonMiddleware()),
-                Route.sync("GET", "/song/add", this::addSong).withMiddleware(jsonMiddleware()),                              // input: payload
+                Route.sync("POST", "/song/add", this::addSong).withMiddleware(jsonMiddleware()),                              // input: payload
                 Route.sync("OPTIONS", "/song/add", rc -> "ok").withMiddleware(jsonMiddleware())
         );
     }
@@ -80,13 +82,18 @@ public class APIHandlers {
     }
 
     public Response<Object> addSong(final RequestContext requestContext) {
+                Song song;
+                JsonNode songVal;
+
         if (requestContext.request().payload().isPresent()) {
             try {
-                Song song = objectMapper.readValue(requestContext.request().payload().get().toString(), Song.class);
+                songVal = objectMapper.readTree(requestContext.request().payload().get().utf8());
+                song = objectMapper.readValue(songVal.toString(), Song.class);
+//                Song song = objectMapper.readValue(requestContext.request().payload().get().toString(), Song.class);
                 Response<Object> response = songStore.addSong(song);
                 if(response.status().code() == 200) {
                     LOG.info("addSong -- {}", response);
-                    return Response.ok();
+                    return response;
                 } else if (response.status().code() == 302) {
                     LOG.info("addSong -- Track already in DB. Updated score.");
                     return Response.forStatus(Status.FOUND);

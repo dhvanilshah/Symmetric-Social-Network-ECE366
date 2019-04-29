@@ -11,8 +11,12 @@ import com.typesafe.config.ConfigFactory;
 import cool.disc.server.model.Song;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.set;
 
 public class SongStoreController implements SongStore {
     private static final Logger LOG = LoggerFactory.getLogger(SongStoreController.class);
@@ -50,18 +54,42 @@ public class SongStoreController implements SongStore {
             }
         }
         String databaseString = this.config.getString("mongo.database");
-        database = dbClient.getDatabase(databaseString);
-        songCollection = database.getCollection(this.config.getString("mongo.collection_song"));
+//        database = dbClient.getDatabase(databaseString);
+//        songCollection = database.getCollection(this.config.getString("mongo.collection_song"));
+
+        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
+        database = dbClient.getDatabase("discbase");
+        songCollection = database.getCollection("songs");
     }
 
+    @Override
     public Response<Object> addSong(Song newSong){
+// DONT ADD THE SONG IF IT ALREADY EXISTS
+        try {
+            Document song = songCollection.find(eq("songUrl", newSong.songUrl())).first();
+            String songId = song.get("_id").toString();
+            return Response.ok().withPayload(songId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+// IF THE SONG DOESNT EXIST, ADD IT TO THE DB
         Document addSongDoc = new Document()
                 .append("title", newSong.title())
                 .append("songUrl", newSong.songUrl())
                 .append("artist", newSong.artist())
 //                .append("albumName", newSong.albumName())
                 .append("albumImageUrl", newSong.albumImageUrl())
-                .append("score", newSong.score());
+                .append("score", 0);
+        try {
+            songCollection.insertOne(addSongDoc);
+            Document song = songCollection.find(eq("songUrl", newSong.songUrl())).first();
+            String songId = song.get("_id").toString();
+            return Response.ok().withPayload(songId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         Response<Object> response = getObjectResponse(addSongDoc, songCollection);
 //        LOG.info("response: {}", response);
         return response;
