@@ -11,12 +11,10 @@ import com.typesafe.config.ConfigFactory;
 import cool.disc.server.model.Song;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Updates.set;
 
 public class SongStoreController implements SongStore {
     private static final Logger LOG = LoggerFactory.getLogger(SongStoreController.class);
@@ -39,27 +37,30 @@ public class SongStoreController implements SongStore {
         String host3 = this.config.getString("mongo.host3");
         String uriString = uri1 + username + password;
 
-        // initialize db driver
+
+//         initialize db driver
         uri = new MongoClientURI(uriString+host);
-        try {
-            dbClient = new MongoClient(uri);
-        } catch (MongoClientException e) {
-            try {
-                uri = new MongoClientURI(uriString+host2);
-                dbClient = new MongoClient(uri);
-            } catch (Exception error) {
-                uri = new MongoClientURI(uriString+host3);
-                dbClient = new MongoClient(uri);
-
-            }
-        }
+//        try {
+//            dbClient = new com.mongodb.MongoClient(uri);
+//        } catch (MongoClientException e) {
+//            try {
+//                uri = new MongoClientURI(uriString+host2);
+//                dbClient = new com.mongodb.MongoClient(uri);
+//            } catch (Exception error) {
+//                uri = new MongoClientURI(uriString+host3);
+//                dbClient = new com.mongodb.MongoClient(uri);
+//            }
+//        }
+        dbClient = new com.mongodb.MongoClient(uri);
         String databaseString = this.config.getString("mongo.database");
-//        database = dbClient.getDatabase(databaseString);
-//        songCollection = database.getCollection(this.config.getString("mongo.collection_song"));
-
-        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
-        database = dbClient.getDatabase("discbase");
-        songCollection = database.getCollection("songs");
+        database = dbClient.getDatabase(databaseString);
+//        String databaseString = this.config.getString("mongo.database");
+////        database = dbClient.getDatabase(databaseString);
+////        songCollection = database.getCollection(this.config.getString("mongo.collection_song"));
+//
+//        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
+//        database = dbClient.getDatabase("discbase");
+//        songCollection = database.getCollection("songs");
     }
 
     @Override

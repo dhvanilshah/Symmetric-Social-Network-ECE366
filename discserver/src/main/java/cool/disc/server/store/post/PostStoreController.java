@@ -1,6 +1,8 @@
 package cool.disc.server.store.post;
 
-import com.mongodb.*;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
@@ -13,12 +15,16 @@ import cool.disc.server.model.Post;
 import cool.disc.server.model.PostBuilder;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class PostStoreController implements PostStore {
+    private static final Logger LOG = LoggerFactory.getLogger(PostStoreController.class);
+
     private final Config config;
 
     // localhost
@@ -42,25 +48,25 @@ public class PostStoreController implements PostStore {
         String host3 = this.config.getString("mongo.host3");
         String uriString = uri1 + username + password;
 
-        // initialize db driver
+//         initialize db driver
         uri = new MongoClientURI(uriString+host);
-        try {
-            dbClient = new com.mongodb.MongoClient(uri);
-        } catch (MongoClientException e) {
-            try {
-                uri = new MongoClientURI(uriString+host2);
-                dbClient = new com.mongodb.MongoClient(uri);
-            } catch (Exception error) {
-                uri = new MongoClientURI(uriString+host3);
-                dbClient = new com.mongodb.MongoClient(uri);
-
-            }
-        }
+//        try {
+//            dbClient = new com.mongodb.MongoClient(uri);
+//        } catch (MongoClientException e) {
+//            try {
+//                uri = new MongoClientURI(uriString+host2);
+//                dbClient = new com.mongodb.MongoClient(uri);
+//            } catch (Exception error) {
+//                uri = new MongoClientURI(uriString+host3);
+//                dbClient = new com.mongodb.MongoClient(uri);
+//            }
+//        }
+        dbClient = new com.mongodb.MongoClient(uri);
         String databaseString = this.config.getString("mongo.database");
         database = dbClient.getDatabase(databaseString);
     }
 
-    // (GET) addPost?message
+    // (GET) addPost
     // in the driver function, receiverId and message would be passed in.
     // writerId is still here until we can get it from the token (passed on from frontend)
     @Override
@@ -88,19 +94,18 @@ public class PostStoreController implements PostStore {
         return getObjectResponse(addPostDoc, postCollection);
     }
 
-    // get response from inserting
     private Response<Object> getObjectResponse(Document addPostDoc, MongoCollection<Document> postCollection) {
         try {
             userCollection.insertOne(addPostDoc);
             return Response.ok();
         } catch (MongoWriteException e) {
       // todo: user already exists
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            LOG.error( "get object response: {}", e.getClass().getName() + ": " + e.getMessage() );
             return Response.forStatus(Status.CONFLICT);
         }
     }
 
-    // Utility function for getPosts() below
+    // Utility function for getMyFeed()
     // retrieves all friends of the specified user
     public List<Friend> getFriends(String name) {
 
@@ -113,7 +118,7 @@ public class PostStoreController implements PostStore {
             friendList = (List<Friend>) inputUser.get("friends");
             return friendList;
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            LOG.error (" getFriends {}", e.getClass().getName() + ": " + e.getMessage() );
         }
         return friendList;
     }
@@ -123,50 +128,61 @@ public class PostStoreController implements PostStore {
 
     }
 
-    // getPosts(userId) --> retrieves all posts written by the specified userId
-    public List<Post> getPosts(ObjectId userId) {
+    public List<Post> getPostsWriter(ObjectId userId) {
         postCollection = database.getCollection(this.config.getString("mongo.collection_post"));
         List<Post> postList = new ArrayList<>();
         try {
             Document queryId = new Document("writerId", userId);
-            MongoCursor<Document> matchingPosts = postCollection.find(queryId).iterator();
-            while (matchingPosts.hasNext()) {
-                Document postDoc = matchingPosts.next();
-                Post post = new PostBuilder()
-                        .id(postDoc.getObjectId("_id"))
-                        .writerId(postDoc.getObjectId("writerId"))
-                        .receiverId(postDoc.getObjectId("receiverId"))
-                        .message(postDoc.getString("message"))
-                        .privacy(postDoc.getInteger("privacy"))
-                        .likes(postDoc.getInteger("likes"))
-                        .songId(postDoc.getObjectId("songId"))
-                        .comments((List<String>) postDoc.get("comments"))
-                        .build();
-//                System.out.println("id: "+postDoc.getObjectId("_id").toString() + " writerId: " + postDoc.getObjectId("writerId").toString());
-//                System.out.println("message: "+postDoc.getString("message") + " comments: " + (List<String>) postDoc.get("comments"));
-                postList.add(post);
-            }
-//            System.out.println("postList writer: " + postList.iterator().next().writerId() + " message: " + postList.iterator().next().message());
+            getPostListFromQuery(postList, queryId);
         } catch (Exception e) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            LOG.error( "getPostsWriter:  {}", e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return postList;
+    }
+
+    private void getPostListFromQuery(List<Post> postList, Document queryId) {
+        MongoCursor<Document> matchingPosts = postCollection.find(queryId).iterator();
+        while (matchingPosts.hasNext()) {
+            Document postDoc = matchingPosts.next();
+            Post post = new PostBuilder()
+                    .id(postDoc.getObjectId("_id"))
+                    .writerId(postDoc.getObjectId("writerId"))
+                    .receiverId(postDoc.getObjectId("receiverId"))
+                    .message(postDoc.getString("message"))
+                    .privacy(postDoc.getInteger("privacy"))
+                    .likes(postDoc.getInteger("likes"))
+                    .songId(postDoc.getObjectId("songId"))
+                    .comments((List<String>) postDoc.get("comments"))
+                    .build();
+            postList.add(post);
+        }
+    }
+
+    public List<Post> getPostsReceiver(ObjectId userId) {
+        postCollection = database.getCollection(this.config.getString("mongo.collection_post"));
+        List<Post> postList = new ArrayList<>();
+        try {
+            Document queryId = new Document("receiverId", userId);
+            getPostListFromQuery(postList, queryId);
+        } catch (Exception e) {
+            LOG.error( "getPostsReceiver: {}", e.getClass().getName() + ": " + e.getMessage() );
         }
         return postList;
     }
 
     // getFeed(name) - retrieves all posts written by the user and the user's friends
-    public List<Post> getFeed(String name) {
+    public List<Post> getMyFeed(String name) {
 
         userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
         List<Post> postList = new ArrayList<>();
         ObjectId userId = userCollection.find(new Document("name", name)).iterator().next().getObjectId("_id");
         try {
             List<Friend> friendList = getFriends(name);
-
             if (friendList != null) {
                 // iterate through each Friend of the User
                 while (friendList.iterator().hasNext()) {
                     ObjectId friendUserId = friendList.iterator().next().userId();
-                    List<Post> friendPosts = getPosts(friendUserId);
+                    List<Post> friendPosts = getPostsWriter(friendUserId);
 
                     // iterate through selected Friend's posts
                     while (friendPosts.iterator().hasNext()) {
@@ -183,26 +199,51 @@ public class PostStoreController implements PostStore {
                     }
                 }
             }
-            List<Post> userPosts = getPosts(userId);
-            int size = userPosts.size();
-            Iterator<Post> userPostIterator = userPosts.iterator();
-            for (int i = 0; i < size; i++) {
-                Post userPost = userPostIterator.next();
-//                System.out.println("got the user. post message: " + userPost.message());
-                postList.add(
-                        new PostBuilder()
-                                .id(userPost.id())
-                                .writerId(userPost.writerId())
-                                .receiverId(userPost.receiverId())
-                                .message(userPost.message())
-                                .build()
-                );
-            }
+            List<Post> userPosts = getPostsWriter(userId);
+            getPostList(postList, userPosts);
         } catch (Exception e) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            LOG.error( "getMyFeed: {}", e.getClass().getName() + ": " + e.getMessage() );
         }
-        System.out.println("postList writer: " + postList.iterator().next().writerId() + " message: " + postList.iterator().next().message());
+        LOG.info("postList writer: " + postList.iterator().next().writerId() + " message: " + postList.iterator().next().message());
         return postList;
+    }
+
+    @Override
+    public List<Post> getPublicFeed(String name) {
+        userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
+        List<Post> writerPostList = new ArrayList<>();
+        List<Post> receiverPostList = new ArrayList<>();
+        ObjectId userId = userCollection.find(new Document("name", name)).iterator().next().getObjectId("_id");
+
+        List<Post> userPostsWriter = getPostsWriter(userId);
+        List<Post> userPostsReceiver = getPostsWriter(userId);
+        try {
+            getPostList(writerPostList, userPostsWriter);
+            getPostList(receiverPostList, userPostsReceiver);
+        } catch (Exception e) {
+            LOG.error( "getPublicFeed: {}", e.getClass().getName() + ": " + e.getMessage() );
+        }
+
+        for (Post post : receiverPostList) {
+            writerPostList.add(post);
+        }
+        return writerPostList;
+    }
+
+    private void getPostList(List<Post> postList, List<Post> userPostsWriter) {
+        int size1 = userPostsWriter.size();
+        Iterator<Post> userPostIterator1 = userPostsWriter.iterator();
+        for (int i = 0; i < size1; i++) {
+            Post userPost = userPostIterator1.next();
+            postList.add(
+                    new PostBuilder()
+                            .id(userPost.id())
+                            .writerId(userPost.writerId())
+                            .receiverId(userPost.receiverId())
+                            .message(userPost.message())
+                            .build()
+            );
+        }
     }
 
     // for testing purposes only -- get 'all' posts from the collection
@@ -224,11 +265,18 @@ public class PostStoreController implements PostStore {
             }
         }
         catch(Exception e){
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            LOG.error("getAllPosts: {}", e.getClass().getName() + ": " + e.getMessage() );
         }
         finally {
             cursor.close();
         }
         return postEntries;
+    }
+
+    // get only '_id' from User's 'name'
+    public ObjectId getUserId(String name) {
+        ObjectId userId = userCollection.find(new Document("name", name)).iterator().next().getObjectId("_id");
+        if (userId != null) LOG.info("userId: {}", userId);
+        return userId;
     }
 }
