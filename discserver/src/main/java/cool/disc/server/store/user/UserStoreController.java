@@ -1,5 +1,6 @@
 package cool.disc.server.store.user;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -292,4 +293,71 @@ public class UserStoreController implements UserStore {
 
         return userList;
     }
+
+    @SuppressWarnings("Duplicates")
+    @Override
+    public User getBio(String user_id, String username) {
+        Document userDoc;
+        User user;
+        if(username.equals("self")){
+            try {
+                userDoc = userCollection.find(eq("_id", new ObjectId(user_id))).first();
+                user = new UserBuilder()
+                        .id((userDoc.getObjectId("_id")).toHexString())
+                        .name(userDoc.getString("name"))
+                        .username(userDoc.getString("username"))
+                        .birthday(userDoc.getString("birthday"))
+                        .bio(userDoc.getString("bio"))
+                        .faveSong(userDoc.getString("faveSong"))
+                        .name(userDoc.getString("name"))
+                        .username(userDoc.getString("username"))
+                        .build();
+                return user;
+            } catch (Exception e) {
+                System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            }
+        }
+        else {
+            try {
+                userDoc = userCollection.find(eq("username", username)).first();
+                user = new UserBuilder()
+                        .id((userDoc.getObjectId("_id")).toHexString())
+                        .name(userDoc.getString("name"))
+                        .username(userDoc.getString("username"))
+                        .birthday(userDoc.getString("birthday"))
+                        .bio(userDoc.getString("bio"))
+                        .faveSong(userDoc.getString("faveSong"))
+                        .name(userDoc.getString("name"))
+                        .username(userDoc.getString("username"))
+                        .build();
+                return user;
+            } catch (Exception e) {
+                System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            }
+        }
+        return null;
+    }
+
+    @SuppressWarnings("Duplicates")
+    @Override
+    public Integer updateBio(String user_id, User user) {
+        String bio = user.bio();
+        String birthday = user.birthday();
+        String faveSong= user.faveSong();
+
+        try{
+            BasicDBObject updates = new BasicDBObject();
+            updates.append("$set", new BasicDBObject()
+                    .append("bio", bio)
+                    .append("birthday", birthday)
+                    .append("faveSong", faveSong));
+            userCollection.updateOne(eq("_id",  new ObjectId(user_id)), updates);
+            return 0;
+
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+    return 1;
+    }
+
 }

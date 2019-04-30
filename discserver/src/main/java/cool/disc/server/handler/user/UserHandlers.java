@@ -44,7 +44,11 @@ public class UserHandlers {
                 Route.sync("GET", "/getRequests", this::getRequests).withMiddleware(jsonMiddleware()),
                 Route.sync("OPTIONS", "/getRequests", rc -> "ok").withMiddleware(jsonMiddleware()),
                 Route.sync("GET", "/getFriends", this::getFriends).withMiddleware(jsonMiddleware()),
-                Route.sync("OPTIONS", "/getFriends", rc -> "ok").withMiddleware(jsonMiddleware())
+                Route.sync("OPTIONS", "/getFriends", rc -> "ok").withMiddleware(jsonMiddleware()),
+                Route.sync("GET", "/getBio/<username>", this::getBio).withMiddleware(jsonMiddleware()),
+                Route.sync("OPTIONS", "/getBio/<username>", rc -> "ok").withMiddleware(jsonMiddleware()),
+                Route.sync("POST", "/updateBio", this::updateBio).withMiddleware(jsonMiddleware()),
+                Route.sync("OPTIONS", "/updateBio", rc -> "ok").withMiddleware(jsonMiddleware())
         );
     }
 
@@ -165,7 +169,57 @@ public class UserHandlers {
         return Response.ok().withPayload(requestSenders);
     }
 
+    @SuppressWarnings("Duplicates")
+    public Response<User> getBio(final RequestContext requestContext){
+        Optional<String> token = requestContext.request().header("session-token");
+        String username = requestContext.pathArgs().get("username");
+        if (!token.isPresent()) {
+            return Response.forStatus(Status.BAD_REQUEST);
+        }
+        String user_id = authUtils.verifyToken(token.get());
 
+        if(user_id == null){
+            return Response.forStatus(Status.UNAUTHORIZED);
+        }
+
+        User user = userStore.getBio(user_id, username);
+
+        return Response.ok().withPayload(user);
+    }
+
+    @SuppressWarnings("Duplicates")
+    public Response<User> updateBio(final RequestContext requestContext){
+        Optional<String> token = requestContext.request().header("session-token");
+        if (!token.isPresent()) {
+            return Response.forStatus(Status.BAD_REQUEST);
+        }
+        String user_id = authUtils.verifyToken(token.get());
+
+        if(user_id == null){
+            return Response.forStatus(Status.UNAUTHORIZED);
+        }
+
+        User user;
+        JsonNode test;
+
+        if (requestContext.request().payload().isPresent()) {
+            try {
+                test = objectMapper.readTree(requestContext.request().payload().get().utf8());
+                user = objectMapper.readValue(test.toString(), User.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("invalid payload");
+            }
+        } else {
+            throw new RuntimeException("no payload");
+        }
+
+        Integer resp = userStore.updateBio(user_id, user);
+
+        return Response.ok();
+    }
+
+    @SuppressWarnings("Duplicates")
     private <T> Middleware<AsyncHandler<T>, AsyncHandler<Response<ByteString>>> jsonMiddleware() {
 
         Map<String, String> headers = new HashMap<>();

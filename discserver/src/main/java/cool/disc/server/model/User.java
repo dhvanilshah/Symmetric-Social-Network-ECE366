@@ -15,12 +15,12 @@ public interface User {
     @Nullable String email();
     @Nullable String birthday();
     @Nullable String photo();
+    @Nullable String bio();
+    @Nullable String faveSong();
     @Nullable Date dateCreated();
     @Nullable List<Friend> friends();
     @Nullable List<Request> reqSent();
     @Nullable List<Request> reqReceived();
     @Nullable List<String> likedPosts();
     @Nullable List<String> likedComments();
-
-
 }
