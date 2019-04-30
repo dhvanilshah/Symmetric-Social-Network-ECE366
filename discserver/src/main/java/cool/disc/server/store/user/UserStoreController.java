@@ -54,10 +54,14 @@ public class UserStoreController implements UserStore {
         database = dbClient.getDatabase(databaseString);
 
 //      localhost for testing
-        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
-        database = dbClient.getDatabase("discbase");
-//        postCollection = database.getCollection("posts");
-        userCollection = database.getCollection("users");
+//        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
+//        database = dbClient.getDatabase("discbase");
+
+        // database
+        String userdb = this.config.getString("mongo.collection_user");
+        String postdb = this.config.getString("mongo.collection_post");
+        String songdb = this.config.getString("mongo.collection_song");
+        userCollection = database.getCollection(userdb);
     }
 
     @Override

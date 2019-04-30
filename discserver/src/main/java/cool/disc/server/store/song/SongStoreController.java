@@ -44,10 +44,15 @@ public class SongStoreController implements SongStore {
         database = dbClient.getDatabase(databaseString);
 
 //      localhost for testing
-        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
-        database = dbClient.getDatabase("discbase");
-        songCollection = database.getCollection("songs");
-//        userCollection = database.getCollection("users");
+//        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
+//        database = dbClient.getDatabase("discbase");
+//        songCollection = database.getCollection("songs");
+
+        // database
+        String userdb = this.config.getString("mongo.collection_user");
+        String postdb = this.config.getString("mongo.collection_post");
+        String songdb = this.config.getString("mongo.collection_song");
+        songCollection = database.getCollection(songdb);
     }
 
     @Override

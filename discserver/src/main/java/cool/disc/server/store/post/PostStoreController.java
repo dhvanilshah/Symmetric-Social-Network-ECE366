@@ -10,7 +10,6 @@ import com.spotify.apollo.Response;
 import com.spotify.apollo.Status;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import cool.disc.server.model.Friend;
 import cool.disc.server.model.Post;
 import cool.disc.server.model.PostBuilder;
 import org.bson.Document;
@@ -18,7 +17,6 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -55,11 +53,16 @@ public class PostStoreController implements PostStore {
         database = dbClient.getDatabase(databaseString);
 
 //      localhost for testing
-        MongoClient dbClient = new MongoClient("localhost", 27017);
-        database = dbClient.getDatabase("discbase");
-        postCollection = database.getCollection("posts");
-        userCollection = database.getCollection("users");
-        songCollection = database.getCollection("songs");
+//        MongoClient dbClient = new MongoClient("localhost", 27017);
+//        database = dbClient.getDatabase("discbase");
+
+        // database
+        String userdb = this.config.getString("mongo.collection_user");
+        String postdb = this.config.getString("mongo.collection_post");
+        String songdb = this.config.getString("mongo.collection_song");
+        userCollection = database.getCollection(userdb);
+        postCollection = database.getCollection(postdb);
+        songCollection = database.getCollection(songdb);
     }
 
     // (GET) addPost
