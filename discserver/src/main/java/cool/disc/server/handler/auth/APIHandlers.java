@@ -9,7 +9,6 @@ import com.spotify.apollo.Status;
 import com.spotify.apollo.route.*;
 import cool.disc.server.data.Track;
 import cool.disc.server.model.Song;
-import cool.disc.server.model.User;
 import cool.disc.server.store.song.SongStore;
 import okio.ByteString;
 import org.json.JSONObject;
@@ -64,7 +63,7 @@ public class APIHandlers {
         return result;
     }
 
-    // getSongUrl: retrieves the first song(from album) url in the list
+    // getSongInfo: returns a list of searched songs
     public List<JSONObject> getSongInfo(final RequestContext requestContext) {
         List<JSONObject> result = new ArrayList<>();
         String type = "track";
@@ -77,19 +76,19 @@ public class APIHandlers {
             LOG.error("Error: {}", e.getMessage());
             e.printStackTrace();
         }
-//        LOG.info("getSongInfo - result: {}", result);
         return result;
     }
 
+    // addSong: adds a song to the database collection
     public Response<Object> addSong(final RequestContext requestContext) {
-                Song song;
-                JsonNode songVal;
-
+        Song song;
+        JsonNode songVal;
         if (requestContext.request().payload().isPresent()) {
             try {
+                // JSON Document
                 songVal = objectMapper.readTree(requestContext.request().payload().get().utf8());
+                // Values from JSON --> Song class
                 song = objectMapper.readValue(songVal.toString(), Song.class);
-//                Song song = objectMapper.readValue(requestContext.request().payload().get().toString(), Song.class);
                 Response<Object> response = songStore.addSong(song);
                 if(response.status().code() == 200) {
                     LOG.info("addSong -- {}", response);
@@ -106,7 +105,7 @@ public class APIHandlers {
                 }
             }
             catch(Exception e) {
-                LOG.error(e.getMessage());
+                LOG.error("addSong Error: {}", e.getMessage());
             }
         }
         return null;
@@ -114,14 +113,12 @@ public class APIHandlers {
 
     // utility function to generate JSON List to return from obtained Songs
     private List<JSONObject> makeJSONList(List<Song> songs) {
-//        LOG.info("Count searched songs: {}", songs.size());
         List<JSONObject> result = new ArrayList<>();
         for(Song song : songs) {
             String name = song.title();
             String artist = song.artist();
             String album = song.albumImageUrl();
             String url = song.songUrl();
-//            LOG.info("title, artist, album, url: {},{},{},{}",name,artist,album,url);
             JSONObject songInfo = new JSONObject();
             songInfo.put("title", name).put("artist",artist).put("album", album).put("url", url);
             result.add(songInfo);

@@ -49,27 +49,15 @@ public class UserStoreController implements UserStore {
 
 //         initialize db driver
         uri = new MongoClientURI(uriString+host);
-//        try {
-//            dbClient = new com.mongodb.MongoClient(uri);
-//        } catch (MongoClientException e) {
-//            try {
-//                uri = new MongoClientURI(uriString+host2);
-//                dbClient = new com.mongodb.MongoClient(uri);
-//            } catch (Exception error) {
-//                uri = new MongoClientURI(uriString+host3);
-//                dbClient = new com.mongodb.MongoClient(uri);
-//            }
-//        }
         dbClient = new com.mongodb.MongoClient(uri);
-
         String databaseString = this.config.getString("mongo.database");
         database = dbClient.getDatabase(databaseString);
 
-//      Temporary overwrite for testing
-        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
-        database = dbClient.getDatabase("discbase");
-        userCollection = database.getCollection("users");
-//        testCollection = database.getCollection("tests");
+//      localhost for testing
+//        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
+//        database = dbClient.getDatabase("discbase");
+//        postCollection = database.getCollection("posts");
+//        userCollection = database.getCollection("users");
     }
 
     @Override
