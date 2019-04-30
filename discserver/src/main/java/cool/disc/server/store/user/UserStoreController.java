@@ -54,10 +54,10 @@ public class UserStoreController implements UserStore {
         database = dbClient.getDatabase(databaseString);
 
 //      localhost for testing
-//        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
-//        database = dbClient.getDatabase("discbase");
+        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
+        database = dbClient.getDatabase("discbase");
 //        postCollection = database.getCollection("posts");
-//        userCollection = database.getCollection("users");
+        userCollection = database.getCollection("users");
     }
 
     @Override

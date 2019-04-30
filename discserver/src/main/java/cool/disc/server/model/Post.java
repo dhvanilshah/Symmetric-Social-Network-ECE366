@@ -22,4 +22,8 @@ public interface Post {
     // songIdStirng can come from songId, so unnecesary?
 //    @Nullable String songIdString();
     @Nullable List<String> comments();
+    @Nullable String title();
+    @Nullable String songUrl();
+    @Nullable String artist();
+    @Nullable String albumImageUrl();
 }

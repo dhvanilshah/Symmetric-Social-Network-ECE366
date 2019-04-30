@@ -44,9 +44,9 @@ public class SongStoreController implements SongStore {
         database = dbClient.getDatabase(databaseString);
 
 //      localhost for testing
-//        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
-//        database = dbClient.getDatabase("discbase");
-//        postCollection = database.getCollection("posts");
+        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
+        database = dbClient.getDatabase("discbase");
+        songCollection = database.getCollection("songs");
 //        userCollection = database.getCollection("users");
     }
 

@@ -10,6 +10,7 @@ import cool.disc.server.store.post.PostStore;
 import cool.disc.server.store.user.UserStore;
 import cool.disc.server.utils.AuthUtils;
 import okio.ByteString;
+import org.bson.types.ObjectId;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,19 +41,8 @@ public class PostHandlers {
                 Route.sync("GET", "/getPublicFeed", this::getPublicFeed).withMiddleware(jsonMiddleware()),
                 Route.sync("OPTIONS", "/getPublicFeed", rc -> "ok").withMiddleware(jsonMiddleware()),
                 Route.sync("POST", "/addPost", this::addPost).withMiddleware(jsonMiddleware()),
-                Route.sync("OPTIONS", "/addPost", rc -> "ok").withMiddleware(jsonMiddleware()),
-                Route.sync("GET", "/getAllPosts", this::getAllPosts).withMiddleware(jsonMiddleware()),
-                Route.sync("OPTIONS", "/getAllPosts", rc -> "ok").withMiddleware(jsonMiddleware())
+                Route.sync("OPTIONS", "/addPost", rc -> "ok").withMiddleware(jsonMiddleware())
         );
-    }
-
-    // retrieves all posts in the database
-
-   public List<JSONObject> getAllPosts(final RequestContext requestContext) {
-       List<JSONObject> result = new ArrayList<>();
-       List<Post> posts = postStore.getAllPosts();
-       result = JSONListfromPosts(result, posts);
-       return result;
     }
 
     @SuppressWarnings("Duplicates")
@@ -97,12 +87,12 @@ public class PostHandlers {
       if (!posts.isEmpty()) {
           try {
             result = JSONListfromPosts(result, posts);
-            } catch (NullPointerException e) {
-                LOG.error("null pointer exception: {}", e.getMessage());
-                LOG.error("result: {}", result);
-                throw new NullPointerException();
-              }
+        } catch (NullPointerException e) {
+            LOG.error("null pointer exception: {}", e.getMessage());
+            LOG.error("result: {}", result);
+            throw new NullPointerException();
           }
+      }
         return result;
     }
 
@@ -110,12 +100,15 @@ public class PostHandlers {
         for (Post post : posts) {
           String writerId = post.writerId().toString();
           String receiverId = post.receiverId().toString();
-          String artist = post.receiverId().toString();
           String album = post.message();
           Integer privacy = post.privacy();
           String message = post.message();
           Integer likes = post.likes();
-          String songId = post.songId().toString();
+//          ObjectId songId = post.songId();
+          String title = post.title();
+          String songUrl = post.songUrl();
+          String albumImageUrl = post.albumImageUrl();
+          String artist = post.artist();
           JSONObject postInfo = new JSONObject();
           postInfo
                 .put("writerId", writerId)
@@ -124,21 +117,28 @@ public class PostHandlers {
                 .put("album", album)
                 .put("privacy", privacy)
                 .put("message", message)
-                .put("ilkes", likes)
-                .put("songId", songId);
+                .put("likes", likes)
+//                .put("songId", songId)
+                .put("title", title)
+                  .put("songUrl", songUrl)
+                  .put("artist", artist)
+                  .put("albumImageUrl", albumImageUrl);
           result.add(postInfo);
         }
         return result;
     }
 
     public List<JSONObject> getPublicFeed(final RequestContext requestContext) {
-
         Optional<String> token = requestContext.request().header("session-token");
         String userId = authUtils.verifyToken(token.get());
-        List<JSONObject> result = new ArrayList<>();
         List<Post> posts = postStore.getPublicFeed(userId);
-        if (posts.size() != 0) {
-            result = JSONListfromPosts(result, posts);
+        List<JSONObject> result = new ArrayList<>();
+        if (!posts.isEmpty()) {
+            try {
+                result = JSONListfromPosts(result, posts);
+            } catch (NullPointerException e) {
+                throw new NullPointerException();
+            }
 
         }
         LOG.info("result: {}", result);
