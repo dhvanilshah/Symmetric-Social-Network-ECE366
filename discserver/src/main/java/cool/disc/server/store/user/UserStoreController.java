@@ -1,6 +1,5 @@
 package cool.disc.server.store.user;
 
-import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientException;
@@ -65,7 +64,9 @@ public class UserStoreController implements UserStore {
 //            }
 //        }
 
-        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
+        String databaseString = this.config.getString("mongo.uri");
+//        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
+        MongoClient dbClient = new MongoClient(new MongoClientURI(databaseString));
         database = dbClient.getDatabase("discbase");
         userCollection = database.getCollection("users");
         testCollection = database.getCollection("tests");

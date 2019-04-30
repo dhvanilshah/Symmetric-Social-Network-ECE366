@@ -53,11 +53,11 @@ public class SongStoreController implements SongStore {
 
             }
         }
-        String databaseString = this.config.getString("mongo.database");
+        String databaseString = this.config.getString("mongo.uri");
 //        database = dbClient.getDatabase(databaseString);
 //        songCollection = database.getCollection(this.config.getString("mongo.collection_song"));
-
-        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
+        MongoClient dbClient = new MongoClient(new MongoClientURI(databaseString));
+//        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
         database = dbClient.getDatabase("discbase");
         songCollection = database.getCollection("songs");
     }

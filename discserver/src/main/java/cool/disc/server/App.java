@@ -36,8 +36,8 @@ public final class App {
     }
 
     public static void init(Environment environment) {
-        ObjectMapper objectMapper = new ObjectMapper().registerModule(new AutoMatterModule()).setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-//        AuthUtils authUtils = new AuthUtils();
+     ObjectMapper objectMapper = new ObjectMapper().registerModule(new AutoMatterModule()).setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+//        ObjectMapper objectMapper = new ObjectMapper().registerModule(new AutoMatterModule());
 
 //        AlbumResource albumResource = new AlbumResource(objectMapper);
 //        ArtistResource artistResource = new ArtistResource(objectMapper);
