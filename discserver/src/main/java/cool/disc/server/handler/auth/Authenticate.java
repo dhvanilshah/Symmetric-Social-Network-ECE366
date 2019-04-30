@@ -13,10 +13,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -59,8 +56,8 @@ public class Authenticate {
     }
 
     // queries for a search
+    // access Spotify Web API using the temporary client token
     public JSONObject search(String query, String type) throws UnirestException, IOException{
-        // access Spotify Web API using the token
         // type: track
         // query: search string
         String q = null;
@@ -80,7 +77,7 @@ public class Authenticate {
         return result;
     }
 
-    // queries for a search
+    // queries for a recommendation based on seed
     public JSONObject searchRecommendations(String query,  String genre) throws UnirestException, IOException{
         JSONObject searchResult = search(query, "track");
         JSONArray items = searchResult.getJSONObject("tracks").getJSONArray("items");
@@ -100,18 +97,18 @@ public class Authenticate {
         JSONObject response = accessRequest.getBody().getObject();
         return response;
     }
-
-    private static String readStreamToString(InputStream inputStream) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader((inputStream)));
-        StringBuilder sb = new StringBuilder();
-        String output;
-        while ((output = br.readLine()) != null) {
-            sb.append(output);
-        }
-        return sb.toString();
-    }
 }
 
+//    utility method
+//    private static String readStreamToString(InputStream inputStream) throws IOException {
+//        BufferedReader br = new BufferedReader(new InputStreamReader((inputStream)));
+//        StringBuilder sb = new StringBuilder();
+//        String output;
+//        while ((output = br.readLine()) != null) {
+//            sb.append(output);
+//        }
+//        return sb.toString();
+//    }
 
 // oauth ref: https://collab.ucsd.edu/api/api-documentation/information-for-api-consumers/code-examples/java-example
 

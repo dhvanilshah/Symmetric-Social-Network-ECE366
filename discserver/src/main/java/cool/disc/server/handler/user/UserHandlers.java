@@ -74,8 +74,7 @@ public class UserHandlers {
         }
     }
 
-    public Response<List<User>> getUser(final RequestContext requestContext){
-        Optional<String> token = requestContext.request().header("session-token");
+    public Response<List<User>> getUser(final RequestContext requestContext){ Optional<String> token = requestContext.request().header("session-token");
         String name = requestContext.pathArgs().get("name");
         List<User> data = userStore.getUser(name);
         return Response.ok().withPayload(data);

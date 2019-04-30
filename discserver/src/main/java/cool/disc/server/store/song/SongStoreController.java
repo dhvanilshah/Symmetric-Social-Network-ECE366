@@ -37,30 +37,17 @@ public class SongStoreController implements SongStore {
         String host3 = this.config.getString("mongo.host3");
         String uriString = uri1 + username + password;
 
-
 //         initialize db driver
         uri = new MongoClientURI(uriString+host);
-//        try {
-//            dbClient = new com.mongodb.MongoClient(uri);
-//        } catch (MongoClientException e) {
-//            try {
-//                uri = new MongoClientURI(uriString+host2);
-//                dbClient = new com.mongodb.MongoClient(uri);
-//            } catch (Exception error) {
-//                uri = new MongoClientURI(uriString+host3);
-//                dbClient = new com.mongodb.MongoClient(uri);
-//            }
-//        }
         dbClient = new com.mongodb.MongoClient(uri);
         String databaseString = this.config.getString("mongo.database");
         database = dbClient.getDatabase(databaseString);
-//        String databaseString = this.config.getString("mongo.database");
-////        database = dbClient.getDatabase(databaseString);
-////        songCollection = database.getCollection(this.config.getString("mongo.collection_song"));
-//
+
+//      localhost for testing
 //        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
 //        database = dbClient.getDatabase("discbase");
-//        songCollection = database.getCollection("songs");
+//        postCollection = database.getCollection("posts");
+//        userCollection = database.getCollection("users");
     }
 
     @Override
@@ -74,12 +61,11 @@ public class SongStoreController implements SongStore {
             e.printStackTrace();
         }
 
-// IF THE SONG DOESNT EXIST, ADD IT TO THE DB
+//        IF THE SONG DOESNT EXIST, ADD IT TO THE DB
         Document addSongDoc = new Document()
                 .append("title", newSong.title())
                 .append("songUrl", newSong.songUrl())
                 .append("artist", newSong.artist())
-//                .append("albumName", newSong.albumName())
                 .append("albumImageUrl", newSong.albumImageUrl())
                 .append("score", 0);
         try {
@@ -92,7 +78,7 @@ public class SongStoreController implements SongStore {
         }
 
         Response<Object> response = getObjectResponse(addSongDoc, songCollection);
-//        LOG.info("response: {}", response);
+        LOG.info("response: {}", response);
         return response;
     }
 

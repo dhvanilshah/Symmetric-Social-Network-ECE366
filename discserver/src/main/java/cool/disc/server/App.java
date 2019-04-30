@@ -36,8 +36,8 @@ public final class App {
     }
 
     public static void init(Environment environment) {
-        ObjectMapper objectMapper = new ObjectMapper().registerModule(new AutoMatterModule()).setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-//        AuthUtils authUtils = new AuthUtils();
+     ObjectMapper objectMapper = new ObjectMapper().registerModule(new AutoMatterModule()).setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+//        ObjectMapper objectMapper = new ObjectMapper().registerModule(new AutoMatterModule());
 
 //        AlbumResource albumResource = new AlbumResource(objectMapper);
 //        ArtistResource artistResource = new ArtistResource(objectMapper);
@@ -50,7 +50,7 @@ public final class App {
         UserHandlers userHandlers = new UserHandlers(objectMapper, userStore, authUtils);
 
         PostStore postStore = new PostStoreController();
-        PostHandlers postHandlers = new PostHandlers(objectMapper, postStore, userStore);
+        PostHandlers postHandlers = new PostHandlers(objectMapper, postStore, userStore, authUtils);
 
         SongStore songStore = new SongStoreController();
         APIHandlers apiHandlers = new APIHandlers(objectMapper, songStore);
