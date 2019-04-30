@@ -1,13 +1,10 @@
 package cool.disc.server.store.user;
 
-import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientException;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Updates;
 import com.typesafe.config.Config;
@@ -17,7 +14,6 @@ import cool.disc.server.model.UserBuilder;
 import cool.disc.server.utils.AuthUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,8 +47,8 @@ public class UserStoreController implements UserStore {
         String host3 = this.config.getString("mongo.host3");
         String uriString = uri1 + username + password;
 
-        // initialize db driver
-//        uri = new MongoClientURI(uriString+host);
+//         initialize db driver
+        uri = new MongoClientURI(uriString+host);
 //        try {
 //            dbClient = new com.mongodb.MongoClient(uri);
 //        } catch (MongoClientException e) {
@@ -64,11 +60,15 @@ public class UserStoreController implements UserStore {
 //                dbClient = new com.mongodb.MongoClient(uri);
 //            }
 //        }
+        dbClient = new com.mongodb.MongoClient(uri);
 
-        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
-        database = dbClient.getDatabase("discbase");
-        userCollection = database.getCollection("users");
-        testCollection = database.getCollection("tests");
+        String databaseString = this.config.getString("mongo.database");
+        database = dbClient.getDatabase(databaseString);
+
+//        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
+//        database = dbClient.getDatabase("discbase");
+//        userCollection = database.getCollection("users");
+//        testCollection = database.getCollection("tests");
     }
 
     @Override
@@ -125,23 +125,6 @@ public class UserStoreController implements UserStore {
             userlist.add(user);
         }
         return userlist;
-    }
-
-    // get only '_id' from User's 'name'
-    @Override
-    public ObjectId getUserId(String name) {
-        MongoCursor<Document> foundDoc = null;
-        try {
-            foundDoc = userCollection.find(new Document("name", name)).iterator();
-        } catch (Exception e) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-        }
-        ObjectId userId = null;
-        if (!foundDoc.hasNext()) {
-            return userId; // null
-        }
-        userId = foundDoc.next().getObjectId("_id");
-        return userId;
     }
 
     //    take in username and password and return JWT if password is correct
