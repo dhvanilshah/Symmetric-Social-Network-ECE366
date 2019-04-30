@@ -2,7 +2,6 @@ package cool.disc.server.handler.post;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.MongoClientException;
 import com.spotify.apollo.RequestContext;
 import com.spotify.apollo.Response;
 import com.spotify.apollo.route.*;
@@ -10,7 +9,9 @@ import cool.disc.server.model.Post;
 import cool.disc.server.store.post.PostStore;
 import cool.disc.server.store.user.UserStore;
 import okio.ByteString;
-import org.bson.types.ObjectId;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class PostHandlers {
+    private static final Logger LOG = LoggerFactory.getLogger(PostHandlers.class);
 
     private final ObjectMapper objectMapper;
     private PostStore postStore;
@@ -33,10 +35,12 @@ public class PostHandlers {
 
     public Stream<Route<AsyncHandler<Response<ByteString>>>> routes() {
         return Stream.of(
-                Route.sync("GET", "/getFeed", this::getFeed).withMiddleware(jsonMiddleware()),
-                Route.sync("OPTIONS", "/getFeed", rc -> "ok").withMiddleware(jsonMiddleware()),
+                Route.sync("GET", "/getMyFeed/<name>", this::getMyFeed).withMiddleware(jsonMiddleware()),
+//                Route.sync("OPTIONS", "/getMyFeed", rc -> "ok").withMiddleware(jsonMiddleware()),
+                Route.sync("GET", "/getPublicFeed/<name>", this::getPublicFeed).withMiddleware(jsonMiddleware()),
+//                Route.sync("OPTIONS", "/getPublicFeed", rc -> "ok").withMiddleware(jsonMiddleware()),
                 Route.sync("POST", "/addPost", this::addPost).withMiddleware(jsonMiddleware()),
-                Route.sync("OPTIONS", "/addPost", rc -> "ok").withMiddleware(jsonMiddleware()),
+//                Route.sync("OPTIONS", "/addPost", rc -> "ok").withMiddleware(jsonMiddleware()),
                 Route.sync("GET", "/getAllPosts", this::getAllPosts).withMiddleware(jsonMiddleware()),
                 Route.sync("OPTIONS", "/getAllPosts", rc -> "ok").withMiddleware(jsonMiddleware())
         );
@@ -44,8 +48,11 @@ public class PostHandlers {
 
     // retrieves all posts in the database
 
-   public List<Post> getAllPosts(final RequestContext requestContext) {
-        return postStore.getAllPosts();
+   public List<JSONObject> getAllPosts(final RequestContext requestContext) {
+       List<JSONObject> result = new ArrayList<>();
+       List<Post> posts = postStore.getAllPosts();
+       result = JSONListfromPosts(result, posts);
+       return result;
     }
 
     // adding a post from parameters received through http request
@@ -68,25 +75,62 @@ public class PostHandlers {
         }
     }
 
-    // retrieves all posts written by the specified user and the user's friends.
-    // needs to pass in the name of the user as parameter through http request
-    public List<Post> getFeed(final RequestContext requestContext) {
-        String name = requestContext.request().parameters().get("name").iterator().next();
-        List<Post> postList = new ArrayList<>();
-        try {
-            // check if the name - userId exists
-            ObjectId postId = userStore.getUserId(name);
-            if (postId != null) { // if in the database
-                postList = postStore.getFeed(name);
-                if (postList.size() != 0) {
-                    System.out.println("postList found entries!");
-                    return postList;
-                }
-            }
-        } catch (MongoClientException e) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+  // retrieves all posts written by the specified user and the user's friends.
+  // needs to pass in the name of the user as parameter through http request
+  public List<JSONObject> getMyFeed(final RequestContext requestContext) {
+        String name = requestContext.pathArgs().get("name");
+      List<Post> posts = postStore.getMyFeed(name);
+      List<JSONObject> result = new ArrayList<>();
+      LOG.info("breakpoint");
+      if (!posts.isEmpty()) {
+          try {
+            result = JSONListfromPosts(result, posts);
+            } catch (NullPointerException e) {
+              LOG.error("null pointer exception: {}", e.getMessage());
+              }
+          }
+        if (result == null)
+            LOG.info("result: {}", result);
+        return result;
+    }
+
+    private List<JSONObject> JSONListfromPosts(List<JSONObject> result, List<Post> posts) {
+        for (Post post : posts) {
+          String writerId = post.writerId().toString();
+          String receiverId = post.receiverId().toString();
+          String artist = post.receiverId().toString();
+          String album = post.message();
+//          Integer url = post.privacy();
+//          Integer likes = post.likes();
+//          String songId = post.songId().toString();
+//          List<String> comments = post.comments();
+          //            LOG.info("title, artist, album, url: {},{},{},{}",name,artist,album,url);
+          JSONObject postInfo = new JSONObject();
+          postInfo
+              .put("writerId", writerId)
+              .put("receiverId", receiverId)
+              .put("artist", artist)
+              .put("album", album);
+//              .put("url", url)
+//              .put("ilkes", likes)
+//              .put("songId", songId)
+//              .put("comments", comments);
+          result.add(postInfo);
+
         }
-        return postList;
+        return result;
+    }
+
+    public List<JSONObject> getPublicFeed(final RequestContext requestContext) {
+        String name = requestContext.pathArgs().get("name");
+        List<JSONObject> result = new ArrayList<>();
+        List<Post> posts = postStore.getPublicFeed(name);
+        if (posts.size() != 0) {
+            result = JSONListfromPosts(result, posts);
+
+        }
+        LOG.info("result: {}", result);
+        return result;
     }
 
     // Asynchronous Middleware Handling for payloads

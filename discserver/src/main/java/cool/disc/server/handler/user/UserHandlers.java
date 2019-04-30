@@ -2,16 +2,14 @@ package cool.disc.server.handler.user;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spotify.apollo.Status;
-import cool.disc.server.model.User;
-import cool.disc.server.store.user.UserStore;
 import com.spotify.apollo.RequestContext;
 import com.spotify.apollo.Response;
 import com.spotify.apollo.Status;
 import com.spotify.apollo.route.*;
+import cool.disc.server.model.User;
+import cool.disc.server.store.user.UserStore;
 import cool.disc.server.utils.AuthUtils;
 import okio.ByteString;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -76,8 +74,7 @@ public class UserHandlers {
         }
     }
 
-    public Response<List<User>> getUser(final RequestContext requestContext){
-       Optional<String> token = requestContext.request().header("session-token");
+    public Response<List<User>> getUser(final RequestContext requestContext){ Optional<String> token = requestContext.request().header("session-token");
         String name = requestContext.pathArgs().get("name");
         List<User> data = userStore.getUser(name);
         return Response.ok().withPayload(data);
