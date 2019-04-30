@@ -50,7 +50,7 @@ public final class App {
         UserHandlers userHandlers = new UserHandlers(objectMapper, userStore, authUtils);
 
         PostStore postStore = new PostStoreController();
-        PostHandlers postHandlers = new PostHandlers(objectMapper, postStore, userStore);
+        PostHandlers postHandlers = new PostHandlers(objectMapper, postStore, userStore, authUtils);
 
         SongStore songStore = new SongStoreController();
         APIHandlers apiHandlers = new APIHandlers(objectMapper, songStore);

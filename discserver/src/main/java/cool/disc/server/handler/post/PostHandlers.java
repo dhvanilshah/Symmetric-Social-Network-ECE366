@@ -4,20 +4,19 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spotify.apollo.RequestContext;
 import com.spotify.apollo.Response;
+import com.spotify.apollo.Status;
 import com.spotify.apollo.route.*;
 import cool.disc.server.model.Post;
 import cool.disc.server.store.post.PostStore;
 import cool.disc.server.store.user.UserStore;
+import cool.disc.server.utils.AuthUtils;
 import okio.ByteString;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class PostHandlers {
@@ -26,11 +25,13 @@ public class PostHandlers {
     private final ObjectMapper objectMapper;
     private PostStore postStore;
     private UserStore userStore;
+    private final AuthUtils authUtils;
 
-    public PostHandlers(final ObjectMapper objectMapper, final PostStore postStore, final UserStore userStore) {
+    public PostHandlers(final ObjectMapper objectMapper, final PostStore postStore, final UserStore userStore, final AuthUtils authUtils) {
         this.objectMapper = objectMapper;
         this.postStore = postStore;
         this.userStore = userStore;
+        this.authUtils = authUtils;
     }
 
     public Stream<Route<AsyncHandler<Response<ByteString>>>> routes() {
@@ -55,16 +56,28 @@ public class PostHandlers {
        return result;
     }
 
+    @SuppressWarnings("Duplicates")
     // adding a post from parameters received through http request
     // parameters: writerName (not id), receiverName (not id), message
     public Integer addPost(final RequestContext requestContext) {
         Post post;
         JsonNode postVal;
+
+        Optional<String> token = requestContext.request().header("session-token");
+        if (!token.isPresent()) {
+            return 404;
+        }
+        String user_id = authUtils.verifyToken(token.get());
+
+        if(user_id == null){
+            return 402; //unauthorized
+        }
+
         if (requestContext.request().payload().isPresent()) {
             try {
                 postVal = objectMapper.readTree(requestContext.request().payload().get().utf8());
                 post = objectMapper.readValue(postVal.toString(), Post.class);
-                Response<Object> response = postStore.addPost(post);
+                Response<Object> response = postStore.addPost(post, user_id);
                 return response.status().code();
             } catch (IOException e) {
                 e.printStackTrace();

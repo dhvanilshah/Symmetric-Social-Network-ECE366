@@ -76,17 +76,22 @@ public class PostStoreController implements PostStore {
     // in the driver function, receiverId and message would be passed in.
     // writerId is still here until we can get it from the token (passed on from frontend)
     @Override
-    public Response<Object> addPost(Post newPost) {
+    public Response<Object> addPost(Post newPost, String user_id) {
 
         // parse data from the payload
         ObjectId newId = new ObjectId();
-        ObjectId writerId = newPost.writerId();
-        ObjectId receiverId = newPost.receiverId();
+        ObjectId writerId = new ObjectId(user_id);
+        ObjectId receiverId;
+        if("self".equals(newPost.receiverIdString())){
+            receiverId = writerId;
+        } else {
+            receiverId = new ObjectId(newPost.receiverIdString());
+        }
         Integer privacy = newPost.privacy();
         String message = newPost.message();
         Integer likes = newPost.likes();
-        ObjectId songId = newPost.songId();
-        List<String> comments = newPost.comments();
+        ObjectId songId = new ObjectId(newPost.songIdString());
+//        List<String> comments = newPost.comments();
         // create document to insert
         Document addPostDoc = new Document("_id", newId)
                 .append("writerId", writerId)
@@ -94,8 +99,8 @@ public class PostStoreController implements PostStore {
                 .append("privacy", privacy)
                 .append("message", message)
                 .append("likes", likes)
-                .append("songId",songId)
-                .append("comments", comments);
+                .append("songId",songId);
+//                .append("comments", comments);
         return getObjectResponse(addPostDoc, postCollection);
     }
 
@@ -175,7 +180,6 @@ public class PostStoreController implements PostStore {
     // getFeed(name) - retrieves all posts written by the user and the user's friends
     public List<Post> getMyFeed(String name) {
 
-        userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
         List<Post> postList = new ArrayList<>();
         ObjectId userId = userCollection.find(new Document("name", name)).iterator().next().getObjectId("_id");
         try {

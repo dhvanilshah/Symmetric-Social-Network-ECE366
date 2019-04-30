@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PostStore {
     //    Post addPost(ObjectId writerId, ObjectId receiverId, String message);
-    Response<Object> addPost(Post newPost);
+    Response<Object> addPost(Post newPost, String user_id);
     List<Friend> getFriends(String id);
     List<Post> getPostsWriter(ObjectId userId);
     List<Post> getPostsReceiver(ObjectId userId);

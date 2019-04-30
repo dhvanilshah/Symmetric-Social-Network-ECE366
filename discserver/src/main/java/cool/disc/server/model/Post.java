@@ -8,12 +8,14 @@ import java.util.List;
 
 @AutoMatter
 public interface Post {
-    ObjectId id();
-    ObjectId writerId();
-    ObjectId receiverId();
+    @Nullable ObjectId id();
+    @Nullable ObjectId writerId();
+    @Nullable ObjectId receiverId();
+    @Nullable String receiverIdString();
     String message();
     @Nullable Integer privacy();
     @Nullable Integer likes();
     @Nullable ObjectId songId();
+    @Nullable String songIdString();
     @Nullable List<String> comments();
 }
