@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b6cd22ea-f10d-4be4-a0f6-08e356d64d9f" name="Default Changelist" comment="Merge branch 'master' of https://github.com/dhvanilshah/Symmetric-Social-Network-ECE366&#10;&#10;# Conflicts:&#10;#&#9;discserver/dependency-reduced-pom.xml&#10;#&#9;discserver/src/main/java/cool/disc/server/store/song/SongStoreController.java&#10;#&#9;discserver/src/main/java/cool/disc/server/store/user/UserStoreController.java">
-      <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/post/PostHandlers.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/handler/post/PostHandlers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/model/Post.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/post/PostStore.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/post/PostStore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/post/PostStoreController.java" beforeDir="false" afterPath="$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/post/PostStoreController.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/discserver/target/" />
@@ -74,11 +71,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/post/PostStoreController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="166">
-              <caret line="212" selection-start-line="212" selection-end-line="212" />
+            <state relative-caret-position="226">
+              <caret line="164" column="5" lean-forward="true" selection-start-line="164" selection-start-column="5" selection-end-line="164" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -89,8 +86,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/com/spotify/apollo-api-impl/1.2.4/apollo-api-impl-1.2.4.jar!/com/spotify/apollo/dispatch/EndpointInvocationHandler.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="166">
-              <caret line="26" selection-start-line="26" selection-end-line="26" />
+            <state relative-caret-position="214">
+              <caret line="49" selection-start-line="49" selection-end-line="49" />
             </state>
           </provider>
         </entry>
@@ -104,10 +101,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/com/spotify/apollo-api-impl/1.2.4/apollo-api-impl-1.2.4.jar!/com/spotify/apollo/request/RequestRunnableImpl.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="428">
+            <state relative-caret-position="627">
               <caret line="76" selection-start-line="76" selection-end-line="76" />
             </state>
           </provider>
@@ -165,6 +162,7 @@
       <find>jackson</find>
       <find>receiverId</find>
       <find>getMy</find>
+      <find>.comme</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -381,7 +379,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556607366243" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556608511625" />
     <property name="jdk.selected.JAVA_MODULE" value="1.8" />
     <property name="last_opened_file_path" value="D:/IdeaProjects/ece366-spring2019/mongodb" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -508,7 +506,7 @@
       <workItem from="1555610146391" duration="7435000" />
       <workItem from="1556464810832" duration="352000" />
       <workItem from="1556499111238" duration="7894000" />
-      <workItem from="1556550401658" duration="10846000" />
+      <workItem from="1556550401658" duration="11421000" />
     </task>
     <servers />
   </component>
@@ -545,10 +543,11 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="143620000" />
+    <option name="totallyTimeSpent" value="144195000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27968526" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -718,7 +717,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/post/PostStoreController.java</url>
-          <line>180</line>
+          <line>178</line>
           <properties class="cool.disc.server.store.post.PostStoreController" method="getMyFeed">
             <option name="EMULATED" value="true" />
           </properties>
@@ -1123,23 +1122,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/post/PostStoreController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="212" selection-start-line="212" selection-end-line="212" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/spotify/apollo-api-impl/1.2.4/apollo-api-impl-1.2.4.jar!/com/spotify/apollo/dispatch/EndpointInvocationHandler.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="26" selection-start-line="26" selection-end-line="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/com/spotify/apollo-api-impl/1.2.4/apollo-api-impl-1.2.4.jar!/com/spotify/apollo/request/RequestHandlerImpl.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="431">
@@ -1149,8 +1131,25 @@
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/com/spotify/apollo-api-impl/1.2.4/apollo-api-impl-1.2.4.jar!/com/spotify/apollo/request/RequestRunnableImpl.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="428">
+        <state relative-caret-position="627">
           <caret line="76" selection-start-line="76" selection-end-line="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/spotify/apollo-api-impl/1.2.4/apollo-api-impl-1.2.4.jar!/com/spotify/apollo/dispatch/EndpointInvocationHandler.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="49" selection-start-line="49" selection-end-line="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/discserver/src/main/java/cool/disc/server/store/post/PostStoreController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="164" column="5" lean-forward="true" selection-start-line="164" selection-start-column="5" selection-end-line="164" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

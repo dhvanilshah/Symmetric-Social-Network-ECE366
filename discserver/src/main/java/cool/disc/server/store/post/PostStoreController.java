@@ -136,7 +136,6 @@ public class PostStoreController implements PostStore {
     }
 
     public List<Post> getPostsWriter(ObjectId userId) {
-        postCollection = database.getCollection(this.config.getString("mongo.collection_post"));
         List<Post> postList = new ArrayList<>();
         try {
             Document queryId = new Document("writerId", userId);
@@ -159,14 +158,13 @@ public class PostStoreController implements PostStore {
                     .privacy(postDoc.getInteger("privacy"))
                     .likes(postDoc.getInteger("likes"))
                     .songId(postDoc.getObjectId("songId"))
-                    .comments((List<String>) postDoc.get("comments"))
+//                    .comments((List<String>) postDoc.get("comments"))
                     .build();
             postList.add(post);
         }
     }
 
     public List<Post> getPostsReceiver(ObjectId userId) {
-        postCollection = database.getCollection(this.config.getString("mongo.collection_post"));
         List<Post> postList = new ArrayList<>();
         try {
             Document queryId = new Document("receiverId", userId);
@@ -216,7 +214,6 @@ public class PostStoreController implements PostStore {
 
     @Override
     public List<Post> getPublicFeed(String name) {
-        userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
         List<Post> writerPostList = new ArrayList<>();
         List<Post> receiverPostList = new ArrayList<>();
         ObjectId userId = userCollection.find(new Document("name", name)).iterator().next().getObjectId("_id");
