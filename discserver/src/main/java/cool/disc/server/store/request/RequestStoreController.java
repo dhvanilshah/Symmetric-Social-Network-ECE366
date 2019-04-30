@@ -33,23 +33,16 @@ public class RequestStoreController implements RequestStore {
 
 //         initialize db driver
         uri = new MongoClientURI(uriString+host);
-//        try {
-//            dbClient = new com.mongodb.MongoClient(uri);
-//        } catch (MongoClientException e) {
-//            try {
-//                uri = new MongoClientURI(uriString+host2);
-//                dbClient = new com.mongodb.MongoClient(uri);
-//            } catch (Exception error) {
-//                uri = new MongoClientURI(uriString+host3);
-//                dbClient = new com.mongodb.MongoClient(uri);
-//            }
-//        }
         dbClient = new com.mongodb.MongoClient(uri);
         String databaseString = this.config.getString("mongo.database");
         database = dbClient.getDatabase(databaseString);
-//        String databaseString = this.config.getString("mongo.database");
-//        database = dbClient.getDatabase(databaseString);
-//        userCollection = database.getCollection(this.config.getString("mongo.collection_user"));
+
+        // database
+        String userdb = this.config.getString("mongo.collection_user");
+        String postdb = this.config.getString("mongo.collection_post");
+        String songdb = this.config.getString("mongo.collection_song");
+        userCollection = database.getCollection(userdb);
+        postCollection = database.getCollection(postdb);
     }
 
     @Override

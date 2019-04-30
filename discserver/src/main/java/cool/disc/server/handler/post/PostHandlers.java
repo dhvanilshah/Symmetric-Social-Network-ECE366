@@ -4,13 +4,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spotify.apollo.RequestContext;
 import com.spotify.apollo.Response;
-import com.spotify.apollo.Status;
 import com.spotify.apollo.route.*;
 import cool.disc.server.model.Post;
 import cool.disc.server.store.post.PostStore;
 import cool.disc.server.store.user.UserStore;
 import cool.disc.server.utils.AuthUtils;
 import okio.ByteString;
+import org.bson.types.ObjectId;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,24 +36,13 @@ public class PostHandlers {
 
     public Stream<Route<AsyncHandler<Response<ByteString>>>> routes() {
         return Stream.of(
-                Route.sync("GET", "/getMyFeed/<name>", this::getMyFeed).withMiddleware(jsonMiddleware()),
-//                Route.sync("OPTIONS", "/getMyFeed", rc -> "ok").withMiddleware(jsonMiddleware()),
-                Route.sync("GET", "/getPublicFeed/<name>", this::getPublicFeed).withMiddleware(jsonMiddleware()),
-//                Route.sync("OPTIONS", "/getPublicFeed", rc -> "ok").withMiddleware(jsonMiddleware()),
+                Route.sync("GET", "/getMyFeed", this::getMyFeed).withMiddleware(jsonMiddleware()),
+                Route.sync("OPTIONS", "/getMyFeed", rc -> "ok").withMiddleware(jsonMiddleware()),
+                Route.sync("GET", "/getPublicFeed", this::getPublicFeed).withMiddleware(jsonMiddleware()),
+                Route.sync("OPTIONS", "/getPublicFeed", rc -> "ok").withMiddleware(jsonMiddleware()),
                 Route.sync("POST", "/addPost", this::addPost).withMiddleware(jsonMiddleware()),
-//                Route.sync("OPTIONS", "/addPost", rc -> "ok").withMiddleware(jsonMiddleware()),
-                Route.sync("GET", "/getAllPosts", this::getAllPosts).withMiddleware(jsonMiddleware()),
-                Route.sync("OPTIONS", "/getAllPosts", rc -> "ok").withMiddleware(jsonMiddleware())
+                Route.sync("OPTIONS", "/addPost", rc -> "ok").withMiddleware(jsonMiddleware())
         );
-    }
-
-    // retrieves all posts in the database
-
-   public List<JSONObject> getAllPosts(final RequestContext requestContext) {
-       List<JSONObject> result = new ArrayList<>();
-       List<Post> posts = postStore.getAllPosts();
-       result = JSONListfromPosts(result, posts);
-       return result;
     }
 
     @SuppressWarnings("Duplicates")
@@ -89,21 +78,21 @@ public class PostHandlers {
     }
 
   // retrieves all posts written by the specified user and the user's friends.
-  // needs to pass in the name of the user as parameter through http request
   public List<JSONObject> getMyFeed(final RequestContext requestContext) {
-        String name = requestContext.pathArgs().get("name");
-      List<Post> posts = postStore.getMyFeed(name);
+
+      Optional<String> token = requestContext.request().header("session-token");
+      String userId = authUtils.verifyToken(token.get());
+      List<Post> posts = postStore.getMyFeed(userId);
       List<JSONObject> result = new ArrayList<>();
-      LOG.info("breakpoint");
       if (!posts.isEmpty()) {
           try {
             result = JSONListfromPosts(result, posts);
-            } catch (NullPointerException e) {
-              LOG.error("null pointer exception: {}", e.getMessage());
-              }
+        } catch (NullPointerException e) {
+            LOG.error("null pointer exception: {}", e.getMessage());
+            LOG.error("result: {}", result);
+            throw new NullPointerException();
           }
-        if (result == null)
-            LOG.info("result: {}", result);
+      }
         return result;
     }
 
@@ -111,35 +100,45 @@ public class PostHandlers {
         for (Post post : posts) {
           String writerId = post.writerId().toString();
           String receiverId = post.receiverId().toString();
-          String artist = post.receiverId().toString();
           String album = post.message();
-//          Integer url = post.privacy();
-//          Integer likes = post.likes();
-//          String songId = post.songId().toString();
-//          List<String> comments = post.comments();
-          //            LOG.info("title, artist, album, url: {},{},{},{}",name,artist,album,url);
+          Integer privacy = post.privacy();
+          String message = post.message();
+          Integer likes = post.likes();
+//          ObjectId songId = post.songId();
+          String title = post.title();
+          String songUrl = post.songUrl();
+          String albumImageUrl = post.albumImageUrl();
+          String artist = post.artist();
           JSONObject postInfo = new JSONObject();
           postInfo
-              .put("writerId", writerId)
-              .put("receiverId", receiverId)
-              .put("artist", artist)
-              .put("album", album);
-//              .put("url", url)
-//              .put("ilkes", likes)
-//              .put("songId", songId)
-//              .put("comments", comments);
+                .put("writerId", writerId)
+                .put("receiverId", receiverId)
+                .put("artist", artist)
+                .put("album", album)
+                .put("privacy", privacy)
+                .put("message", message)
+                .put("likes", likes)
+//                .put("songId", songId)
+                .put("title", title)
+                  .put("songUrl", songUrl)
+                  .put("artist", artist)
+                  .put("albumImageUrl", albumImageUrl);
           result.add(postInfo);
-
         }
         return result;
     }
 
     public List<JSONObject> getPublicFeed(final RequestContext requestContext) {
-        String name = requestContext.pathArgs().get("name");
+        Optional<String> token = requestContext.request().header("session-token");
+        String userId = authUtils.verifyToken(token.get());
+        List<Post> posts = postStore.getPublicFeed(userId);
         List<JSONObject> result = new ArrayList<>();
-        List<Post> posts = postStore.getPublicFeed(name);
-        if (posts.size() != 0) {
-            result = JSONListfromPosts(result, posts);
+        if (!posts.isEmpty()) {
+            try {
+                result = JSONListfromPosts(result, posts);
+            } catch (NullPointerException e) {
+                throw new NullPointerException();
+            }
 
         }
         LOG.info("result: {}", result);
