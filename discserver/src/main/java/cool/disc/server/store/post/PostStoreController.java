@@ -12,6 +12,7 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import cool.disc.server.model.Post;
 import cool.disc.server.model.PostBuilder;
+import javafx.geometry.Pos;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -189,32 +190,34 @@ public class PostStoreController implements PostStore {
                     List<Post> friendPosts = getPostsWriter(friend.getObjectId("userId"));
 
                     // iterate through selected Friend's posts
-                    Post friendPost = friendPosts.iterator().next();
-                    System.out.println("got a friend. post message: " + friendPost.message());
+                    for(Post friendPost: friendPosts){
+                        System.out.println("got a friend. post message: " + friendPost.message());
 
-                    Document songDoc = songCollection.find(new Document("_id", friendPost.songId())).first();
-                    postList.add(
-                            new PostBuilder()
-                                    .id(friendPost.id())
-                                    .writerId(friendPost.writerId())
-                                    .receiverId(friendPost.receiverId())
-                                    .message(friendPost.message())
-                                    .songId(friendPost.songId())
-                                    .title(songDoc.getString("title"))
-                                    .songUrl(songDoc.getString("songUrl"))
-                                    .artist(songDoc.getString("artist"))
-                                    .albumImageUrl(songDoc.getString("albumImageUrl"))
-                                    .privacy(friendPost.privacy())
-                                    .build()
-                    );
+                        Document songDoc = songCollection.find(new Document("_id", friendPost.songId())).first();
+                        postList.add(
+                                new PostBuilder()
+                                        .id(friendPost.id())
+                                        .writerId(friendPost.writerId())
+                                        .receiverId(friendPost.receiverId())
+                                        .message(friendPost.message())
+                                        .songId(friendPost.songId())
+                                        .title(songDoc.getString("title"))
+                                        .songUrl(songDoc.getString("songUrl"))
+                                        .artist(songDoc.getString("artist"))
+                                        .albumImageUrl(songDoc.getString("albumImageUrl"))
+                                        .privacy(friendPost.privacy())
+                                        .build()
+                        );
+                    }
                 }
             }
-            List<Post> userPosts = getPostsWriter(userId);
-            getPostList(postList, userPosts);
         } catch (Exception e) {
             LOG.error("getMyFeed error: {}", e.getClass().getName() + ": " + e.getMessage());
         }
         LOG.info("postList writer: " + postList.iterator().next().writerId() + " message: " + postList.iterator().next().message());
+        List<Post> userPosts = getPostsWriter(userId);
+        getPostList(postList, userPosts);
+
         return postList;
     }
 
