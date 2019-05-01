@@ -77,10 +77,19 @@ public class UserHandlers {
             return Response.of(Status.UNAUTHORIZED, ByteString.encodeUtf8("Could not create account"));
         }
     }
+    @SuppressWarnings("Duplicates")
+    public Response<List<User>> getUser(final RequestContext requestContext){
+        Optional<String> token = requestContext.request().header("session-token");
+        if (!token.isPresent()) {
+            return Response.forStatus(Status.BAD_REQUEST);
+        }
+        String user_id = authUtils.verifyToken(token.get());
 
-    public Response<List<User>> getUser(final RequestContext requestContext){ Optional<String> token = requestContext.request().header("session-token");
+        if(user_id == null){
+            return Response.forStatus(Status.UNAUTHORIZED);
+        }
         String name = requestContext.pathArgs().get("name");
-        List<User> data = userStore.getUser(name);
+        List<User> data = userStore.getUser(name, user_id);
         return Response.ok().withPayload(data);
     }
 

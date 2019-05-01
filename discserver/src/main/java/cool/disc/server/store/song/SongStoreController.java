@@ -38,14 +38,14 @@ public class SongStoreController implements SongStore {
         String uriString = uri1 + username + password;
 
 //         initialize db driver
-        uri = new MongoClientURI(uriString+host);
+        uri = new MongoClientURI(uri1);
         dbClient = new com.mongodb.MongoClient(uri);
         String databaseString = this.config.getString("mongo.database");
         database = dbClient.getDatabase(databaseString);
 
 //      localhost for testing
-//        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
-//        database = dbClient.getDatabase("discbase");
+        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
+        database = dbClient.getDatabase("discbase");
 //        songCollection = database.getCollection("songs");
 
         // database

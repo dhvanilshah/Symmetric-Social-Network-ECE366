@@ -23,4 +23,5 @@ public interface User {
     @Nullable List<Request> reqReceived();
     @Nullable List<String> likedPosts();
     @Nullable List<String> likedComments();
+    @Nullable Boolean friendCheck();
 }

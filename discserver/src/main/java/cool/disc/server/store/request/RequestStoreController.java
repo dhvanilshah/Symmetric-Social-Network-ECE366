@@ -32,7 +32,7 @@ public class RequestStoreController implements RequestStore {
         String uriString = uri1 + username + password;
 
 //         initialize db driver
-        uri = new MongoClientURI(uriString+host);
+        uri = new MongoClientURI(uri1);
         dbClient = new com.mongodb.MongoClient(uri);
         String databaseString = this.config.getString("mongo.database");
         database = dbClient.getDatabase(databaseString);

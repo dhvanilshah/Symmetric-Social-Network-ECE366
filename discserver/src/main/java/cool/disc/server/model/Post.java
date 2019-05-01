@@ -4,6 +4,7 @@ import io.norberg.automatter.AutoMatter;
 import org.bson.types.ObjectId;
 
 import javax.annotation.Nullable;
+import java.util.Date;
 import java.util.List;
 
 @AutoMatter
@@ -20,10 +21,11 @@ public interface Post {
     // a post should include a song, so songid should not be nullable?
     @Nullable ObjectId songId();
     // songIdStirng can come from songId, so unnecesary?
-//    @Nullable String songIdString();
+    @Nullable String songIdString();
     @Nullable List<String> comments();
     @Nullable String title();
     @Nullable String songUrl();
     @Nullable String artist();
     @Nullable String albumImageUrl();
+    @Nullable Date dateCreated();
 }

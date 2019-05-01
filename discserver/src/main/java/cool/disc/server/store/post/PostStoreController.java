@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -47,14 +48,14 @@ public class PostStoreController implements PostStore {
         String uriString = uri1 + username + password;
 
 //         initialize db driver
-        uri = new MongoClientURI(uriString + host);
+        uri = new MongoClientURI(uri1);
         dbClient = new com.mongodb.MongoClient(uri);
         String databaseString = this.config.getString("mongo.database");
         database = dbClient.getDatabase(databaseString);
 
 //      localhost for testing
-//        MongoClient dbClient = new MongoClient("localhost", 27017);
-//        database = dbClient.getDatabase("discbase");
+        MongoClient dbClient = new MongoClient("localhost", 27017);
+        database = dbClient.getDatabase("discbase");
 
         // database
         String userdb = this.config.getString("mongo.collection_user");
@@ -73,7 +74,7 @@ public class PostStoreController implements PostStore {
         ObjectId newId = new ObjectId();
         ObjectId writerId = new ObjectId(user_id);
         ObjectId receiverId;
-        if ("self" .equals(newPost.receiverIdString())) {
+        if ("self".equals(newPost.receiverIdString())) {
             receiverId = writerId;
         } else {
             receiverId = new ObjectId(newPost.receiverIdString());
@@ -82,7 +83,7 @@ public class PostStoreController implements PostStore {
         String message = newPost.message();
         Integer likes = newPost.likes();
 
-        ObjectId songId = new ObjectId(newPost.songId().toString());
+        ObjectId songId = new ObjectId(newPost.songIdString());
 
         // create document to insert
         Document addPostDoc = new Document("_id", newId)
@@ -91,7 +92,8 @@ public class PostStoreController implements PostStore {
                 .append("privacy", privacy)
                 .append("message", message)
                 .append("likes", likes)
-                .append("songId", songId);
+                .append("songId", songId)
+                .append("dateCreated", new Date());
         return getObjectResponse(addPostDoc, postCollection);
     }
 

@@ -8,6 +8,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Updates;
+import com.sun.xml.internal.messaging.saaj.util.FinalArrayList;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import cool.disc.server.model.User;
@@ -35,6 +36,7 @@ public class UserStoreController implements UserStore {
     private MongoDatabase database;
     private MongoCollection<Document> userCollection;
     private MongoCollection<Document> testCollection;
+    private Object search;
 
     public UserStoreController() {
         this.authUtils =  new AuthUtils();
@@ -49,14 +51,14 @@ public class UserStoreController implements UserStore {
         String uriString = uri1 + username + password;
 
 //         initialize db driver
-        uri = new MongoClientURI(uriString+host);
+        uri = new MongoClientURI(uri1);
         dbClient = new com.mongodb.MongoClient(uri);
         String databaseString = this.config.getString("mongo.database");
         database = dbClient.getDatabase(databaseString);
 
 //      localhost for testing
-//        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
-//        database = dbClient.getDatabase("discbase");
+        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
+        database = dbClient.getDatabase("discbase");
 
         // database
         String userdb = this.config.getString("mongo.collection_user");
@@ -97,28 +99,64 @@ public class UserStoreController implements UserStore {
     // get a list of Users from matching [regex] 'name'
     @SuppressWarnings("Duplicates")
     @Override
-    public List<User> getUser(final String name){
-        Document regQuery = new Document();
-        regQuery.append("$regex", "^(?)" + Pattern.quote(name));
-        regQuery.append("$options", "i");
+    public List<User> getUser(final String name, String user_id){
+        Document doc;
 
-        Document findQuery = new Document();
-        findQuery.append("name", regQuery);
-        FindIterable<Document> iterable = userCollection.find(findQuery);
+        try {
+            doc  = userCollection.find(eq("_id", new ObjectId(user_id))).first();
+            ArrayList<Document> friends =  (ArrayList<Document>) doc.get("friends");
+            String username = doc.getString("username");
 
-        List<User> userlist = new ArrayList<User>();
-        for(Document userDoc : iterable){
-            ObjectId id = (ObjectId)userDoc.get( "_id" );
-            String nameUser = userDoc.getString("name");
-            String usernameUser = userDoc.getString("username");
-            User user = new UserBuilder()
-                    .id(id.toHexString())
-                    .name(nameUser)
-                    .username(usernameUser)
-                    .build();
-            userlist.add(user);
+
+            Document regQuery = new Document();
+            regQuery.append("$regex", "^(?)" + Pattern.quote(name));
+            regQuery.append("$options", "i");
+
+            Document findQuery = new Document();
+            findQuery.append("name", regQuery);
+            FindIterable<Document> iterable = userCollection.find(findQuery);
+
+            List<User> userlist = new ArrayList<User>();
+            for(Document userDoc : iterable){
+                ObjectId id = (ObjectId)userDoc.get( "_id" );
+                String nameUser = userDoc.getString("name");
+                String usernameUser = userDoc.getString("username");
+
+                if(usernameUser.equals(username)){
+                    continue;
+                } else if(checkFriend(id, friends)){
+                    User user = new UserBuilder()
+                            .id(id.toHexString())
+                            .name(nameUser)
+                            .username(usernameUser)
+                            .friendCheck(true)
+                            .build();
+                    userlist.add(user);
+                } else {
+                    User user = new UserBuilder()
+                            .id(id.toHexString())
+                            .name(nameUser)
+                            .username(usernameUser)
+                            .friendCheck(false)
+                            .build();
+                    userlist.add(user);
+                }
+
+            }
+            return userlist;
+        } catch (Exception e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
-        return userlist;
+        return null;
+    }
+
+    private Boolean checkFriend(ObjectId id, ArrayList<Document> friendsList){
+        for(Document friend : friendsList){
+            if(friend.getObjectId("userId").equals(id)){
+                return true;
+            }
+        }
+        return false;
     }
 
     //    take in username and password and return JWT if password is correct
