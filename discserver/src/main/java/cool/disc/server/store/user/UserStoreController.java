@@ -83,7 +83,7 @@ public class UserStoreController implements UserStore {
                 .append("username", username)
                 .append("password", password)
                 .append("email", email)
-                .append("service", birthday)
+                .append("birthday", birthday)
 //                .append("photo", photo)
                 .append("date", date);
 
@@ -161,9 +161,11 @@ public class UserStoreController implements UserStore {
     }
 
     private Boolean checkFriend(ObjectId id, ArrayList<Document> friendsList){
-        for(Document friend : friendsList){
-            if(friend.getObjectId("userId").equals(id)){
-                return true;
+        if(friendsList != null) {
+            for (Document friend : friendsList) {
+                if (friend.getObjectId("userId").equals(id)) {
+                    return true;
+                }
             }
         }
         return false;

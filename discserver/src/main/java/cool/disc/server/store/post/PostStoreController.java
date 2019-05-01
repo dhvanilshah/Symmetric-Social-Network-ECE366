@@ -177,10 +177,11 @@ public class PostStoreController implements PostStore {
             LOG.error("getPostsReceiver: {}", e.getClass().getName() + ": " + e.getMessage());
         }
 
-        for(int i = 0; i < postList.size(); i++){
-            Post currentPost = postList.get(i);
-            if(currentPost.writerId().equals(currentPost.receiverId())){
-                postList.remove(currentPost);
+        for (Iterator<Post> iterator = postList.iterator(); iterator.hasNext();) {
+            Post currentPost = iterator.next();
+            if (currentPost.writerId().equals(currentPost.receiverId())) {
+                // Remove the current element from the iterator and the list.
+                iterator.remove();
             }
         }
 
@@ -194,7 +195,7 @@ public class PostStoreController implements PostStore {
         ObjectId userId = new ObjectId(user_id);
         try {
             ArrayList<Document> friendList = getFriends(userId);
-            if (!friendList.isEmpty()) {
+            if (friendList != null) {
                 // iterate through each Friend of the User
                 for (Document friend : friendList) {
 
@@ -229,7 +230,6 @@ public class PostStoreController implements PostStore {
         } catch (Exception e) {
             LOG.error("getMyFeed error: {}", e.getClass().getName() + ": " + e.getMessage());
         }
-        LOG.info("postList writer: " + postList.iterator().next().writerId() + " message: " + postList.iterator().next().message());
         List<Post> userPosts = getPostsWriter(userId);
         getPostList(postList, userPosts);
 
@@ -237,12 +237,13 @@ public class PostStoreController implements PostStore {
     }
 
     @Override
-    public List<Post> getPublicFeed(String userId) {
+    public List<Post> getPublicFeed(String username) {
+        Document user = userCollection.find(new Document("username", username)).first();
         List<Post> writerPostList = new ArrayList<>();
         List<Post> receiverPostList = new ArrayList<>();
 
-        List<Post> userPostsWriter = getPostsWriter(new ObjectId(userId));
-        List<Post> userPostsReceiver = getPostsReceiver(new ObjectId(userId));
+        List<Post> userPostsWriter = getPostsWriter(user.getObjectId("_id"));
+        List<Post> userPostsReceiver = getPostsReceiver(user.getObjectId("_id"));
         try {
             getPostList(writerPostList, userPostsWriter);
             getPostList(receiverPostList, userPostsReceiver);

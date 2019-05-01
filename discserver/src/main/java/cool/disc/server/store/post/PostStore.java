@@ -15,5 +15,5 @@ public interface PostStore {
     List<Post> getPostsWriter(ObjectId userId);
     List<Post> getPostsReceiver(ObjectId userId);
     List<Post> getMyFeed(String name);
-    List<Post> getPublicFeed(String name);
+    List<Post> getPublicFeed(String username);
 }

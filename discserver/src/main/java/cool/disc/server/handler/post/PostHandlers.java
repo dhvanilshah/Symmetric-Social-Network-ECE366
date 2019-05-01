@@ -38,8 +38,8 @@ public class PostHandlers {
         return Stream.of(
                 Route.sync("GET", "/getMyFeed", this::getMyFeed).withMiddleware(jsonMiddleware()),
                 Route.sync("OPTIONS", "/getMyFeed", rc -> "ok").withMiddleware(jsonMiddleware()),
-                Route.sync("GET", "/getPublicFeed", this::getPublicFeed).withMiddleware(jsonMiddleware()),
-                Route.sync("OPTIONS", "/getPublicFeed", rc -> "ok").withMiddleware(jsonMiddleware()),
+                Route.sync("GET", "/getPublicFeed/<username>", this::getPublicFeed).withMiddleware(jsonMiddleware()),
+                Route.sync("OPTIONS", "/getPublicFeed/<username>", rc -> "ok").withMiddleware(jsonMiddleware()),
                 Route.sync("POST", "/addPost", this::addPost).withMiddleware(jsonMiddleware()),
                 Route.sync("OPTIONS", "/addPost", rc -> "ok").withMiddleware(jsonMiddleware())
         );
@@ -139,9 +139,10 @@ public class PostHandlers {
     }
 
     public List<JSONObject> getPublicFeed(final RequestContext requestContext) {
+        String username = requestContext.pathArgs().get("username");
         Optional<String> token = requestContext.request().header("session-token");
         String userId = authUtils.verifyToken(token.get());
-        List<Post> posts = postStore.getPublicFeed(userId);
+        List<Post> posts = postStore.getPublicFeed(username);
         List<JSONObject> result = new ArrayList<>();
         if (!posts.isEmpty()) {
             try {
