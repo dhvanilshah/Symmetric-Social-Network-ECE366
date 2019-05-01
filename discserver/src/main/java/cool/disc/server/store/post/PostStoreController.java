@@ -75,10 +75,14 @@ public class PostStoreController implements PostStore {
         ObjectId newId = new ObjectId();
         ObjectId writerId = new ObjectId(user_id);
         ObjectId receiverId;
-        if ("self".equals(newPost.receiverIdString())) {
+        String username = newPost.receiverUsername();
+        Document writer = userCollection.find(new Document("_id", writerId)).first();
+
+        if (username.equals(writer.getString("username"))) {
             receiverId = writerId;
         } else {
-            receiverId = new ObjectId(newPost.receiverIdString());
+            Document receiver = userCollection.find(new Document("username", username)).first();
+            receiverId = receiver.getObjectId("_id");
         }
         Integer privacy = newPost.privacy();
         String message = newPost.message();

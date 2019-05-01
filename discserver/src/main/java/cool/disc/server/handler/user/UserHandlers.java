@@ -33,6 +33,7 @@ public class UserHandlers {
     public Stream<Route<AsyncHandler<Response<ByteString>>>> routes() {
         return Stream.of(
                 Route.sync("POST", "/addUser", this::addUser).withMiddleware(jsonMiddleware()),
+                Route.sync("OPTIONS", "/addUser", rc -> "ok").withMiddleware(jsonMiddleware()),
                 Route.sync("GET", "/getUser/<name>", this::getUser).withMiddleware(jsonMiddleware()),
                 Route.sync("OPTIONS", "/getUser/<any>", rc -> "ok").withMiddleware(jsonMiddleware()),
                 Route.sync("GET", "/login", this::login).withMiddleware(jsonMiddleware()),
@@ -52,7 +53,7 @@ public class UserHandlers {
         );
     }
 
-    public Response addUser(final RequestContext requestContext) {
+    public Response<String> addUser(final RequestContext requestContext) {
         User user;
         Integer response;
         JsonNode test;
@@ -73,8 +74,14 @@ public class UserHandlers {
         if(response == 1){
             return Response.ok();
         }
+        else if(response == 2){
+            return Response.of(Status.UNAUTHORIZED, "This username is taken.");
+        }
+        else if(response == 3){
+            return Response.of(Status.UNAUTHORIZED, "This email is taken.");
+        }
         else {
-            return Response.of(Status.UNAUTHORIZED, ByteString.encodeUtf8("Could not create account"));
+            return Response.of(Status.UNAUTHORIZED, "Could not create account");
         }
     }
     @SuppressWarnings("Duplicates")

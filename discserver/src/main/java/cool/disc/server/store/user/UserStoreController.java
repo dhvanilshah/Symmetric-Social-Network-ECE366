@@ -87,6 +87,16 @@ public class UserStoreController implements UserStore {
 //                .append("photo", photo)
                 .append("date", date);
 
+        Document doc  = userCollection.find(eq("username", username)).first();
+        if(doc != null){
+            return 2;
+        }
+
+        Document doc2  = userCollection.find(eq("email", email)).first();
+        if(doc2 != null){
+            return 3;
+        }
+
         try {
             userCollection.insertOne(addUserDoc);
             return 1;
