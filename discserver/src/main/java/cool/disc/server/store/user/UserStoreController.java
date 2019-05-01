@@ -341,9 +341,9 @@ public class UserStoreController implements UserStore {
     public User getBio(String user_id, String username) {
         Document userDoc;
         User user;
-        if(username.equals("self")){
+        userDoc = userCollection.find(eq("_id", new ObjectId(user_id))).first();
+        if(username.equals(userDoc.getString("username"))){
             try {
-                userDoc = userCollection.find(eq("_id", new ObjectId(user_id))).first();
                 user = new UserBuilder()
                         .id((userDoc.getObjectId("_id")).toHexString())
                         .name(userDoc.getString("name"))
