@@ -164,6 +164,14 @@ public class PostStoreController implements PostStore {
         } catch (Exception e) {
             LOG.error("getPostsReceiver: {}", e.getClass().getName() + ": " + e.getMessage());
         }
+
+        for(int i = 0; i < postList.size(); i++){
+            Post currentPost = postList.get(i);
+            if(currentPost.writerId().equals(currentPost.receiverId())){
+                postList.remove(currentPost);
+            }
+        }
+
         return postList;
     }
 
@@ -177,9 +185,8 @@ public class PostStoreController implements PostStore {
             if (!friendList.isEmpty()) {
                 // iterate through each Friend of the User
                 for (Document friend : friendList) {
-                    LOG.info("next friend doc: {}", friend.getObjectId("userId"));
+
                     List<Post> friendPosts = getPostsWriter(friend.getObjectId("userId"));
-                    LOG.info("friendPost message: {}", friendPosts.iterator().next().message());
 
                     // iterate through selected Friend's posts
                     Post friendPost = friendPosts.iterator().next();
