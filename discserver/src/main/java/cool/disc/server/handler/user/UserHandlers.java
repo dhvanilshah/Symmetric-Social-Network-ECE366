@@ -235,6 +235,7 @@ public class UserHandlers {
         return Response.ok();
     }
 
+
     @SuppressWarnings("Duplicates")
     private <T> Middleware<AsyncHandler<T>, AsyncHandler<Response<ByteString>>> jsonMiddleware() {
 

@@ -353,6 +353,7 @@ public class UserStoreController implements UserStore {
                         .faveSong(userDoc.getString("faveSong"))
                         .name(userDoc.getString("name"))
                         .username(userDoc.getString("username"))
+                        .friendCheck(true)
                         .build();
                 return user;
             } catch (Exception e) {
@@ -362,6 +363,8 @@ public class UserStoreController implements UserStore {
         else {
             try {
                 userDoc = userCollection.find(eq("username", username)).first();
+                ArrayList<Document> friends =  (ArrayList<Document>) userDoc.get("friends");
+                Boolean friendCheck = checkFriend(new ObjectId(user_id), friends);
                 user = new UserBuilder()
                         .id((userDoc.getObjectId("_id")).toHexString())
                         .name(userDoc.getString("name"))
@@ -371,6 +374,7 @@ public class UserStoreController implements UserStore {
                         .faveSong(userDoc.getString("faveSong"))
                         .name(userDoc.getString("name"))
                         .username(userDoc.getString("username"))
+                        .friendCheck(friendCheck)
                         .build();
                 return user;
             } catch (Exception e) {
