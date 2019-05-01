@@ -28,4 +28,8 @@ public interface Post {
     @Nullable String artist();
     @Nullable String albumImageUrl();
     @Nullable Date dateCreated();
+    @Nullable String receiverName();
+    @Nullable String writerName();
+    @Nullable String receiverUsername();
+    @Nullable String writerUsername();
 }

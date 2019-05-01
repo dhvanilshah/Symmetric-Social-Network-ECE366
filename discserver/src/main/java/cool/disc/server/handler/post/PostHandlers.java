@@ -109,6 +109,11 @@ public class PostHandlers {
           String songUrl = post.songUrl();
           String albumImageUrl = post.albumImageUrl();
           String artist = post.artist();
+          Date dateCreated = post.dateCreated();
+          String writerName  = post.writerName();
+          String writerUsername = post.writerUsername();
+          String receiverName = post.receiverName();
+          String receiverUsername = post.receiverUsername();
           JSONObject postInfo = new JSONObject();
           postInfo
                 .put("writerId", writerId)
@@ -120,9 +125,14 @@ public class PostHandlers {
                 .put("likes", likes)
 //                .put("songId", songId)
                 .put("title", title)
-                  .put("songUrl", songUrl)
-                  .put("artist", artist)
-                  .put("albumImageUrl", albumImageUrl);
+                .put("songUrl", songUrl)
+                .put("artist", artist)
+                .put("albumImageUrl", albumImageUrl)
+                .put("dateCreated", dateCreated)
+                .put("writerName", writerName)
+                .put("writerUsername", writerUsername)
+                .put("receiverName", receiverName)
+                .put("receiverUsername", receiverUsername);
           result.add(postInfo);
         }
         return result;

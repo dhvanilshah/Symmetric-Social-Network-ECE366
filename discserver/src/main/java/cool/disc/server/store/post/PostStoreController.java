@@ -140,6 +140,8 @@ public class PostStoreController implements PostStore {
         while (matchingPosts.hasNext()) {
             Document postDoc = matchingPosts.next();
             Document songDoc = songCollection.find(new Document("_id", postDoc.getObjectId("songId"))).first();
+            Document writer = userCollection.find(new Document("_id", postDoc.getObjectId("writerId"))).first();
+            Document receiver = userCollection.find(new Document("_id", postDoc.getObjectId("receiverId"))).first();
             postList.add(
                     new PostBuilder()
                             .id(postDoc.getObjectId("_id"))
@@ -152,6 +154,11 @@ public class PostStoreController implements PostStore {
                             .artist(songDoc.getString("artist"))
                             .albumImageUrl(songDoc.getString("albumImageUrl"))
                             .privacy(postDoc.getInteger("privacy"))
+                            .dateCreated(postDoc.getDate("dateCreated"))
+                            .receiverName(receiver.getString("name"))
+                            .writerName(writer.getString("name"))
+                            .receiverUsername(receiver.getString("username"))
+                            .writerUsername(writer.getString("username"))
                             .build()
             );
         }
@@ -191,7 +198,6 @@ public class PostStoreController implements PostStore {
 
                     // iterate through selected Friend's posts
                     for(Post friendPost: friendPosts){
-                        System.out.println("got a friend. post message: " + friendPost.message());
 
                         Document songDoc = songCollection.find(new Document("_id", friendPost.songId())).first();
                         postList.add(
@@ -206,6 +212,11 @@ public class PostStoreController implements PostStore {
                                         .artist(songDoc.getString("artist"))
                                         .albumImageUrl(songDoc.getString("albumImageUrl"))
                                         .privacy(friendPost.privacy())
+                                        .dateCreated(friendPost.dateCreated())
+                                        .receiverName(friendPost.receiverName())
+                                        .receiverUsername(friendPost.receiverUsername())
+                                        .writerName(friendPost.writerName())
+                                        .writerUsername(friendPost.writerUsername())
                                         .build()
                         );
                     }
