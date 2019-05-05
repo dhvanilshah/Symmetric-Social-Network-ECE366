@@ -28,31 +28,38 @@ public class SongStoreController implements SongStore {
     public SongStoreController() {
         this.config = ConfigFactory.load("discserver.conf");
 
-        // get login info from config
-        String uri1 = this.config.getString("mongo.uri");
-        String username = this.config.getString("mongo.username");
-        String password = this.config.getString("mongo.password");
-        String host = this.config.getString("mongo.host");
-        String host2 = this.config.getString("mongo.host2");
-        String host3 = this.config.getString("mongo.host3");
-        String uriString = uri1 + username + password;
-
-//         initialize db driver
-        uri = new MongoClientURI(uri1);
+//        // get login info from config
+//        String uri1 = this.config.getString("mongo.uri");
+//        String username = this.config.getString("mongo.username");
+//        String password = this.config.getString("mongo.password");
+//        String host = this.config.getString("mongo.host");
+//        String host2 = this.config.getString("mongo.host2");
+//        String host3 = this.config.getString("mongo.host3");
+//        String uriString = uri1 + username + password;
+//
+////         initialize db driver
+//        uri = new MongoClientURI(uri1);
+//        dbClient = new com.mongodb.MongoClient(uri);
+//        String databaseString = this.config.getString("mongo.database");
+//        database = dbClient.getDatabase(databaseString);
+//
+////      localhost for testing
+//        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
+//        database = dbClient.getDatabase("discbase");
+////        songCollection = database.getCollection("songs");
+//
+//        // database
+//        String userdb = this.config.getString("mongo.collection_user");
+//        String postdb = this.config.getString("mongo.collection_post");
+        // database
+        String uri = this.config.getString("mongo.uri");
         dbClient = new com.mongodb.MongoClient(uri);
         String databaseString = this.config.getString("mongo.database");
         database = dbClient.getDatabase(databaseString);
-
-//      localhost for testing
-        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
-        database = dbClient.getDatabase("discbase");
-//        songCollection = database.getCollection("songs");
-
-        // database
-        String userdb = this.config.getString("mongo.collection_user");
-        String postdb = this.config.getString("mongo.collection_post");
         String songdb = this.config.getString("mongo.collection_song");
         songCollection = database.getCollection(songdb);
+//        String userdb = this.config.getString("mongo.collection_user");
+//        userCollection = database.getCollection(userdb);
     }
 
     @Override

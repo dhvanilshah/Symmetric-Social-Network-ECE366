@@ -1,6 +1,5 @@
 package cool.disc.server.store.user;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -8,7 +7,6 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Updates;
-import com.sun.xml.internal.messaging.saaj.util.FinalArrayList;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import cool.disc.server.model.User;
@@ -42,28 +40,22 @@ public class UserStoreController implements UserStore {
         this.authUtils =  new AuthUtils();
         this.config = ConfigFactory.load("discserver.conf");
         // get login info from config
-        String uri1 = this.config.getString("mongo.uri");
-        String username = this.config.getString("mongo.username");
-        String password = this.config.getString("mongo.password");
-        String host = this.config.getString("mongo.host");
-        String host2 = this.config.getString("mongo.host2");
-        String host3 = this.config.getString("mongo.host3");
-        String uriString = uri1 + username + password;
-
+//        String username = this.config.getString("mongo.username");
+//        String password = this.config.getString("mongo.password");
 //         initialize db driver
-        uri = new MongoClientURI(uri1);
+
+//      localhost for testing
+//        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
+//        database = dbClient.getDatabase("discbase");
+//        String postdb = this.config.getString("mongo.collection_post");
+//        String songdb = this.config.getString("mongo.collection_song");
+
+        // database
+        String uri = this.config.getString("mongo.uri");
         dbClient = new com.mongodb.MongoClient(uri);
         String databaseString = this.config.getString("mongo.database");
         database = dbClient.getDatabase(databaseString);
-
-//      localhost for testing
-        MongoClient dbClient = new MongoClient( "localhost" , 27017 );
-        database = dbClient.getDatabase("discbase");
-
-        // database
         String userdb = this.config.getString("mongo.collection_user");
-        String postdb = this.config.getString("mongo.collection_post");
-        String songdb = this.config.getString("mongo.collection_song");
         userCollection = database.getCollection(userdb);
     }
 

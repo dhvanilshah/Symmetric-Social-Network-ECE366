@@ -23,24 +23,28 @@ public class RequestStoreController implements RequestStore {
         this.config = ConfigFactory.load("discserver.conf");
 
         // get login info from config
-        String uri1 = this.config.getString("mongo.uri");
-        String username = this.config.getString("mongo.username");
-        String password = this.config.getString("mongo.password");
-        String host = this.config.getString("mongo.host");
-        String host2 = this.config.getString("mongo.host2");
-        String host3 = this.config.getString("mongo.host3");
-        String uriString = uri1 + username + password;
+//        String uri1 = this.config.getString("mongo.uri");
+//        String username = this.config.getString("mongo.username");
+//        String password = this.config.getString("mongo.password");
+//        String host = this.config.getString("mongo.host");
+//        String host2 = this.config.getString("mongo.host2");
+//        String host3 = this.config.getString("mongo.host3");
+//        String uriString = uri1 + username + password;
+//
+////         initialize db driver
+//        uri = new MongoClientURI(uri1);
+//        dbClient = new com.mongodb.MongoClient(uri);
+//        String databaseString = this.config.getString("mongo.database");
+//        database = dbClient.getDatabase(databaseString);
 
-//         initialize db driver
-        uri = new MongoClientURI(uri1);
+        // database
+        // database
+        String uri = this.config.getString("mongo.uri");
         dbClient = new com.mongodb.MongoClient(uri);
         String databaseString = this.config.getString("mongo.database");
         database = dbClient.getDatabase(databaseString);
-
-        // database
         String userdb = this.config.getString("mongo.collection_user");
         String postdb = this.config.getString("mongo.collection_post");
-        String songdb = this.config.getString("mongo.collection_song");
         userCollection = database.getCollection(userdb);
         postCollection = database.getCollection(postdb);
     }

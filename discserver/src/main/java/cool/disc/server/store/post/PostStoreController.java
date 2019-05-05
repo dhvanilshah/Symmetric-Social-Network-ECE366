@@ -12,7 +12,6 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import cool.disc.server.model.Post;
 import cool.disc.server.model.PostBuilder;
-import javafx.geometry.Pos;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -42,23 +41,28 @@ public class PostStoreController implements PostStore {
         this.config = ConfigFactory.load("discserver.conf");
 
         // get login info from config
-        String uri1 = this.config.getString("mongo.uri");
-        String username = this.config.getString("mongo.username");
-        String password = this.config.getString("mongo.password");
-        String host = this.config.getString("mongo.host");
-        String uriString = uri1 + username + password;
+//        String uri1 = this.config.getString("mongo.uri");
+//        String username = this.config.getString("mongo.username");
+//        String password = this.config.getString("mongo.password");
+//        String host = this.config.getString("mongo.host");
+//        String uriString = uri1 + username + password;
+//
+////         initialize db driver
+//        uri = new MongoClientURI(uri1);
+//        dbClient = new com.mongodb.MongoClient(uri);
+//        String databaseString = this.config.getString("mongo.database");
+//        database = dbClient.getDatabase(databaseString);
+//
+////      localhost for testing
+//        MongoClient dbClient = new MongoClient("localhost", 27017);
+//        database = dbClient.getDatabase("discbase");
 
-//         initialize db driver
-        uri = new MongoClientURI(uri1);
+        // database
+        // database
+        String uri = this.config.getString("mongo.uri");
         dbClient = new com.mongodb.MongoClient(uri);
         String databaseString = this.config.getString("mongo.database");
         database = dbClient.getDatabase(databaseString);
-
-//      localhost for testing
-        MongoClient dbClient = new MongoClient("localhost", 27017);
-        database = dbClient.getDatabase("discbase");
-
-        // database
         String userdb = this.config.getString("mongo.collection_user");
         String postdb = this.config.getString("mongo.collection_post");
         String songdb = this.config.getString("mongo.collection_song");
@@ -197,7 +201,7 @@ public class PostStoreController implements PostStore {
             ArrayList<Document> friendList = getFriends(userId);
             if (friendList != null) {
                 // iterate through each Friend of the User
-                for (Document friend : friendList) {
+                for (Document friend : friendList)  {
 
                     List<Post> friendPosts = getPostsWriter(friend.getObjectId("userId"));
 
