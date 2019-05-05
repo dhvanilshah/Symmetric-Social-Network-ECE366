@@ -52,7 +52,7 @@ public class UserStoreController implements UserStore {
 
         // database
         String uri = this.config.getString("mongo.uri");
-        dbClient = new com.mongodb.MongoClient(uri);
+        dbClient = new com.mongodb.MongoClient(new MongoClientURI(uri));
         String databaseString = this.config.getString("mongo.database");
         database = dbClient.getDatabase(databaseString);
         String userdb = this.config.getString("mongo.collection_user");
