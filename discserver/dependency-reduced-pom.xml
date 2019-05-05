@@ -12,7 +12,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>cool.disc.server.test.App</mainClass>
+              <mainClass>cool.disc.server.App</mainClass>
             </manifest>
           </archive>
         </configuration>
