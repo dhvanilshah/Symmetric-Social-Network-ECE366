@@ -14,6 +14,7 @@ import cool.disc.server.model.UserBuilder;
 import cool.disc.server.utils.AuthUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,6 +26,7 @@ import static com.mongodb.client.model.Filters.eq;
 public class UserStoreController implements UserStore {
     private final Config config;
     private final AuthUtils authUtils;
+    private final int logRounds;
 
     // localhost
 //    private static MongoClientURI uri = new MongoClientURI("mongodb://localhost:27017/?retryWrites=true");
@@ -37,6 +39,7 @@ public class UserStoreController implements UserStore {
     private Object search;
 
     public UserStoreController() {
+        this.logRounds = 13;
         this.authUtils =  new AuthUtils();
         this.config = ConfigFactory.load("discserver.conf");
         // get login info from config
@@ -67,13 +70,14 @@ public class UserStoreController implements UserStore {
         String password = newUser.password();
         String email = newUser.email();
         String birthday = newUser.birthday();
+        String hashword = hash(password);
 //        String photo = newUser.photo();
         Date date = new Date();
 
         Document addUserDoc = new Document()
                 .append("name", name)
                 .append("username", username)
-                .append("password", password)
+                .append("password", hashword)
                 .append("email", email)
                 .append("birthday", birthday)
 //                .append("photo", photo)
@@ -172,7 +176,7 @@ public class UserStoreController implements UserStore {
         try {
             doc  = userCollection.find(eq("username", username)).first();
             String pwd = doc.getString("password");
-            if(pwd.equals(password)){
+            if(verifyHash(password, pwd)){
                 String uid = doc.getObjectId("_id").toHexString();
                token = authUtils.createToken(uid);
             }
@@ -188,6 +192,14 @@ public class UserStoreController implements UserStore {
         }
     }
 
+
+    private String hash(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt(logRounds));
+    }
+
+    private boolean verifyHash(String password, String hash) {
+        return BCrypt.checkpw(password, hash);
+    }
     @Override
     public String addFriend(String friend_id, String user_id){
         Document requestPending;
