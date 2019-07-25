@@ -1,9 +1,9 @@
-### Symmetric Social Network: DISC
+### Symmetric Social Network Service Platform: DISC
 - by Ariana Freitag, Andy Jeong, Leart Krasniqi, and Dhvanil Shah
 
 #### Project Description
-- Symmetric Social Network Service Platform designed to provide a medium through which songs could be shared.
-- Track/album/artist access(fetching) will be possible through open-source APIs (i.e. Spotify)
+- Symmetric Social Network Service Platform designed to provide a medium through which songs could be shared across public/ connected users.
+- Track/album/artist access(fetching) will be possible through open-source song service APIs (currently only Spotify)
 - Language: Java, JavaScript
 - Tools: Maven
 
@@ -37,7 +37,7 @@ yarn start
 
 - The static files can be found in */var/www/disc.cool* and are referred to by the `root` directive in the actual Nginx code.  The Nginx code can be found in */etc/nginx/sites-enabled/disc.cool* and the configuration file, which includes all code in the */etc/nginx/sites-enabled/* directory can be found in */etc/nginx/nginx.conf*.  
 
-- In order to run Nginx, run the following command: `sudo nginx` and in order to stop Nginx, run: `sudo nginx -s stop`.  A very helpful guide for running Nginx on an Ubuntu VM (which is what we are doing) can be found [here](https://medium.com/@jgefroh/a-guide-to-using-nginx-for-static-websites-d96a9d034940?fbclid=IwAR2HYBfjMCbsoSDHM9SHxzrMWqOVn5nwLl1OegxakSP9Sp2OR5fa6gj9msw).
+- In order to run Nginx, run the following command: `sudo nginx` and in order to stop Nginx, run: `sudo nginx -s stop`.  A very helpful guide for running Nginx on an Ubuntu VM can be found [here](https://medium.com/@jgefroh/a-guide-to-using-nginx-for-static-websites-d96a9d034940?fbclid=IwAR2HYBfjMCbsoSDHM9SHxzrMWqOVn5nwLl1OegxakSP9Sp2OR5fa6gj9msw).
 
 Below is our actual code in the file */etc/nginx/sites-enabled/disc.cool*:
 ```
@@ -58,39 +58,30 @@ The `location` directive tells Nginx to reverse proxy whenever a URI contains */
 ********
 ##### Explanation of BackEnd Server
 In general, the flow of the process is as such:
-App -> Handler routes -> Controller implementation. Upon start, HttpService.boot(), followed by init(), is called, where path routes from the Handlers are registered: ```registerRoutes( Handler.routes() )```. Then each path route is asynchronously linked to the specified uri and its method type (i.e. GET, POST).
+App -> Handler routes -> Controller implementation. Upon start, ```HttpService.boot()```, followed by ```init()```, is called, where path routes from the Handlers are registered: ```registerRoutes( Handler.routes()```. Then each path route is asynchronously linked to the specified uri and its method type (i.e. GET, POST).
 
 To check what parameters are needed for a user, post, etc., check under ```/model``` directory
 
 User currently has the following endpoints (subject to change):
-  1) /addUser : adds a user with the provided input payload.
+  1) ```/addUser` : adds a user with the provided input payload.
 
-  2) /getUser/${name} : returns a user with the specified ${name}
+  2) ```/getUser/${name}``` : returns a user with the specified ${name}
 
 Post currently has the following endpoints (subject to change):
-  1) /getFeed?name=${name} : when name equals the {first+last name concatenated} of an existing user, it returns all posts written by the identified user and his/her friends. This uses methods ``` getPosts``` on each friend of the user (```getFriends ```) and the user as well, and returns a list of Posts.
+  1) ```/getFeed?name=${name}``` : when name equals the {first+last name concatenated} of an existing user, it returns all posts written by the identified user and his/her friends. This uses methods ``` getPosts``` on each friend of the user (```getFriends ```) and the user as well, and returns a list of Posts.
 
-  2) /addPost : given writer, targeted user and message, it adds a post entry to the collection in the database. The input payload will be passed in as a JSON object (``` payload()```).
+  2) ```/addPost``` : given writer, targeted user and message, it adds a post entry to the collection in the database. The input payload will be passed in as a JSON object (``` payload()```).
 
-  3) /getAllPosts : retrieves all posts in the post collection.
+  3) ```/getAllPosts``` : retrieves all posts in the post collection.
 
 Track currently has the following endpoints (subject to change):
-  1) /song/${title} : upon calling this endpoint with the title as the argument, it searches for a song on Spotify Web API and returns the first (most relevant) openspotify url. Then it stores in our "searched song" collection database
+  1) ```/song/${title}``` : upon calling this endpoint with the title as the argument, it searches for a song on Spotify Web API and returns the first (most relevant) openspotify url. Then it stores in our "searched song" collection database
   
-  2) /song/add : takes in a JSON formatted data (payload) and returns a HTTP response according to the status of the insertion to collection
+  2) ```/song/add``` : takes in a JSON formatted data (payload) and returns a HTTP response according to the status of the insertion to collection
   
-  3) /song/recommend/${title} : by the user's query (title), it searches for a recommended song, using the seeded artist, album, track. 
+  3) ```/song/recommend/${title}``` : by the user's query (title), it searches for a recommended song, using the seeded artist, album, track. 
   
  Friend currently has the following endpoints (subject to change):
-  1) /addFriend/${id} : takes in a userId from the front end and sends that friend a request
+  1) ```/addFriend/${id}``` : takes in a userId from the front end and sends that friend a request
     
-  2) /handleRequest/${id}/${action} : takes in a userId from a friend request and and action (either "decline" or "accept") and handles the request
-	
-	
-	
-********
-##### In Progress
-- Front-end register users
-- UI/UX Design
-- persistent user session (i.e. token stays when page refreshes )
-- Linking Song services API's and outputting on front-end pages (Spotify Web API is ready on the backend!)
+  2) ```/handleRequest/${id}/${action}``` : takes in a userId from a friend request and and action (either "decline" or "accept") and handles the request
