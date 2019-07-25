@@ -63,7 +63,7 @@ App -> Handler routes -> Controller implementation. Upon start, ```HttpService.b
 To check what parameters are needed for a user, post, etc., check under ```/model``` directory
 
 User currently has the following endpoints (subject to change):
-  1) ```/addUser` : adds a user with the provided input payload.
+  1) ```/addUser``` : adds a user with the provided input payload.
 
   2) ```/getUser/${name}``` : returns a user with the specified ${name}
 
