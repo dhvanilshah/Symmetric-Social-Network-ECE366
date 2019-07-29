@@ -6,6 +6,7 @@
 - Track/album/artist access(fetching) will be possible through open-source song service APIs (currently only Spotify)
 - Language: Java, JavaScript
 - Tools: Maven
+- Backend design pattern: MVC architecture
 
 #### Tech Stack
 - ReactJS, Redux, Axios
